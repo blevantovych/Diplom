@@ -1,9 +1,18 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import { TextField, RaisedButton } from 'material-ui';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-
+import PropTypes from 'prop-types';
 import chunk from 'lodash.chunk';
+import {
+  DiscreteTable,
+  UploadButtons,
+  XYChooser,
+  FormContainer,
+  FileInput,
+  DeleteTdPopup
+} from './style';
+import { csvIcon, excelIcon } from './icons';
 
 function to_json(workbook) {
   var result = {};
@@ -17,33 +26,12 @@ function to_json(workbook) {
   return result;
 }
 
-const csvIcon = (
-  <img
-    class="icon icons8-CSV"
-    width="26"
-    height="26"
-    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAABwUlEQVRIS82WgVHDMAxF2wmACQgTABMQJgAmoGwAEzACMAEZASYgTABMQNgAJoD/chbnunLSlBTQ3b+6sqwv2bKc6cSXQuorYU9g3CWNJi+Euy6jqTOJ4ydhs4cgnb4OhO4yj4jIjoRHYSYQcU5KTTxEk5XGZ56xR/Quww1hp4fE/H0mjl0yj8gWenNesCkRNgtk6yKC7EY4t8jWSQTHidBW4xhEz/Kzm6kWComzHoXI44irsU1mjIwyyUzmiupXibr22KJ902A7F3rQ42c/slnIyBQfMjoW6mhhkeg4XKqIssUxbQqbSjhNjiJLROvACc0UmQm0oTI4YiE6yKgkehsCKToyjo8iS4QRi4wIJ+aUyCuBHohARGc3G5owsjIRi2uBZ4CtYnwQ/kOMENzlEKLD4My2hD2nCHBOo8UhztHfC5wnEhfTUhmxgHPiF2kEtoQ2grBVPAn2TuG0EF7DPD+dRMuUNxkZQeR3bvgSgjHl313YNMKh71Euw/+TkT3lWwqV8SpiRULVMna7N92Bi1kLVGEzkAnHt0IpfF8Dr3tjSCXygfIToXdyJdpAcx8gkHFxMezr2mkwbBeBWg9s578AJCRzG57OQdMAAAAASUVORK5CYII="
-  />
-);
-const excelIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    version="1.0"
-    x="0px"
-    y="0px"
-    viewBox="0 0 24 24"
-    class="icon icons8-Microsoft-Excel"
-  >
-    {' '}
-    <path d="M 14 2 L 2 4 L 2 20 L 14 22 L 14 2 z M 15 4 L 15 7 L 17 7 L 17 8 L 15 8 L 15 10 L 17 10 L 17 11 L 15 11 L 15 13 L 17 13 L 17 14 L 15 14 L 15 16 L 17 16 L 17 17 L 15 17 L 15 20 L 20 20 C 21.105 20 22 19.105 22 18 L 22 6 C 22 4.895 21.105 4 20 4 L 15 4 z M 18 7 L 20 7 L 20 8 L 18 8 L 18 7 z M 4.21875 8 L 6.28125 8 L 7.34375 10.40625 C 7.43075 10.60125 7.4945 10.8055 7.5625 11.0625 L 7.59375 11.0625 C 7.63275 10.9085 7.72675 10.683 7.84375 10.375 L 9.03125 8 L 10.9375 8 L 8.6875 11.96875 L 11 16 L 8.96875 16 L 7.6875 13.40625 C 7.6385 13.31425 7.57925 13.10075 7.53125 12.84375 L 7.5 12.84375 C 7.471 12.96675 7.43175 13.15925 7.34375 13.40625 L 6.03125 16 L 4 16 L 6.40625 12 L 4.21875 8 z M 18 10 L 20 10 L 20 11 L 18 11 L 18 10 z M 18 13 L 20 13 L 20 14 L 18 14 L 18 13 z M 18 16 L 20 16 L 20 17 L 18 17 L 18 16 z" />
-  </svg>
-);
-
-class Form extends PureComponent {
+class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      points: this.props.formData.points,
+      deg: 2,
+      points: [{ x: 0, y: 0 }],
       excelTableHeaders: [],
       excelTableInJson: null,
       showColumnChooser: false,
@@ -89,7 +77,7 @@ class Form extends PureComponent {
           points.push({ x: +val, y: +y_vals[i] });
         });
       } else if (type === 'vert') {
-        rows.forEach((row, i) => {
+        rows.forEach(row => {
           let xy = row.split(/,\s?/);
           console.log(xy);
           points.push({ x: +xy[0], y: +xy[1] });
@@ -97,20 +85,16 @@ class Form extends PureComponent {
       }
 
       this.setState({ points, showColumnChooser: false });
-      this.props.formData.points = points;
+      // this.props.formData.points = points;
     };
     reader.readAsText(input.files[0]);
   };
-
-  componentWillUnmount() {
-    this.props.formData.points = this.state.points;
-  }
 
   render() {
     let sortButton = (
       <RaisedButton
         label="Посортувати"
-        onTouchTap={() => {
+        onClick={() => {
           this.setState({
             points: [...this.state.points].sort((p1, p2) => {
               return +p1.x > +p2.x ? 1 : -1;
@@ -120,12 +104,12 @@ class Form extends PureComponent {
       />
     );
     let addClearBtns = (
-      <div style={{ height: '100%' }}>
+      <td key="add_clear_btns" style={{ height: '100%' }}>
         <RaisedButton
           label="Очистити"
           secondary={true}
           containerElement="label"
-          onTouchTap={() =>
+          onClick={() =>
             this.setState({
               points: [{ x: 0, y: 0 }]
             })
@@ -135,18 +119,18 @@ class Form extends PureComponent {
           label="Додати"
           secondary={true}
           containerElement="label"
-          onTouchTap={() =>
+          onClick={() =>
             this.setState({
               points: [...this.state.points, { x: 0, y: 0 }]
             })
           }
         />
-      </div>
+      </td>
     );
 
     let x_vals_tds = this.state.points.map((val, i) => (
-      <td>
-        <span
+      <td key={i}>
+        <DeleteTdPopup
           class="delete_td_popup"
           onClick={() => {
             let copy = [...this.state.points];
@@ -155,8 +139,9 @@ class Form extends PureComponent {
           }}
         >
           X
-        </span>
+        </DeleteTdPopup>
         <TextField
+          id={`text-field${val.x}`}
           value={val.x}
           onChange={e => {
             val.x = e.target.value;
@@ -167,8 +152,8 @@ class Form extends PureComponent {
       </td>
     ));
     let y_vals_tds = this.state.points.map((val, i) => (
-      <td>
-        <span
+      <td key={i}>
+        <DeleteTdPopup
           class="delete_td_popup"
           onClick={() => {
             let copy = [...this.state.points];
@@ -177,8 +162,9 @@ class Form extends PureComponent {
           }}
         >
           X
-        </span>
+        </DeleteTdPopup>
         <TextField
+          id="text-field"
           value={val.y}
           onChange={e => {
             val.y = e.target.value;
@@ -189,50 +175,51 @@ class Form extends PureComponent {
       </td>
     ));
 
-    x_vals_tds.push(sortButton);
+    x_vals_tds.push(<td key="sort button">{sortButton}</td>);
     y_vals_tds.push(addClearBtns);
     let separateXTds = chunk(x_vals_tds, 10);
     let separateYTds = chunk(y_vals_tds, 10);
 
     let tables = separateXTds.map((xTds, i) => (
-      <div>
-        <table class="discrete_table">
-          <tr>
-            <td>X</td>
-            {xTds}
-          </tr>
-          <tr>
-            <td>Y</td>
-            {separateYTds[i]}
-          </tr>
-        </table>
+      <div key={i}>
+        <DiscreteTable>
+          <tbody>
+            <tr>
+              <td>X</td>
+              {xTds}
+            </tr>
+            <tr>
+              <td>Y</td>
+              {separateYTds[i]}
+            </tr>
+          </tbody>
+          {/* {sortButton} */}
+          {/* {addClearBtns} */}
+        </DiscreteTable>
         <br />
       </div>
     ));
 
     return (
-      <div class="form">
+      <FormContainer>
         <TextField
           floatingLabelText="Степінь"
           type="number"
-          defaultValue={this.props.formData.deg}
-          onChange={e => (this.props.formData.deg = +e.target.value)}
+          value={this.state.deg || ''}
+          onChange={e => this.setState({ deg: +e.target.value })}
         />
+
         {tables}
         <br />
 
-        <div className="upload_btns">
+        <UploadButtons>
           <RaisedButton
             label="Завантажити CSV"
             secondary={true}
             icon={<span>{csvIcon}</span>}
             containerElement="label"
           >
-            <input
-              class="file_input"
-              type="file"
-              onChange={this.onFileUpload}
-            />
+            <FileInput type="file" onChange={this.onFileUpload} />
           </RaisedButton>
 
           <RaisedButton
@@ -242,16 +229,11 @@ class Form extends PureComponent {
             secondary={true}
             containerElement="label"
           >
-            <input
-              class="file_input"
-              type="file"
-              onChange={this.onExcelUpload}
-            />
+            <FileInput type="file" onChange={this.onExcelUpload} />
           </RaisedButton>
-        </div>
+        </UploadButtons>
 
-        <div
-          class="xy_chooser"
+        <XYChooser
           style={{
             visibility: this.state.showColumnChooser ? 'visible' : 'hidden'
           }}
@@ -283,7 +265,7 @@ class Form extends PureComponent {
           <div>
             <RaisedButton
               label="<=>"
-              onTouchTap={() => {
+              onClick={() => {
                 this.setState({
                   X: this.state.Y,
                   Y: this.state.X,
@@ -319,7 +301,7 @@ class Form extends PureComponent {
               ))}
             </SelectField>
           </div>
-        </div>
+        </XYChooser>
 
         <RaisedButton
           label="Обчислити"
@@ -327,13 +309,17 @@ class Form extends PureComponent {
           onClick={() => {
             let xs = this.state.points.map(p => +p.x);
             let ys = this.state.points.map(p => +p.y);
-            this.props.onCalcClick(xs, ys, +this.props.formData.deg);
+            this.props.onCalcClick(xs, ys, this.state.deg);
           }}
         />
-      </div>
+      </FormContainer>
     );
   }
 }
+
+Form.propTypes = {
+  onCalcClick: PropTypes.func
+};
 
 Form.defaultProps = {
   formData: {

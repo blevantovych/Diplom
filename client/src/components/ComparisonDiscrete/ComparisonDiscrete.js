@@ -5,9 +5,13 @@ import { Card, CardText } from 'material-ui/Card';
 import FormDiscrete from '../forms/FormDiscrete';
 import truncateCoefs from '../../helpers/truncateCoefs';
 
-import Loader from '../loader';
 import Plot from '../Plot';
 import Formula from '../Formula';
+import {
+  MINMAX_DISCRETE_URL,
+  LSSQ_DISCRETE_URL
+} from '../../../api/api-config';
+import toArr from '../../helpers/toArr';
 
 if (!Array.prototype.last) {
   Array.prototype.last = function() {
@@ -16,15 +20,48 @@ if (!Array.prototype.last) {
 }
 
 class ComparisonDiscrete extends Component {
+  constructor() {
+    super();
+    this.state = {
+      minmax: null,
+      lssq: null
+    };
+    this.clickCalcHandler = this.clickCalcHandler.bind(this);
+  }
+
+  clickCalcHandler(xPoints, yPoints, deg) {
+    const requestData = { x_vals: xPoints, y_vals: yPoints, deg };
+    const lssqDiscrete = fetch(LSSQ_DISCRETE_URL, {
+      method: 'POST',
+      body: JSON.stringify(requestData)
+    }).then(r => r.json());
+
+    const minmaxDiscrete = fetch(MINMAX_DISCRETE_URL, {
+      method: 'POST',
+      body: JSON.stringify(requestData)
+    }).then(r => r.json());
+
+    Promise.all([lssqDiscrete, minmaxDiscrete]).then(data => {
+      // const endTime = Date.now();
+      this.setState({
+        minmax: toArr(data[1]).last(),
+        lssq: data[0]
+        // loaderActive: false,
+        // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
+      });
+    });
+  }
+
   render() {
     let minmaxData;
+    let lssqData;
     let mmPlot;
     let lsPlot;
     let errsPlot;
 
-    if (this.props.minmaxData) {
-      minmaxData = this.props.minmaxData.last();
-
+    if (this.state.minmax && this.state.lssq) {
+      minmaxData = this.state.minmax;
+      lssqData = this.state.lssq;
       console.log('minmaxData: ', minmaxData);
       mmPlot = (
         <Plot
@@ -58,18 +95,18 @@ class ComparisonDiscrete extends Component {
           legend={false}
           plotData={[
             {
-              x: this.props.lssqData.x_approx,
-              y: this.props.lssqData.approximation,
+              x: lssqData.x_approx,
+              y: lssqData.approximation,
               name: 'Апроксимація'
             },
             {
-              x: this.props.lssqData.x_vals,
-              y: this.props.lssqData.y_vals,
+              x: lssqData.x_vals,
+              y: lssqData.y_vals,
               mode: 'markers',
               name: 'Табл. дані'
             },
             {
-              ...this.props.lssqData.max_error_line,
+              ...lssqData.max_error_line,
               name: 'Максимальна похибка',
               line: { color: '#f00' }
             }
@@ -81,7 +118,7 @@ class ComparisonDiscrete extends Component {
           id="comp_discrete_errs_plot"
           plotData={[
             {
-              ...this.props.lssqData.error_plot,
+              ...lssqData.error_plot,
               name: 'МНК'
             },
             {
@@ -96,19 +133,9 @@ class ComparisonDiscrete extends Component {
 
     return (
       <div>
-        <FormDiscrete
-          formData={this.props.formData}
-          onCalcClick={this.props.clickCalcHandler}
-        />
-        {this.props.lssqData && (
-          <div
-            style={{
-              width: '90vw',
-              position: 'absolute',
-              left: '-15vw',
-              margin: '30px 0'
-            }}
-          >
+        <FormDiscrete onCalcClick={this.clickCalcHandler} />
+        {lssqData && (
+          <div>
             <Card>
               <CardText>
                 <Table>
@@ -126,7 +153,7 @@ class ComparisonDiscrete extends Component {
                         {minmaxData.max_error.toFixed(4)}
                       </TableRowColumn>
                       <TableRowColumn>
-                        {this.props.lssqData.max_error.toFixed(4)}
+                        {lssqData.max_error.toFixed(4)}
                       </TableRowColumn>
                     </TableRow>
                     <TableRow>
@@ -137,7 +164,7 @@ class ComparisonDiscrete extends Component {
                         {minmaxData.x_error.toFixed(4)}
                       </TableRowColumn>
                       <TableRowColumn>
-                        {this.props.lssqData.x_error.toFixed(4)}
+                        {lssqData.x_error.toFixed(4)}
                       </TableRowColumn>
                     </TableRow>
                     <TableRow>
@@ -154,7 +181,7 @@ class ComparisonDiscrete extends Component {
                       </TableRowColumn>
                       <TableRowColumn>
                         <Formula
-                          formula={this.props.lssqData.formula.replace(
+                          formula={lssqData.formula.replace(
                             truncateCoefs(4),
                             '$1'
                           )}

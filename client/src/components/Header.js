@@ -8,6 +8,15 @@ import { withRouter } from 'react-router-dom';
 
 import Hamburger from 'material-ui/svg-icons/navigation/menu';
 
+const pathNameToTitle = {
+  '/ls-discrete': 'МНК (дискретна функція)',
+  '/minmax-discrete': 'Мінімакс (дискретна функція)',
+  '/comparison-discrete': 'Порівняти Мінімакс і МНК',
+  '/ls': 'МНК',
+  '/minmax': 'Мінімакс',
+  '/comparison-continuous': 'Порівняти Мінімакс і МНК'
+};
+
 const Menu = props => (
   <IconMenu
     iconButtonElement={
@@ -23,14 +32,17 @@ const Menu = props => (
       rightIcon={<ArrowDropRight />}
       menuItems={[
         <MenuItem
+          key="МНК_дискр"
           primaryText="МНК"
           onClick={() => props.history.push('/ls-discrete')}
         />,
         <MenuItem
+          key="Мінімакс_дискр"
           primaryText="Мінімакс"
           onClick={() => props.history.push('/minmax-discrete')}
         />,
         <MenuItem
+          key="Порівняти_дискр"
           primaryText="Порівняти"
           onClick={() => props.history.push('/comparison-discrete')}
         />
@@ -41,14 +53,17 @@ const Menu = props => (
       rightIcon={<ArrowDropRight />}
       menuItems={[
         <MenuItem
+          key="МНК"
           primaryText="МНК"
           onClick={() => props.history.push('/ls')}
         />,
         <MenuItem
+          key="Мінімакс"
           primaryText="Мінімакс"
           onClick={() => props.history.push('/minmax')}
         />,
         <MenuItem
+          key="Порівняти"
           primaryText="Порівняти"
           onClick={() => props.history.push('/comparison-continuous')}
         />
@@ -59,7 +74,7 @@ const Menu = props => (
             onTouchTap={() => props.onMenuChange(4)}
         />*/}
     <MenuItem primaryText="Як користуватися (pdf)">
-      <a id="download_desc_link" href="./program_description.pdf" download="" />
+      <a id="download_desc_link" href="/program_description.pdf" download="" />
     </MenuItem>
   </IconMenu>
 );
@@ -69,7 +84,7 @@ class Header extends Component {
     return (
       <AppBar
         // style={{  position: 'fixed', top: 0, width: '60vw' }}
-        title={this.props.title}
+        title={pathNameToTitle[this.props.location.pathname]}
         showMenuIconButton={false}
         iconElementRight={
           <Menu

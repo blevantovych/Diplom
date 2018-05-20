@@ -41,6 +41,7 @@ class Plot extends Component {
   }
 
   render() {
+    console.log(this.props);
     return <div id={'plot' + this.props.id} />;
   }
 }

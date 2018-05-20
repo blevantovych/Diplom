@@ -16,7 +16,7 @@ const history = createBrowserHistory();
 const Routes = () => (
   <Router history={history}>
     <MuiThemeProvider>
-      <div style={{ height: '100%', width: '100%', border: '1px solid red' }}>
+      <div style={{ height: '100%', width: '100%' }}>
         <Route path="/" component={App} />
         <Route path="/comparison-discrete" component={ComparisonDiscrete} />
         <Route path="/comparison-continuous" component={Comparison} />

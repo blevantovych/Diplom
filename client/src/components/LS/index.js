@@ -1,25 +1,59 @@
 import React, { Component } from 'react';
-import range from 'lodash.range';
+// import range from 'lodash.range';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardText } from 'material-ui/Card';
+import { observer } from 'mobx-react';
+import { action, observable, toJS } from 'mobx';
 
-import IterationList from '../iteration-lists/IterationList';
-import Form from '../forms/Form';
 import Plot from '../Plot';
 import Formula from '../Formula';
 import truncateCoefs from '../../helpers/truncateCoefs';
+import Form from './ls-form';
+import { LSSQ_URL } from '../../../api/api-config';
 
+@observer
 class LS extends Component {
+  @observable data = null;
+  constructor() {
+    super();
+    this.clickCalcHandler = this.clickCalcHandler.bind(this);
+  }
+
+  clickCalcHandler(func, deg, start, end, points) {
+    // const startTime = Date.now();
+    fetch(LSSQ_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        func,
+        deg,
+        start,
+        end,
+        points
+      })
+    })
+      .then(res => res.json())
+      .then(
+        action(res => {
+          this.data = res;
+          // const endTime = Date.now();
+          // this.setState({
+          //   dataLS: res,
+          //   loaderActive: false,
+          //   message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
+          // });
+        })
+      )
+      .catch(e => {
+        console.error(`Something went wrong!\n ${e}`);
+        // this.setState({ loaderActive: false });
+      });
+  }
   render() {
     return (
       <div>
-        <Form
-          formData={this.props.formData}
-          onCalcClick={this.props.clickCalcHandler}
-          lssq={true}
-        />
+        <Form onCalcClick={this.clickCalcHandler} />
 
-        {this.props.data && (
+        {this.data && (
           <Card>
             <CardText>
               <Table>
@@ -30,7 +64,7 @@ class LS extends Component {
                     </TableRowColumn>
                     <TableRowColumn>
                       <Formula
-                        formula={this.props.data.formula.replace(
+                        formula={this.data.formula.replace(
                           truncateCoefs(4),
                           '$1'
                         )}
@@ -42,13 +76,13 @@ class LS extends Component {
                       Значення <i>x</i> в якому досягається максимальна похибка
                     </TableRowColumn>
                     <TableRowColumn>
-                      {this.props.data.x_of_max_error.toFixed(5)}
+                      {this.data.x_of_max_error.toFixed(5)}
                     </TableRowColumn>
                   </TableRow>
                   <TableRow>
                     <TableRowColumn>Максимальна похибка</TableRowColumn>
                     <TableRowColumn>
-                      {this.props.data.max_error.toFixed(5)}
+                      {this.data.max_error.toFixed(5)}
                     </TableRowColumn>
                   </TableRow>
                 </TableBody>
@@ -59,23 +93,23 @@ class LS extends Component {
               id="ls_plot"
               plotData={[
                 {
-                  x: this.props.data.x_approx,
-                  y: this.props.data.f_x_approx,
+                  x: toJS(this.data.x_approx),
+                  y: toJS(this.data.f_x_approx),
                   name: 'Функція'
                 },
                 {
-                  x: this.props.data.x_approx,
-                  y: this.props.data.approximation,
+                  x: toJS(this.data.x_approx),
+                  y: toJS(this.data.approximation),
                   name: 'Апроксимація'
                 },
                 {
-                  x: this.props.data.x_vals,
-                  y: this.props.data.y_vals,
+                  x: toJS(this.data.x_vals),
+                  y: toJS(this.data.y_vals),
                   mode: 'markers',
                   name: 'Точки (викор. в МНК)'
                 },
                 {
-                  ...this.props.data.max_error_line,
+                  ...toJS(this.data.max_error_line),
                   name: 'Максимальна похибка',
                   mode: 'lines'
                 }
@@ -86,20 +120,18 @@ class LS extends Component {
               title="Функція похибки"
               plotData={[
                 {
-                  ...this.props.data.error_plot,
+                  ...toJS(this.data.error_plot),
                   name: 'функція похибки'
                 },
                 {
-                  x: this.props.data.max_error_line.x,
-                  y: this.props.data.y_error_plot,
+                  x: toJS(this.data.max_error_line.x),
+                  y: toJS(this.data.y_error_plot),
                   mode: 'lines',
                   name: 'макс. похибка'
                 }
               ]}
             />
-            <h1>{`Час рахування: ${this.props.data.computation_time.toFixed(
-              2
-            )}`}</h1>
+            <h1>{`Час рахування: ${this.data.computation_time.toFixed(2)}`}</h1>
           </Card>
         )}
       </div>

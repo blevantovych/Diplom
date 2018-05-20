@@ -2,21 +2,50 @@ import React, { Component } from 'react';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardText } from 'material-ui/Card';
 
-import IterationList from '../iteration-lists/IterationList';
+// import IterationList from '../iteration-lists/IterationList';
 import FormDiscrete from '../forms/FormDiscrete';
 import Plot from '../Plot';
 import truncateCoefs from '../../helpers/truncateCoefs';
 import Formula from '../Formula';
+import { LSSQ_DISCRETE_URL } from '../../../api/api-config';
 
 class LS extends Component {
+  constructor() {
+    super();
+    this.state = {
+      data: null
+    };
+    this.clickCalcHandler = this.clickCalcHandler.bind(this);
+  }
+  clickCalcHandler(xPoints, yPoints, deg) {
+    // this.setState({
+    //   loaderActive: true,
+    //   message: ''
+    // });
+
+    // const startTime = Date.now();
+
+    fetch(LSSQ_DISCRETE_URL, {
+      method: 'POST',
+      body: JSON.stringify({ x_vals: xPoints, y_vals: yPoints, deg })
+    })
+      .then(r => r.json())
+      .then(res => {
+        console.log(res);
+        // const endTime = Date.now();
+        this.setState({
+          data: res
+          // dataLS_discrete: res,
+          // loaderActive: false,
+          // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
+        });
+      });
+  }
   render() {
     return (
       <div>
-        <FormDiscrete
-          formData={this.props.formData}
-          onCalcClick={this.props.clickCalcHandler}
-        />
-        {this.props.data && (
+        <FormDiscrete onCalcClick={this.clickCalcHandler} />
+        {this.state.data && (
           <Card>
             <CardText>
               <Table>
@@ -27,7 +56,7 @@ class LS extends Component {
                     </TableRowColumn>
                     <TableRowColumn>
                       <Formula
-                        formula={this.props.data.formula.replace(
+                        formula={this.state.data.formula.replace(
                           truncateCoefs(4),
                           '$1'
                         )}
@@ -39,13 +68,13 @@ class LS extends Component {
                       Значення <i>x</i> в якому досягається максимальна похибка
                     </TableRowColumn>
                     <TableRowColumn>
-                      {this.props.data.x_error.toFixed(5)}
+                      {this.state.data.x_error.toFixed(5)}
                     </TableRowColumn>
                   </TableRow>
                   <TableRow>
                     <TableRowColumn>Максимальна похибка</TableRowColumn>
                     <TableRowColumn>
-                      {this.props.data.max_error.toFixed(5)}
+                      {this.state.data.max_error.toFixed(5)}
                     </TableRowColumn>
                   </TableRow>
                 </TableBody>
@@ -56,18 +85,18 @@ class LS extends Component {
               id="ls_discrete_plot"
               plotData={[
                 {
-                  x: this.props.data.x_approx,
-                  y: this.props.data.approximation,
+                  x: this.state.data.x_approx,
+                  y: this.state.data.approximation,
                   name: 'Апроксимація'
                 },
                 {
-                  x: this.props.data.x_vals,
-                  y: this.props.data.y_vals,
+                  x: this.state.data.x_vals,
+                  y: this.state.data.y_vals,
                   mode: 'markers',
                   name: 'Табл. дані'
                 },
                 {
-                  ...this.props.data.max_error_line,
+                  ...this.state.data.max_error_line,
                   name: 'Максимальна похибка',
                   mode: 'lines'
                 }
@@ -76,9 +105,9 @@ class LS extends Component {
             <Plot
               id="ls_discrete_error"
               title="Функція похибки"
-              plotData={[{ ...this.props.data.error_plot }]}
+              plotData={[{ ...this.state.data.error_plot }]}
             />
-            <h1>{`Час рахування: ${this.props.data.computation_time.toFixed(
+            <h1>{`Час рахування: ${this.state.data.computation_time.toFixed(
               2
             )}`}</h1>
           </Card>

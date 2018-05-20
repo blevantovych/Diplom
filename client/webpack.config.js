@@ -43,6 +43,7 @@ module.exports = {
   devServer: {
     // contentBase: "./src",
     // hot: true
+    host: '0.0.0.0',
     historyApiFallback: true
   },
   plugins: debug

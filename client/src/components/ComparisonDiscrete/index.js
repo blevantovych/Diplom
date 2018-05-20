@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 
 import ComparisonDiscrete from './ComparisonDiscrete';
-import Header from '../Header';
+// import Header from '../Header';
 
 const Container = ({}) => (
   <React.Fragment>

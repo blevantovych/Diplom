@@ -1,0 +1,10 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": ["error", { "singleQuote": true }],
+    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+    "no-use-before-define": "error"
+  },
+  "extends": ["prettier", "plugin:react/recommended"]
+}

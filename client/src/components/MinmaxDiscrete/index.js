@@ -2,16 +2,40 @@ import React, { Component } from 'react';
 
 import FormDiscrete from '../forms/FormDiscrete';
 import IterationListDiscreteMinmax from '../iteration-lists/IterationListDiscreteMinmax';
+import { MINMAX_DISCRETE_URL } from '../../../api/api-config';
+import toArr from '../../helpers/toArr';
 
 class MinmaxDiscrete extends Component {
+  constructor() {
+    super();
+    this.state = {
+      data: null
+    };
+    this.clickCalcHandler = this.clickCalcHandler.bind(this);
+  }
+  clickCalcHandler(xPoints, yPoints, deg) {
+    fetch(MINMAX_DISCRETE_URL, {
+      method: 'POST',
+      body: JSON.stringify({ x_vals: xPoints, y_vals: yPoints, deg })
+    })
+      .then(r => r.json())
+      .then(res => {
+        // const endTime = Date.now();
+
+        this.setState({
+          data: toArr(res)
+          // loaderActive: false,
+          // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
+        });
+      });
+  }
   render() {
     return (
       <div>
-        <FormDiscrete
-          formData={this.props.formData}
-          onCalcClick={this.props.clickCalcHandler}
-        />
-        {/* <IterationListDiscreteMinmax arr={this.props.data} /> */}
+        <FormDiscrete onCalcClick={this.clickCalcHandler} />
+        {this.state.data ? (
+          <IterationListDiscreteMinmax arr={this.state.data} />
+        ) : null}
       </div>
     );
   }
