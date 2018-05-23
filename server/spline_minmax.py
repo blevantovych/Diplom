@@ -69,13 +69,13 @@ def main(func, deg, start, end, precision, allowed_error):
         else:
           splines.append({
             "interval": overallInterval,
-            # "spline": result,
+            "spline": result,
             "max_error": max_error
           })
     else:
       splines.append({
         "interval": overallInterval,
-        # "spline": result,
+        "spline": result,
         "max_error": max_error
       })
       if overallInterval[1] < interval[1]:

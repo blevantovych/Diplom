@@ -28,7 +28,7 @@ class Iteration extends React.Component {
       );
     });
     alt.unshift(
-      <TableRowColumn>
+      <TableRowColumn key="alternance_point">
         <h4>Точка альтернансу</h4>
       </TableRowColumn>
     );
@@ -37,7 +37,7 @@ class Iteration extends React.Component {
       return <TableRowColumn key={i}>{el.toFixed(7)}</TableRowColumn>;
     });
     err_alt.unshift(
-      <TableRowColumn>
+      <TableRowColumn key="error">
         <h4>Похибка</h4>
       </TableRowColumn>
     );
@@ -67,26 +67,28 @@ class Iteration extends React.Component {
             <Table>
               <TableBody displayRowCheckbox={false}>
                 <TableRow>
-                  <TableRowColumn>Максимальна похибка</TableRowColumn>
-                  <TableRowColumn>
+                  <TableRowColumn key="label">
+                    Максимальна похибка
+                  </TableRowColumn>
+                  <TableRowColumn key="value">
                     {this.props.data.max_err.toFixed(7)}
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>
+                  <TableRowColumn key="label">
                     Значення <i>x</i> в якому досягається максимальна похибка
                   </TableRowColumn>
-                  <TableRowColumn>
+                  <TableRowColumn key="value">
                     {this.props.data.x_of_max_err.toFixed(7)}
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>
+                  <TableRowColumn key="label">
                     {this.props.isLast
                       ? 'Алгоритм закінчено бо '
                       : 'Продовжуємо алгоритм бо '}
                   </TableRowColumn>
-                  <TableRowColumn>
+                  <TableRowColumn key="value">
                     {this.props.data.err_diff &&
                       this.props.data.err_diff.toFixed(7)}
                     {this.props.isLast ? ' < ' : ' > '}
@@ -94,8 +96,10 @@ class Iteration extends React.Component {
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>Аналітичний вигляд многочлена</TableRowColumn>
-                  <TableRowColumn>
+                  <TableRowColumn key="label">
+                    Аналітичний вигляд многочлена
+                  </TableRowColumn>
+                  <TableRowColumn key="value">
                     <div style={{ overflowX: 'scroll' }}>
                       <Formula
                         formula={this.props.data.polynom_latex.replace(
@@ -109,7 +113,7 @@ class Iteration extends React.Component {
               </TableBody>
             </Table>
             <Plot
-              id={this.props.ctn + 1}
+              id={`${this.props.ctn + 1}`}
               plotData={[
                 {
                   x: this.props.data.error_plot[0],
@@ -152,14 +156,14 @@ Iteration.propTypes = {
     error_plot: PropTypes.array,
     alternance: PropTypes.array,
     err_in_each_point: PropTypes.array,
-    max_err: PropTypes.string,
-    x_of_max_err: PropTypes.string,
-    err_diff: PropTypes.string,
+    max_err: PropTypes.number,
+    x_of_max_err: PropTypes.number,
+    err_diff: PropTypes.number,
     polynom_latex: PropTypes.string
   }),
+  precision: PropTypes.number,
   ctn: PropTypes.number,
-  isLast: PropTypes.bool,
-  isLast: PropTypes.number
+  isLast: PropTypes.bool
 };
 
 export default Iteration;

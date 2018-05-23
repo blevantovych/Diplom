@@ -1,35 +1,25 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Plot extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderPlot = () => {
     const leftPoint = Math.min(...this.props.plotData.map(p => p.x[0]));
     const rightPoint = Math.max(
       ...this.props.plotData.map(p => p.x[p.x.length - 1])
     );
-    const add = (rightPoint - leftPoint) / 40;
-    const xRange = { range: [leftPoint - add, rightPoint + add] };
-    // const yRange = this.props.yRange || null
+    const margin = (rightPoint - leftPoint) / 40;
+    const xRange = { range: [leftPoint - margin, rightPoint + margin] };
+
     const yRange = this.props.yRange || null;
-    if (this.props.legend === false) {
-      Plotly.newPlot('plot' + this.props.id, this.props.plotData, {
-        title: this.props.title,
-        showlegend: false,
-        xaxis: xRange,
-        yaxis: { range: yRange }
-        // yaxis: {range: [-0.0004, 0.0004]}
-      });
-    } else {
-      Plotly.newPlot('plot' + this.props.id, this.props.plotData, {
-        title: this.props.title,
-        xaxis: xRange,
-        yaxis: { range: yRange }
-        // yaxis: {range: [-0.0004, 0.0004]}
-      });
-    }
+
+    const plotOptions = {
+      title: this.props.title,
+      // showlegend: this.props.legend,
+      xaxis: xRange,
+      yaxis: { range: yRange }
+    };
+
+    Plotly.newPlot('plot' + this.props.id, this.props.plotData, plotOptions);
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -41,9 +31,23 @@ class Plot extends Component {
   }
 
   render() {
-    console.log(this.props);
     return <div id={'plot' + this.props.id} />;
   }
 }
+
+Plot.propTypes = {
+  plotData: PropTypes.arrayOf(
+    PropTypes.shape({
+      x: PropTypes.arrayOf(PropTypes.number),
+      y: PropTypes.arrayOf(PropTypes.number),
+      mode: PropTypes.string,
+      name: PropTypes.string
+    })
+  ),
+  title: PropTypes.string,
+  id: PropTypes.string,
+  yRange: PropTypes.arrayOf(PropTypes.number),
+  legend: PropTypes.bool
+};
 
 export default Plot;
