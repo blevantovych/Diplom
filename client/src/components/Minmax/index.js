@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { observable, action, toJS } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import IterationList from '../iteration-lists/IterationList';
 // import Form from '../forms/Form';
 import { MINMAX_URL } from '../../../api/api-config';
 import toArr from '../../helpers/toArr';
 import MinmaxForm from './minmax-form';
 
+@inject('loader')
 @observer
 class Minmax extends Component {
   @observable data = null;
@@ -17,6 +18,8 @@ class Minmax extends Component {
 
   calculateMinmax(func, deg, start, end, precision) {
     // const startTime = Date.now();
+    this.props.loader.showLoader();
+
     fetch(MINMAX_URL, {
       method: 'POST',
       body: JSON.stringify({
@@ -31,7 +34,9 @@ class Minmax extends Component {
       .then(
         action(r => {
           // const endTime = Date.now();
+          this.props.loader.hideLoader();
           this.data = toArr(r);
+
           // this.setState({
           //   data: toArr(r),
           //   loaderActive: false,
@@ -41,7 +46,7 @@ class Minmax extends Component {
       )
       .catch(e => {
         console.error(`Something went wrong!\n ${e}`);
-        this.setState({ loaderActive: false });
+        this.props.loader.hideLoader();
       });
   }
 

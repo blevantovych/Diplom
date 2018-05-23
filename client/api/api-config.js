@@ -1,22 +1,22 @@
 const LOCAL = true;
 const MINMAX_URL = LOCAL
-  ? 'http://localhost:5000/minmax?'
+  ? `http://${window.location.hostname}:5000/minmax`
   : 'https://min-max.herokuapp.com/minmax?';
 
 const LSSQ_URL = LOCAL
-  ? 'http://localhost:5000/least_squares?'
+  ? 'http://0.0.0.0:5000/least_squares?'
   : 'https://min-max.herokuapp.com/least_squares?';
 
 const LSSQ_DISCRETE_URL = LOCAL
-  ? 'http://localhost:5000/least_squares_discrete?'
+  ? 'http://0.0.0.0:5000/least_squares_discrete?'
   : 'https://min-max.herokuapp.com/least_squares_discrete?';
 
 const MINMAX_DISCRETE_URL = LOCAL
-  ? 'http://localhost:5000/minmax_discrete?'
+  ? 'http://0.0.0.0:5000/minmax_discrete?'
   : 'https://min-max.herokuapp.com/minmax_discrete?';
 
 const SPLINE_MINMAX_URL = LOCAL
-  ? 'http://localhost:5000/spline_minmax?'
+  ? 'http://0.0.0.0:5000/spline_minmax?'
   : 'https://min-max.herokuapp.com/spline_minmax?';
 
 // GET

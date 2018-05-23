@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardText } from 'material-ui/Card';
-
+import { inject, observer } from 'mobx-react';
 // import IterationList from '../iteration-lists/IterationList';
 import FormDiscrete from '../forms/FormDiscrete';
 import Plot from '../Plot';
@@ -9,6 +9,8 @@ import truncateCoefs from '../../helpers/truncateCoefs';
 import Formula from '../Formula';
 import { LSSQ_DISCRETE_URL } from '../../../api/api-config';
 
+@inject('loader')
+@observer
 class LS extends Component {
   constructor() {
     super();
@@ -18,20 +20,14 @@ class LS extends Component {
     this.clickCalcHandler = this.clickCalcHandler.bind(this);
   }
   clickCalcHandler(xPoints, yPoints, deg) {
-    // this.setState({
-    //   loaderActive: true,
-    //   message: ''
-    // });
-
-    // const startTime = Date.now();
-
+    this.props.loader.showLoader();
     fetch(LSSQ_DISCRETE_URL, {
       method: 'POST',
       body: JSON.stringify({ x_vals: xPoints, y_vals: yPoints, deg })
     })
       .then(r => r.json())
       .then(res => {
-        console.log(res);
+        this.props.loader.hideLoader();
         // const endTime = Date.now();
         this.setState({
           data: res
@@ -39,6 +35,10 @@ class LS extends Component {
           // loaderActive: false,
           // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
         });
+      })
+      .catch(e => {
+        console.log(e);
+        this.props.loader.hideLoader();
       });
   }
   render() {

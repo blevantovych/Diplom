@@ -21,6 +21,10 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/', methods=['GET'])
+def hi():
+    return 'hi'
+
 @app.route('/minmax', methods=['POST'])
 def min_max():
     data = json.loads(request.data)
@@ -166,4 +170,4 @@ def least_squares_get_results():
     return jsonify(result) 
 
 if __name__  == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

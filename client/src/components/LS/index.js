@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import range from 'lodash.range';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardText } from 'material-ui/Card';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { action, observable, toJS } from 'mobx';
 
 import Plot from '../Plot';
@@ -11,6 +11,7 @@ import truncateCoefs from '../../helpers/truncateCoefs';
 import Form from './ls-form';
 import { LSSQ_URL } from '../../../api/api-config';
 
+@inject('loader')
 @observer
 class LS extends Component {
   @observable data = null;
@@ -20,7 +21,8 @@ class LS extends Component {
   }
 
   clickCalcHandler(func, deg, start, end, points) {
-    // const startTime = Date.now();
+    this.props.loader.showLoader();
+
     fetch(LSSQ_URL, {
       method: 'POST',
       body: JSON.stringify({
@@ -34,6 +36,7 @@ class LS extends Component {
       .then(res => res.json())
       .then(
         action(res => {
+          this.props.loader.hideLoader();
           this.data = res;
           // const endTime = Date.now();
           // this.setState({
@@ -45,7 +48,7 @@ class LS extends Component {
       )
       .catch(e => {
         console.error(`Something went wrong!\n ${e}`);
-        // this.setState({ loaderActive: false });
+        this.props.loader.hideLoader();
       });
   }
   render() {

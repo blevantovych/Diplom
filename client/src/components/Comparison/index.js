@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-// import { observer, inject } from 'mobx-react';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardText } from 'material-ui/Card';
-
+import { observer, inject } from 'mobx-react';
 import truncateCoefs from '../../helpers/truncateCoefs';
 import Plot from '../Plot';
 import FormComparisonContinuous from './comparison-continuous-form';
@@ -10,6 +9,8 @@ import Formula from '../Formula';
 import { LSSQ_URL, MINMAX_URL } from '../../../api/api-config';
 import toArr from '../../helpers/toArr';
 
+@inject('loader')
+@observer
 class Comparison extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +22,7 @@ class Comparison extends Component {
   }
 
   clickCalcHandler(func, deg, start, end, points, precision) {
+    this.props.loader.showLoader();
     const lssq = () =>
       fetch(LSSQ_URL, {
         method: 'POST',
@@ -35,24 +37,16 @@ class Comparison extends Component {
     // const startTime = Date.now();
     Promise.all([lssq(), minmax()])
       .then(data => {
+        this.props.loader.hideLoader();
+
         this.setState({
           lssq: data[0],
           minmax: toArr(data[1]).last()
         });
-        console.log(data);
-        // const endTime = Date.now();
-        // this.setState({
-        //   comparison: {
-        //     lssq: data[0],
-        //     minmax: toArr(data[1]).last()
-        //   },
-        //   loaderActive: false,
-        //   message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
-        // });
       })
       .catch(e => {
         console.error(`Something went wrong!\n ${e}`);
-        this.setState({ loaderActive: false });
+        this.props.loader.hideLoader();
       });
   }
 
@@ -116,13 +110,6 @@ class Comparison extends Component {
             alignItems: 'center'
           }}
         >
-          {/* <div
-            style={{
-              width: '90vw',
-              position: 'absolute',
-              left: '-15vw',
-              margin: '30px 0'
-            }} */}
           <Card>
             <CardText>
               <Table>
@@ -183,7 +170,6 @@ class Comparison extends Component {
               {errsPlot}
             </CardText>
           </Card>
-          {/* </div> */}
         </div>
       );
     } else {

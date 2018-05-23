@@ -2,6 +2,7 @@ import React from 'react';
 
 import Iteration from './Iteration';
 import Plot from '../Plot';
+import { Card } from 'material-ui/Card';
 
 const lineStyles = {
   color: 'rgb(32, 206, 15)',
@@ -114,60 +115,63 @@ export default class IterationList extends React.Component {
       <div>
         {iters}
         {this.props.arr.length > 0 && (
-          <div
-            //onClick={this.changeErrPlot}
-            onKeyDown={this.handleClicks}
-            tabIndex="0"
-          >
-            <Plot
-              id="all_errors"
-              title="Ітерація 1"
-              //plotData={this.props.arr.map(el => ({
-              //  x: el.error_plot[0],
-              //  y: el.error_plot[1],
-              //}))}
-              yRange={[yMin - Math.abs(yMin) * 0.1, yMax + yMax * 0.1]}
-              plotData={[
-                {
-                  x: this.props.arr[0].error_plot[0],
-                  y: this.props.arr[0].error_plot[1],
-                  name: 'Функція похибки'
-                },
-                {
-                  x: this.props.arr[0].alternance,
-                  y: this.props.arr[0].err_in_each_point,
-                  mode: 'markers',
-                  name: 'Точки альтернансу'
-                },
-                {
-                  x: this.props.arr[0].error_plot[0],
-                  y: Array(this.props.arr[0].error_plot[0].length).fill(
-                    this.props.arr[0].err_in_each_point[0]
-                  ),
-                  line: lineStyles,
-                  //visible: 'legendonly'
-                  showlegend: false
-                },
-                {
-                  x: this.props.arr[0].error_plot[0],
-                  y: Array(this.props.arr[0].error_plot[0].length).fill(
-                    -this.props.arr[0].err_in_each_point[0]
-                  ),
-                  line: lineStyles,
-                  showlegend: false
-                  //visible: 'legendonly'
-                },
-                {
-                  ...this.props.arr[0].max_err_in_error_plot,
-                  mode: 'lines',
-                  name: 'Макс. похибка',
-                  line: {
-                    color: 'rgba(255, 0, 0, 0.6)'
+          <Card>
+            <div
+              style={{ border: '1px solid red' }}
+              //onClick={this.changeErrPlot}
+              onKeyDown={this.handleClicks}
+              tabIndex="0"
+            >
+              <Plot
+                id="all_errors"
+                title="Ітерація 1"
+                //plotData={this.props.arr.map(el => ({
+                //  x: el.error_plot[0],
+                //  y: el.error_plot[1],
+                //}))}
+                yRange={[yMin - Math.abs(yMin) * 0.1, yMax + yMax * 0.1]}
+                plotData={[
+                  {
+                    x: this.props.arr[0].error_plot[0],
+                    y: this.props.arr[0].error_plot[1],
+                    name: 'Функція похибки'
+                  },
+                  {
+                    x: this.props.arr[0].alternance,
+                    y: this.props.arr[0].err_in_each_point,
+                    mode: 'markers',
+                    name: 'Точки альтернансу'
+                  },
+                  {
+                    x: this.props.arr[0].error_plot[0],
+                    y: Array(this.props.arr[0].error_plot[0].length).fill(
+                      this.props.arr[0].err_in_each_point[0]
+                    ),
+                    line: lineStyles,
+                    //visible: 'legendonly'
+                    showlegend: false
+                  },
+                  {
+                    x: this.props.arr[0].error_plot[0],
+                    y: Array(this.props.arr[0].error_plot[0].length).fill(
+                      -this.props.arr[0].err_in_each_point[0]
+                    ),
+                    line: lineStyles,
+                    showlegend: false
+                    //visible: 'legendonly'
+                  },
+                  {
+                    ...this.props.arr[0].max_err_in_error_plot,
+                    mode: 'lines',
+                    name: 'Макс. похибка',
+                    line: {
+                      color: 'rgba(255, 0, 0, 0.6)'
+                    }
                   }
-                }
-              ]}
-            />
-          </div>
+                ]}
+              />
+            </div>
+          </Card>
         )}
         {computationTime}
       </div>

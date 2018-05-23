@@ -96,12 +96,14 @@ class Iteration extends React.Component {
                 <TableRow>
                   <TableRowColumn>Аналітичний вигляд многочлена</TableRowColumn>
                   <TableRowColumn>
-                    <Formula
-                      formula={this.props.data.polynom_latex.replace(
-                        truncateCoefs(4),
-                        '$1'
-                      )}
-                    />
+                    <div style={{ overflowX: 'scroll' }}>
+                      <Formula
+                        formula={this.props.data.polynom_latex.replace(
+                          truncateCoefs(4),
+                          '$1'
+                        )}
+                      />
+                    </div>
                   </TableRowColumn>
                 </TableRow>
               </TableBody>

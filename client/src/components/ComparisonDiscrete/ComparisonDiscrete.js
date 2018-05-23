@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardText } from 'material-ui/Card';
+import { observer, inject } from 'mobx-react';
 
 import FormDiscrete from '../forms/FormDiscrete';
 import truncateCoefs from '../../helpers/truncateCoefs';
@@ -19,6 +20,8 @@ if (!Array.prototype.last) {
   };
 }
 
+@inject('loader')
+@observer
 class ComparisonDiscrete extends Component {
   constructor() {
     super();
@@ -30,6 +33,8 @@ class ComparisonDiscrete extends Component {
   }
 
   clickCalcHandler(xPoints, yPoints, deg) {
+    this.props.loader.showLoader();
+
     const requestData = { x_vals: xPoints, y_vals: yPoints, deg };
     const lssqDiscrete = fetch(LSSQ_DISCRETE_URL, {
       method: 'POST',
@@ -41,15 +46,21 @@ class ComparisonDiscrete extends Component {
       body: JSON.stringify(requestData)
     }).then(r => r.json());
 
-    Promise.all([lssqDiscrete, minmaxDiscrete]).then(data => {
-      // const endTime = Date.now();
-      this.setState({
-        minmax: toArr(data[1]).last(),
-        lssq: data[0]
-        // loaderActive: false,
-        // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
+    Promise.all([lssqDiscrete, minmaxDiscrete])
+      .then(data => {
+        // const endTime = Date.now();
+        this.props.loader.hideLoader();
+        this.setState({
+          minmax: toArr(data[1]).last(),
+          lssq: data[0]
+          // loaderActive: false,
+          // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
+        });
+      })
+      .catch(e => {
+        console.log(e);
+        this.props.loader.hideLoader();
       });
-    });
   }
 
   render() {

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-
+import { observer, inject } from 'mobx-react';
 import FormDiscrete from '../forms/FormDiscrete';
 import IterationListDiscreteMinmax from '../iteration-lists/IterationListDiscreteMinmax';
 import { MINMAX_DISCRETE_URL } from '../../../api/api-config';
 import toArr from '../../helpers/toArr';
 
+@inject('loader')
+@observer
 class MinmaxDiscrete extends Component {
   constructor() {
     super();
@@ -14,19 +16,25 @@ class MinmaxDiscrete extends Component {
     this.clickCalcHandler = this.clickCalcHandler.bind(this);
   }
   clickCalcHandler(xPoints, yPoints, deg) {
+    this.props.loader.showLoader();
+
     fetch(MINMAX_DISCRETE_URL, {
       method: 'POST',
       body: JSON.stringify({ x_vals: xPoints, y_vals: yPoints, deg })
     })
       .then(r => r.json())
       .then(res => {
+        this.props.loader.hideLoader();
         // const endTime = Date.now();
 
         this.setState({
           data: toArr(res)
-          // loaderActive: false,
           // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
         });
+      })
+      .catch(e => {
+        console.log(e);
+        this.props.loader.hideLoader();
       });
   }
   render() {
