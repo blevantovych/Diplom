@@ -34,57 +34,55 @@ def expandInterval(interval, history):
     delta = (nearest_right_neighbor - end) / 2.0
     return [start, end + delta]
 
-allowed_error = 0.05
 
-interval = [0, 10]
-historyOfIntervals = []
-splines = []
+def main(func, deg, start, end, precision, allowed_error):
+  interval = [start, end]
+  historyOfIntervals = []
+  splines = []
 
-def approximate(interval):
-  if type(interval) is list:
-    return minmax.main(f_str='sin(x)', start=interval[0], end=interval[1], degree=2, precision=0.0001)
-  else:
-    print "AAAAAAAAAAAA"
-    print interval
+  def approximate(interval):
+    if type(interval) is list:
+      return minmax.main(f_str=func, start=interval[0], end=interval[1], degree=deg, precision=precision)
 
-def make_approximation_on_one_segment(overallInterval):
-  if not type(overallInterval) is list:
-    print overallInterval
-    return
-  result = approximate(overallInterval)
-  max_error = getError(result)
-  print("max_error: {} Interval {} history {}".format(max_error, overallInterval, historyOfIntervals))
-  condition = abs(abs(max_error) - allowed_error)
+  def make_approximation_on_one_segment(overallInterval):
+    if not type(overallInterval) is list:
+      print overallInterval
+      return
+    result = approximate(overallInterval)
+    max_error = getError(result)
+    print("max_error: {} Interval {} history {}".format(max_error, overallInterval, historyOfIntervals))
+    condition = abs(abs(max_error) - allowed_error)
 
-  if condition > 0.1:
+    if condition > 0.1:
 
-    if (getError(result) > allowed_error):
-      shrinkedInterval = shrinkInterval(overallInterval, historyOfIntervals)
-      if len(historyOfIntervals) == 0:
-        historyOfIntervals.append(overallInterval)  
-      historyOfIntervals.append(shrinkedInterval)
-      make_approximation_on_one_segment(shrinkedInterval)
-    else:
-      if overallInterval[1] != interval[1]:
-        expandedInterval = expandInterval(overallInterval, historyOfIntervals)
-        historyOfIntervals.append(expandedInterval)
-        make_approximation_on_one_segment(expandedInterval)
+      if (getError(result) > allowed_error):
+        shrinkedInterval = shrinkInterval(overallInterval, historyOfIntervals)
+        if len(historyOfIntervals) == 0:
+          historyOfIntervals.append(overallInterval)  
+        historyOfIntervals.append(shrinkedInterval)
+        make_approximation_on_one_segment(shrinkedInterval)
       else:
-        splines.append({
-          "interval": overallInterval,
-          # "spline": result,
-          "max_error": max_error
-        })
-  else:
-    splines.append({
-      "interval": overallInterval,
-      # "spline": result,
-      "max_error": max_error
-    })
-    if overallInterval[1] < interval[1]:
-      historyOfIntervals[:] = []
-      make_approximation_on_one_segment([overallInterval[1], interval[1]])
+        if overallInterval[1] != interval[1]:
+          expandedInterval = expandInterval(overallInterval, historyOfIntervals)
+          historyOfIntervals.append(expandedInterval)
+          make_approximation_on_one_segment(expandedInterval)
+        else:
+          splines.append({
+            "interval": overallInterval,
+            # "spline": result,
+            "max_error": max_error
+          })
+    else:
+      splines.append({
+        "interval": overallInterval,
+        # "spline": result,
+        "max_error": max_error
+      })
+      if overallInterval[1] < interval[1]:
+        historyOfIntervals[:] = []
+        make_approximation_on_one_segment([overallInterval[1], interval[1]])
 
-    
-print make_approximation_on_one_segment(interval)
-print splines
+  make_approximation_on_one_segment(interval)
+  return splines
+
+# print main('sin(x)', deg=2, start=1, end=4, precision=0.1, allowed_error=0.001)

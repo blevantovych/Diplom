@@ -131,15 +131,14 @@ class Form extends Component {
     let x_vals_tds = this.state.points.map((val, i) => (
       <td key={i}>
         <DeleteTdPopup
+          title="Видалити стовпець"
           class="delete_td_popup"
           onClick={() => {
             let copy = [...this.state.points];
             copy.splice(i, 1);
             this.setState({ points: copy });
           }}
-        >
-          X
-        </DeleteTdPopup>
+        />
         <TextField
           id={`text-field${val.x}`}
           value={val.x}
@@ -154,15 +153,14 @@ class Form extends Component {
     let y_vals_tds = this.state.points.map((val, i) => (
       <td key={i}>
         <DeleteTdPopup
+          title="Видалити стовпець"
           class="delete_td_popup"
           onClick={() => {
             let copy = [...this.state.points];
             copy.splice(i, 1);
             this.setState({ points: copy });
           }}
-        >
-          X
-        </DeleteTdPopup>
+        />
         <TextField
           id="text-field"
           value={val.y}

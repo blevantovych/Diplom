@@ -14,7 +14,8 @@ const pathNameToTitle = {
   '/comparison-discrete': 'Порівняти Мінімакс і МНК',
   '/ls': 'МНК',
   '/minmax': 'Мінімакс',
-  '/comparison-continuous': 'Порівняти Мінімакс і МНК'
+  '/comparison-continuous': 'Порівняти Мінімакс і МНК',
+  '/spline': 'Побудова сплайну (мінімакс)'
 };
 
 const Menu = props => (
@@ -69,13 +70,17 @@ const Menu = props => (
         />
       ]}
     />
+    <MenuItem
+      primaryText="Апроксимація сплайнами"
+      onClick={() => props.history.push('/spline')}
+    />
     {/*<MenuItem
             primaryText="Історія"
             onTouchTap={() => props.onMenuChange(4)}
         />*/}
-    <MenuItem primaryText="Як користуватися (pdf)">
+    {/* <MenuItem primaryText="Як користуватися (pdf)">
       <a id="download_desc_link" href="/program_description.pdf" download="" />
-    </MenuItem>
+    </MenuItem> */}
   </IconMenu>
 );
 

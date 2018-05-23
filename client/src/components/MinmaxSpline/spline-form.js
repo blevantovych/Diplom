@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
-import Form from '../forms/Form';
+import Form from '../forms/spline-form';
 
 @observer
-class LSForm extends Component {
-  @observable func = 'cos(x)';
+class SplineMinmaxForm extends Component {
+  @observable data = null;
+  @observable func = 'sin(x)';
   @observable deg = 2;
   @observable start = 1;
   @observable end = 3;
-  //   @observable precision = 0.1;
-  @observable points = 10;
+  @observable precision = 0.1;
+  @observable allowedErrorOnSplineSegment = 0.1;
 
   @action.bound
   changeFunc(val) {
@@ -38,12 +39,11 @@ class LSForm extends Component {
   }
 
   @action.bound
-  changePoints(val) {
-    this.points = val;
+  changeAllowedError(val) {
+    this.allowedErrorOnSplineSegment = val;
   }
 
   render() {
-    console.log(this.props);
     return (
       <div style={{ width: '100%', margin: '0 auto' }}>
         <Form
@@ -51,28 +51,28 @@ class LSForm extends Component {
           deg={this.deg}
           start={this.start}
           end={this.end}
-          // precision={this.precision}
-          points={this.points}
+          precision={this.precision}
+          allowedErrorOnSplineSegment={this.allowedErrorOnSplineSegment}
           onCalcClick={() =>
             this.props.onCalcClick(
               this.func,
               this.deg,
               this.start,
               this.end,
-              this.points
+              this.precision,
+              this.allowedErrorOnSplineSegment
             )
           }
           changeFunc={this.changeFunc}
           changeDeg={this.changeDeg}
           changeStart={this.changeStart}
           changeEnd={this.changeEnd}
-          // changePrecision={this.changePrecision}
-          changePoints={this.changePoints}
-          lssq={true}
+          changePrecision={this.changePrecision}
+          changeAllowedError={this.changeAllowedError}
         />
       </div>
     );
   }
 }
 
-export default LSForm;
+export default SplineMinmaxForm;

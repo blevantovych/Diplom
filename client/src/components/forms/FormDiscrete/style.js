@@ -53,18 +53,43 @@ const DiscreteTable = styled.table`
     border-radius: 0 5px 0 0;
   }
 
-  td:hover {
-    & .delete_td_popup {
-      display: inline-block;
-      width: 20px;
+  .delete_td_popup {
+    display: inline-block;
+    width: 20px;
+    position: absolute;
+    left: 50px;
+    top: -5px;
+    height: 20px;
+    z-index: 1000;
+    // border: 1px solid black;
+    cursor: pointer;
+
+    &:after,
+    &:before {
+      transition: opacity 0.2s;
+      content: '';
+      display: block;
       position: absolute;
-      left: 40px;
-      top: -5px;
-      height: 20px;
-      background: 'red';
-      border: 1px solid black;
-      cursor: pointer;
-      color: red;
+      top: 10px;
+      width: 20px;
+      height: 5px;
+      opacity: 0;
+      border-radius: 3px;
+      transform: rotate(45deg);
+      background: red;
+    }
+
+    &:before {
+      transform: rotate(-45deg);
+    }
+  }
+
+  td:hover {
+    .delete_td_popup {
+      &:after,
+      &:before {
+        opacity: 1;
+      }
     }
   }
 `;

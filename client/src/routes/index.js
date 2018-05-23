@@ -9,6 +9,7 @@ import LS from '../components/LS';
 import LSDiscrete from '../components/LSDiscrete';
 import Minmax from '../components/Minmax';
 import MinmaxDiscrete from '../components/MinmaxDiscrete';
+import MinmaxSpline from '../components/MinmaxSpline';
 import App from '../components/App';
 
 const history = createBrowserHistory();
@@ -24,6 +25,7 @@ const Routes = () => (
         <Route path="/ls-discrete" component={LSDiscrete} />
         <Route path="/minmax" component={Minmax} />
         <Route path="/minmax-discrete" component={MinmaxDiscrete} />
+        <Route path="/spline" component={MinmaxSpline} />
       </div>
     </MuiThemeProvider>
   </Router>

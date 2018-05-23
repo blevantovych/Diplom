@@ -5,6 +5,7 @@ import numpy as np
 import minmax
 import discrete_minmax
 import lssq
+import spline_minmax
 
 import sys
 import json
@@ -129,7 +130,13 @@ def minmax_discrete():
     # goesToDB['input'] = input_data
     # db.minmax_discrete.insert_one(goesToDB)
     return jsonify(result)
-        
+
+@app.route('/spline_minmax', methods=['POST'])
+def splineMinmax():
+    data = json.loads(request.data)
+    result = spline_minmax.main(data['func'], data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
+    return jsonify(result)
+
 @app.route('/minmax_discrete_get_results', methods=['GET'])
 def minmax_discrete_get_results():
     result = []
@@ -143,7 +150,7 @@ def least_squares_discrete_get_results():
     for item in db.least_squares_discrete.find({}, {'_id': False}):
         result.append(item)
     return jsonify(result) 
-
+    
 @app.route('/minmax_get_results', methods=['GET'])
 def minmax_get_results():
     result = []
