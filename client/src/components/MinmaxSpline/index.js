@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { observable, action } from 'mobx';
-import { observer, inject } from 'mobx-react';
-// import IterationList from '../iteration-lists/IterationList';
-// import Form from '../forms/Form';
+import { action } from 'mobx';
+import { inject } from 'mobx-react';
+import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
+
 import { SPLINE_MINMAX_URL } from '../../../api/api-config';
 import toArr from '../../helpers/toArr';
 import SplineForm from './spline-form';
 import PropTypes from 'prop-types';
 import Plot from '../Plot';
+import Formula from '../Formula';
+import truncateCoefs from '../../helpers/truncateCoefs';
 
 const getPlotData = (segment, index) => {
   const iterations = toArr(segment.spline);
@@ -20,9 +22,21 @@ const getPlotData = (segment, index) => {
   return trace;
 };
 
+const getErrorPlot = data => {
+  let x = [];
+  let y = [];
+  data.forEach(segment => {
+    const error_plot_on_segment = toArr(segment.spline).last().error_plot;
+    x = [...x, ...error_plot_on_segment[0].slice(1, -1)];
+    y = [...y, ...error_plot_on_segment[1].slice(1, -1)];
+  });
+  return {
+    x,
+    y
+  };
+};
+
 const getFuncPlot = data => {
-  console.log('%c data', 'font-size: 20px');
-  console.log(data);
   const funcDataOnAllInterval = [[], []];
   data.forEach(segment => {
     const funcPlotOnSegment = toArr(segment.spline).last().func_plot;
@@ -91,14 +105,60 @@ class Minmax extends Component {
     return (
       <div style={{ width: '100%', margin: '0 auto' }}>
         <SplineForm onCalcClick={this.calculateMinmax} />
-        {this.state.data ? (
-          <Plot
-            plotData={[
-              ...this.state.data.map(getPlotData),
-              getFuncPlot(this.state.data)
-            ]}
-          />
-        ) : null}
+        {this.state.data
+          ? [
+              <Plot
+                key="plot"
+                id="approx_plot"
+                title="Апроксимація мінімаксними сплайнами"
+                plotData={[
+                  ...this.state.data.map(getPlotData),
+                  getFuncPlot(this.state.data)
+                ]}
+              />,
+              <Plot
+                key="error_plot"
+                id="error_plot"
+                title="Графік функції похибки"
+                plotData={[getErrorPlot(this.state.data)]}
+              />,
+              <Table
+                key="table"
+                fixedHeader={false}
+                style={{ width: 'auto', tableLayout: 'auto' }}
+              >
+                <TableBody displayRowCheckbox={false}>
+                  <TableRow>
+                    <TableRowColumn>Сегмент</TableRowColumn>
+                    <TableRowColumn>Максимальна похибка</TableRowColumn>
+                    <TableRowColumn>Інтервал</TableRowColumn>
+                    <TableRowColumn>Аналітичний вигляд</TableRowColumn>
+                  </TableRow>
+                  {this.state.data.map((segment, index) => (
+                    <TableRow key={index}>
+                      <TableRowColumn>{index + 1}</TableRowColumn>
+                      <TableRowColumn>
+                        {segment.max_error.toFixed(3)}
+                      </TableRowColumn>
+                      <TableRowColumn>
+                        <Formula
+                          formula={`[${segment.interval[0].toFixed(3)};
+                            ${segment.interval[1].toFixed(3)}]`}
+                        />
+                      </TableRowColumn>
+                      <TableRowColumn>
+                        <Formula
+                          formula={toArr(segment.spline)
+                            .last()
+                            .polynom_latex.replace(truncateCoefs(4), '$1')}
+                        />
+                      </TableRowColumn>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ]
+          : null}
         {/* {this.data ? <IterationList arr={toJS(this.data)} /> : null} */}
       </div>
     );

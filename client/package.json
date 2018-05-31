@@ -20,10 +20,12 @@
     "re-base": "^1.3.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
+    "react-katex": "^2.0.2",
     "react-router-dom": "^4.2.2",
     "react-swipeable-views": "^0.12.3",
     "react-tap-event-plugin": "^3.0.2",
-    "styled-components": "^3.2.6"
+    "styled-components": "^3.2.6",
+    "url-loader": "^1.0.1"
   },
   "devDependencies": {
     "@eleks/eslint-config-eleks": "^0.2.1",

@@ -137,8 +137,9 @@ def minmax_discrete():
 
 @app.route('/spline_minmax', methods=['POST'])
 def splineMinmax():
+    print('spline minmax')
     data = json.loads(request.data)
-    result = spline_minmax.main(data['func'], data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
+    result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
     return jsonify(result)
 
 @app.route('/minmax_discrete_get_results', methods=['GET'])

@@ -50,12 +50,13 @@ def main(func, deg, start, end, precision, allowed_error):
       return
     result = approximate(overallInterval)
     max_error = getError(result)
-    print("max_error: {} Interval {} history {}".format(max_error, overallInterval, historyOfIntervals))
+    print("Interval {}".format(overallInterval)) 
+    # print("max_error: {} Interval {} history {}".format(max_error, overallInterval, historyOfIntervals))
     condition = abs(abs(max_error) - allowed_error)
 
-    if condition > 0.1:
+    if condition > (allowed_error / 10):
 
-      if (getError(result) > allowed_error):
+      if (max_error > allowed_error):
         shrinkedInterval = shrinkInterval(overallInterval, historyOfIntervals)
         if len(historyOfIntervals) == 0:
           historyOfIntervals.append(overallInterval)  

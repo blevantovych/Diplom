@@ -90,6 +90,7 @@ def change_alternance(err_func, alternance, start, end):
     return temp
 
 def main(f_str, start, end, degree, precision):
+
     f = simplify(f_str)
     x = Symbol('x')
     f_lamdified = np.vectorize(lambdify(x, f))
