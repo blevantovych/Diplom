@@ -19,6 +19,10 @@ const SPLINE_MINMAX_URL = LOCAL
   ? `http://${window.location.hostname}:5000/spline_minmax?`
   : 'https://min-max.herokuapp.com/spline_minmax?';
 
+const CONTINUOUS_SPLINE_MINMAX_URL = LOCAL
+  ? `http://${window.location.hostname}:5000/continuous_spline_minmax?`
+  : 'https://min-max.herokuapp.com/spline_minmax?';
+
 // GET
 
 const MINMAX_DISCRETE_URL_GET = LOCAL
@@ -46,5 +50,6 @@ export {
   MINMAX_URL_GET,
   LSSQ_URL_GET,
   LSSQ_DISCRETE_URL_GET,
-  SPLINE_MINMAX_URL
+  SPLINE_MINMAX_URL,
+  CONTINUOUS_SPLINE_MINMAX_URL
 };

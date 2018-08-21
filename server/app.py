@@ -142,6 +142,13 @@ def splineMinmax():
     result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
     return jsonify(result)
 
+@app.route('/continuous_spline_minmax', methods=['POST'])
+def continuousSplineMinmax():
+    print('continuous_spline_minmax')
+    data = json.loads(request.data)
+    # result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
+    return jsonify(data)
+
 @app.route('/minmax_discrete_get_results', methods=['GET'])
 def minmax_discrete_get_results():
     result = []

@@ -15,7 +15,8 @@ const pathNameToTitle = {
   '/ls': 'МНК',
   '/minmax': 'Мінімакс',
   '/comparison-continuous': 'Порівняти Мінімакс і МНК',
-  '/spline': 'Побудова сплайну (мінімакс)'
+  '/spline': 'Побудова сплайну (мінімакс)',
+  '/continuous-spline': 'Побудова неперервного сплайну (мінімакс)'
 };
 
 const Menu = props => (
@@ -73,6 +74,10 @@ const Menu = props => (
     <MenuItem
       primaryText="Апроксимація сплайнами"
       onClick={() => props.history.push('/spline')}
+    />
+    <MenuItem
+      primaryText="Апроксимація неперервними сплайнами"
+      onClick={() => props.history.push('/continuous-spline')}
     />
     {/*<MenuItem
             primaryText="Історія"

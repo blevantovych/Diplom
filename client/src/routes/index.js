@@ -9,6 +9,7 @@ import LS from '../components/LS';
 import LSDiscrete from '../components/LSDiscrete';
 import Minmax from '../components/Minmax';
 import MinmaxDiscrete from '../components/MinmaxDiscrete';
+import ContinuousMinmaxSpline from '../components/ContinuousMinmaxSpline';
 import MinmaxSpline from '../components/MinmaxSpline';
 import Header from '../components/Header';
 import Loader from '../components/loader';
@@ -18,7 +19,7 @@ const history = createBrowserHistory();
 const Routes = () => (
   <Router history={history}>
     <MuiThemeProvider>
-      <div style={{ height: '100%', width: '100%' }}>
+      <div style={{ height: '100%', width: '100%'}}>
         <Header />
         <Loader />
         <Route path="/comparison-discrete" component={ComparisonDiscrete} />
@@ -28,6 +29,7 @@ const Routes = () => (
         <Route path="/minmax" component={Minmax} />
         <Route path="/minmax-discrete" component={MinmaxDiscrete} />
         <Route path="/spline" component={MinmaxSpline} />
+        <Route path="/continuous-spline" component={ContinuousMinmaxSpline} />
         <Route path="/" exact component={() => <Redirect to="/spline" />} />
       </div>
     </MuiThemeProvider>
