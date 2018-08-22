@@ -67,6 +67,7 @@ def sign(x):
 sign = np.vectorize(sign)
 
 def change_alternance(err_func, alternance, start, end):
+    print alternance
     x_err = x_of_max_error(err_func, start, end)
     temp = alternance[:]
     temp.append(x_err)
@@ -180,5 +181,6 @@ def main(f_str, start, end, degree, precision):
 
         return results
 
-
+# f_str, start, end, degree, precision):
+# main('sin(x)', 1, 10, 1, 0.001)
 # f_str, start, end, degree, precision
