@@ -1,0 +1,20 @@
+{
+  "name": "webworker_demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "worker.js",
+  "dependencies": {
+    "mathjs": "^5.1.1",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "webpack-dev-server --mode development",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .form {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form">
+    <span>start: </span>
+    <input type="text" id="start" value="1">
+    <span>end: </span>
+    <input type="text" id="end" value="3">
+    <span>degree: </span>
+    <input type="text" id="degree" value="2">
+    <span>precision: </span>
+    <input type="text" id="precision" value="0.01">
+    <span>func: </span>
+    <input type="text" id="func" value="sin(x)">
+  </div>
+
+  <p id="result">Sum of numbers: </p>
+  <button onclick="startWorker()">startWorker</button>
+  <button onclick="calculate()">Compute</button>
+  <!-- <button onclick="stopWorker()">Stop Worker</button> -->
+  <script>
+    var w;
+
+    function calculate() {
+      w.postMessage({
+        start: +start.value,
+        end: +end.value,
+        degree: +degree.value,
+        precision: +precision.value,
+        func: func.value
+      })
+
+    }
+    function startWorker() {
+
+      if (typeof (Worker) !== "undefined") {
+        if (typeof (w) == "undefined") {
+          w = new Worker("main.js");
+        }
+        w.onmessage = function (event) {
+          console.log(JSON.parse(event.data))
+
+          document.getElementById("result").innerHTML = event.data;
+          // stopWorker();
+        };
+      } else {
+        document.getElementById("result").innerHTML = "Sorry! No Web Worker support.";
+      }
+    }
+
+    function stopWorker() {
+      w.terminate();
+      w = undefined;
+    }
+  </script>
+</body>
+
+</html>
