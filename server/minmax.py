@@ -22,8 +22,11 @@ def pol(t, error_on_iteration, degree, f):
     if (degree + 2) % 2 == 1:
         e *= -1
 
+    print eqs
     solution = solve(eqs, variables + (e,))
-
+    print "\n"
+    print solution
+    print "\n"
     error_on_iteration = solution[e]
     polynom = x - x
     for i, v in enumerate(variables):
@@ -42,17 +45,24 @@ def max_error(func, start, end):
         e_max = neg_err
     else:
         e_max = pos_err
+    print "\n"
+    print "Max error"
+    print str(e_max)
+    print "\n"
     return e_max
 
 def x_of_max_error(func, start, end):
-    x_vals = np.linspace(start, end, (end - start) * 10000)
+    x_vals = np.linspace(start, end, (end - start) * 1000)
     y_vals = func(x_vals)
     
     absolute_y_vals = list(map(lambda x: abs(x), y_vals))
     e_max = max(absolute_y_vals)
 
     i = list(absolute_y_vals).index(e_max)
-    return x_vals[i]
+    x = x_vals[i]
+    print "x of max error"
+    print x
+    return x
 
 
 def error(polyn, f):
@@ -67,6 +77,7 @@ def sign(x):
 sign = np.vectorize(sign)
 
 def change_alternance(err_func, alternance, start, end):
+    print 'alternance before'
     print alternance
     x_err = x_of_max_error(err_func, start, end)
     temp = alternance[:]
@@ -88,6 +99,7 @@ def change_alternance(err_func, alternance, start, end):
             del temp[index_of_x_err-1]
         else:
             del temp[0]
+
     return temp
 
 def main(f_str, start, end, degree, precision):
@@ -182,5 +194,5 @@ def main(f_str, start, end, degree, precision):
         return results
 
 # f_str, start, end, degree, precision):
-# main('sin(x)', 1, 10, 1, 0.001)
+# main('sin(x) * x', 1, 4, 2, 0.001)
 # f_str, start, end, degree, precision

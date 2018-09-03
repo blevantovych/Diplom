@@ -1,0 +1,17 @@
+{
+  "name": "minmax_js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "changeAlternance.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "algebra.js": "^0.2.6",
+    "algebrite": "^1.2.0",
+    "mathjs": "^5.1.1"
+  }
+}
