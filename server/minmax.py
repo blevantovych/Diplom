@@ -9,7 +9,7 @@ def make_eq(coefs, point, f):
         eq -= c*point**i
     return eq
 
-def pol(t, error_on_iteration, degree, f):
+def pol(alternance, error_on_iteration, degree, f):
     x = Symbol('x')
     e = Symbol('e')
     vars_str = ' '.join(['a' + str(i) for i in range(degree+1)])
@@ -17,16 +17,13 @@ def pol(t, error_on_iteration, degree, f):
     eqs = []
 
     for i in range(degree+2):
-        eqs.append(make_eq(variables, t[i], f) + e)
+        eqs.append(make_eq(variables, alternance[i], f) + e)
         e *= -1
-    if (degree + 2) % 2 == 1:
+    if degree % 2 == 1:
         e *= -1
 
-    print eqs
     solution = solve(eqs, variables + (e,))
-    print "\n"
-    print solution
-    print "\n"
+
     error_on_iteration = solution[e]
     polynom = x - x
     for i, v in enumerate(variables):
@@ -45,10 +42,6 @@ def max_error(func, start, end):
         e_max = neg_err
     else:
         e_max = pos_err
-    print "\n"
-    print "Max error"
-    print str(e_max)
-    print "\n"
     return e_max
 
 def x_of_max_error(func, start, end):
@@ -60,8 +53,6 @@ def x_of_max_error(func, start, end):
 
     i = list(absolute_y_vals).index(e_max)
     x = x_vals[i]
-    print "x of max error"
-    print x
     return x
 
 
@@ -77,8 +68,6 @@ def sign(x):
 sign = np.vectorize(sign)
 
 def change_alternance(err_func, alternance, start, end):
-    print 'alternance before'
-    print alternance
     x_err = x_of_max_error(err_func, start, end)
     temp = alternance[:]
     temp.append(x_err)
@@ -102,7 +91,7 @@ def change_alternance(err_func, alternance, start, end):
 
     return temp
 
-def main(f_str, start, end, degree, precision):
+def main(f_str, start, end, degree, precision, *args):
 
     f = simplify(f_str)
     x = Symbol('x')
@@ -110,10 +99,11 @@ def main(f_str, start, end, degree, precision):
     error_on_iteration = 0
     # precision = 1e-2
 
-    alternance = [start + (end-start) * k / float(degree + 1) for k in range(degree+2)]
+    alternance = args[0] if len(args) > 0 else [start + (end-start) * k / float(degree + 1) for k in range(degree+2)]
+    getPolynom = args[1] if len(args) > 1 else pol
     iterations = 1
 
-    pol_err_on_iter = pol(alternance, error_on_iteration, degree, f)
+    pol_err_on_iter = getPolynom(alternance, error_on_iteration, degree, f, start, end)
     polyn = pol_err_on_iter[0]
     polyn_lamdified = np.vectorize(lambdify(x, polyn))
     error_on_iteration = pol_err_on_iter[1]
@@ -164,7 +154,7 @@ def main(f_str, start, end, degree, precision):
 
             alternance = change_alternance(err_func, alternance, start, end)
             iterations += 1
-            pol_err_on_iter = pol(alternance, error_on_iteration, degree, f)
+            pol_err_on_iter = getPolynom(alternance, error_on_iteration, degree, f, start, end)
             polyn = pol_err_on_iter[0]
             polyn_lamdified = np.vectorize(lambdify(x, polyn))
             # f_lamdified = np.vectorize(lambdify(x, f))
@@ -192,7 +182,3 @@ def main(f_str, start, end, degree, precision):
 
 
         return results
-
-# f_str, start, end, degree, precision):
-# main('sin(x) * x', 1, 4, 2, 0.001)
-# f_str, start, end, degree, precision
