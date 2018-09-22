@@ -9,7 +9,7 @@ def make_eq(coefs, point, f):
         eq -= c*point**i
     return eq
 
-def pol(alternance, error_on_iteration, degree, f):
+def pol(alternance, error_on_iteration, degree, f, start, end): # start, end arguments are passed for continuous minmax spline
     x = Symbol('x')
     e = Symbol('e')
     vars_str = ' '.join(['a' + str(i) for i in range(degree+1)])

@@ -24,10 +24,10 @@ class Minmax extends Component {
       method: 'POST',
       body: JSON.stringify({
         func,
-        start,
-        end,
-        deg,
-        precision
+        start: +start,
+        end: +end,
+        deg: +deg,
+        precision: +precision
       })
     })
       .then(r => r.json())

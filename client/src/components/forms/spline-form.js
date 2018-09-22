@@ -27,28 +27,28 @@ class Form extends PureComponent {
           floatingLabelText="Степінь многочлена"
           type="number"
           value={this.props.deg}
-          onChange={e => this.props.changeDeg(+e.target.value)}
+          onChange={e => this.props.changeDeg(e.target.value)}
         />
 
         <TextField
           floatingLabelText="Початок інтервалу"
           type="number"
           value={this.props.start}
-          onChange={e => this.props.changeStart(+e.target.value)}
+          onChange={e => this.props.changeStart(e.target.value)}
         />
 
         <TextField
           floatingLabelText="Кінець інтервалу"
           type="number"
           value={this.props.end}
-          onChange={e => this.props.changeEnd(+e.target.value)}
+          onChange={e => this.props.changeEnd(e.target.value)}
         />
 
         <TextField
           floatingLabelText="Точність"
           type="number"
           value={this.props.precision}
-          onChange={e => this.props.changePrecision(+e.target.value)}
+          onChange={e => this.props.changePrecision(e.target.value)}
         />
 
         <TextField
@@ -56,7 +56,7 @@ class Form extends PureComponent {
           type="number"
           style={{ width: '370px' }}
           value={this.props.allowedErrorOnSplineSegment}
-          onChange={e => this.props.changeAllowedError(+e.target.value)}
+          onChange={e => this.props.changeAllowedError(e.target.value)}
         />
 
         <RaisedButton

@@ -5,12 +5,12 @@ import Form from '../forms/Form';
 
 @observer
 class LSForm extends Component {
-  @observable func = 'cos(x)';
-  @observable deg = 2;
-  @observable start = 1;
-  @observable end = 3;
+  @observable func = 'cos(x)*x';
+  @observable deg = '2';
+  @observable start = '1';
+  @observable end = '3';
   //   @observable precision = 0.1;
-  @observable points = 10;
+  @observable points = '10';
 
   @action.bound
   changeFunc(val) {

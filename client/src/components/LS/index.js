@@ -27,10 +27,10 @@ class LS extends Component {
       method: 'POST',
       body: JSON.stringify({
         func,
-        deg,
-        start,
-        end,
-        points
+        deg: +deg,
+        start: +start,
+        end: +end,
+        points: +points
       })
     })
       .then(res => res.json())

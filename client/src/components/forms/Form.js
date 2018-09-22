@@ -27,21 +27,21 @@ class Form extends PureComponent {
           floatingLabelText="Степінь многочлена"
           type="number"
           value={this.props.deg}
-          onChange={e => this.props.changeDeg(+e.target.value)}
+          onChange={e => this.props.changeDeg(e.target.value)}
         />
 
         <TextField
           floatingLabelText="Початок інтервалу"
           type="number"
           value={this.props.start}
-          onChange={e => this.props.changeStart(+e.target.value)}
+          onChange={e => this.props.changeStart(e.target.value)}
         />
 
         <TextField
           floatingLabelText="Кінець інтервалу"
           type="number"
           value={this.props.end}
-          onChange={e => this.props.changeEnd(+e.target.value)}
+          onChange={e => this.props.changeEnd(e.target.value)}
         />
 
         {this.props.minmax && (
@@ -49,7 +49,7 @@ class Form extends PureComponent {
             floatingLabelText="Точність"
             type="number"
             value={this.props.precision}
-            onChange={e => this.props.changePrecision(+e.target.value)}
+            onChange={e => this.props.changePrecision(e.target.value)}
           />
         )}
 
@@ -58,7 +58,7 @@ class Form extends PureComponent {
             floatingLabelText="Точки розбиття"
             type="number"
             value={this.props.points}
-            onChange={e => this.props.changePoints(+e.target.value)}
+            onChange={e => this.props.changePoints(e.target.value)}
           />
         )}
 
@@ -74,11 +74,11 @@ class Form extends PureComponent {
 
 Form.defaultProps = {
   func: 'sin(x)',
-  start: 0,
-  end: 3,
-  deg: 2,
-  precision: 0.01,
-  points: 10
+  start: '0',
+  end: '3',
+  deg: '2',
+  precision: '0.01',
+  points: '10'
 };
 
 export default Form;

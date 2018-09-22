@@ -26,13 +26,13 @@ class Comparison extends Component {
     const lssq = () =>
       fetch(LSSQ_URL, {
         method: 'POST',
-        body: JSON.stringify({ func, start, end, deg, points })
+        body: JSON.stringify({ func, start: +start, end: +end, deg: +deg, points: +points })
       }).then(res => res.json());
 
     const minmax = () =>
       fetch(MINMAX_URL, {
         method: 'POST',
-        body: JSON.stringify({ func, start, end, deg, precision })
+        body: JSON.stringify({ func, start: +start, end: +end, deg: +deg, precision: +precision })
       }).then(res => res.json());
     // const startTime = Date.now();
     Promise.all([lssq(), minmax()])

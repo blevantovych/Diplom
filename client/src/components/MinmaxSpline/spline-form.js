@@ -7,11 +7,11 @@ import Form from '../forms/spline-form';
 class SplineMinmaxForm extends Component {
   @observable data = null;
   @observable func = 'sin(x)';
-  @observable deg = 2;
-  @observable start = 1;
-  @observable end = 3;
-  @observable precision = 0.1;
-  @observable allowedErrorOnSplineSegment = 0.1;
+  @observable deg = '2';
+  @observable start = '1';
+  @observable end = '3';
+  @observable precision = '0.1';
+  @observable allowedErrorOnSplineSegment = '0.1';
 
   @action.bound
   changeFunc(val) {

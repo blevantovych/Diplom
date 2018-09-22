@@ -12,11 +12,11 @@ class LSForm extends Component {
 
   @observable data = null;
   @observable func = 'cos(x)';
-  @observable deg = 2;
-  @observable start = 1;
-  @observable end = 3;
-  @observable precision = 0.1;
-  @observable points = 10;
+  @observable deg = '2';
+  @observable start = '1';
+  @observable end = '3';
+  @observable precision = '0.1';
+  @observable points = '10';
 
   @action.bound
   changeFunc(val) {
