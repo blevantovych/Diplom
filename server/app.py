@@ -5,8 +5,8 @@ import numpy as np
 import minmax
 import discrete_minmax
 import lssq
+import spline_cont
 import spline_minmax
-
 import sys
 import json
 import copy
@@ -24,6 +24,17 @@ CORS(app)
 @app.route('/', methods=['GET'])
 def hi():
     return 'hi'
+
+
+@app.route('/continuous_spline_minmax', methods=['POST'])
+def continuousSplineMinmax():
+    print('continuous_spline_minmax')
+    data = json.loads(request.data)
+    result = spline_cont.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
+    return jsonify(result)
+
+
+
 
 @app.route('/minmax', methods=['POST'])
 def min_max():
@@ -141,13 +152,6 @@ def splineMinmax():
     data = json.loads(request.data)
     result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
     return jsonify(result)
-
-@app.route('/continuous_spline_minmax', methods=['POST'])
-def continuousSplineMinmax():
-    print('continuous_spline_minmax')
-    data = json.loads(request.data)
-    # result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
-    return jsonify(data)
 
 @app.route('/minmax_discrete_get_results', methods=['GET'])
 def minmax_discrete_get_results():
