@@ -81,11 +81,11 @@ class ContinuousMinmaxSpline extends Component {
       method: 'POST',
       body: JSON.stringify({
         func,
-        deg,
-        start,
-        end,
-        precision,
-        allowed_error
+        deg: +deg,
+        start: +start,
+        end: +end,
+        precision: +precision,
+        allowed_error: +allowed_error
       })
     })
       .then(r => r.json())
