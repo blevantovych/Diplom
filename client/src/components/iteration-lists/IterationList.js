@@ -117,8 +117,6 @@ export default class IterationList extends React.Component {
         {this.props.arr.length > 0 && (
           <Card>
             <div
-              style={{ border: '1px solid red' }}
-              //onClick={this.changeErrPlot}
               onKeyDown={this.handleClicks}
               tabIndex="0"
             >

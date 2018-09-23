@@ -15,7 +15,7 @@ class TestMinmaxModule(unittest.TestCase):
         self.assertEqual(minmax.max_error(func, 1, 4), 16)
 
         func = np.vectorize(lambdify(Symbol('x'), simplify('sin(x) - 1.2 * x^2 + 1.53 * x')))
-        self.assertAlmostEqual(minmax.max_error(func, -5, 5), -36.6910757253)
+        self.assertAlmostEqual(minmax.max_error(func, -5, 5), -36.6910757253, places=7)
         
 if __name__ == '__main__':
     unittest.main()

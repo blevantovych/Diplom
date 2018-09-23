@@ -1,6 +1,8 @@
 import numpy as np
 from sympy import simplify, lambdify, Symbol, symbols, latex, solve
 
+max_error_called = 0
+
 def make_eq(coefs, point, f):
     x = Symbol('x')
     _f = lambdify(x, f)
@@ -32,6 +34,8 @@ def pol(alternance, error_on_iteration, degree, f, start, end): # start, end arg
     return [polynom, error_on_iteration]
 
 def max_error(func, start, end):
+    global max_error_called
+    max_error_called+=1
     x_vals = np.linspace(start, end, (end - start) * 1000)
     y_vals = func(x_vals)
     
@@ -54,7 +58,6 @@ def x_of_max_error(func, start, end):
     i = list(absolute_y_vals).index(e_max)
     x = x_vals[i]
     return x
-
 
 def error(polyn, f):
     x = Symbol('x')
@@ -180,5 +183,6 @@ def main(f_str, start, end, degree, precision, *args):
             "func_plot": list([list(x_vals), list(f_lamdified(x_vals))]) 
         }
 
-
+        print 'max_error_called'
+        print max_error_called
         return results
