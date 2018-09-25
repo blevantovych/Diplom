@@ -1,8 +1,6 @@
 import numpy as np
 from sympy import simplify, lambdify, Symbol, symbols, latex, solve
 
-max_error_called = 0
-
 def make_eq(coefs, point, f):
     x = Symbol('x')
     _f = lambdify(x, f)
@@ -35,7 +33,6 @@ def pol(alternance, error_on_iteration, degree, f, start, end): # start, end arg
 
 def max_error(func, start, end):
     global max_error_called
-    max_error_called+=1
     x_vals = np.linspace(start, end, (end - start) * 1000)
     y_vals = func(x_vals)
     
@@ -46,18 +43,9 @@ def max_error(func, start, end):
         e_max = neg_err
     else:
         e_max = pos_err
-    return e_max
-
-def x_of_max_error(func, start, end):
-    x_vals = np.linspace(start, end, (end - start) * 1000)
-    y_vals = func(x_vals)
-    
-    absolute_y_vals = list(map(lambda x: abs(x), y_vals))
-    e_max = max(absolute_y_vals)
-
-    i = list(absolute_y_vals).index(e_max)
-    x = x_vals[i]
-    return x
+  
+    i = list(y_vals).index(e_max)
+    return [x_vals[i], e_max]
 
 def error(polyn, f):
     x = Symbol('x')
@@ -70,8 +58,7 @@ def sign(x):
 
 sign = np.vectorize(sign)
 
-def change_alternance(err_func, alternance, start, end):
-    x_err = x_of_max_error(err_func, start, end)
+def change_alternance(err_func, x_err, alternance, start, end):
     temp = alternance[:]
     temp.append(x_err)
     temp.sort()
@@ -95,7 +82,6 @@ def change_alternance(err_func, alternance, start, end):
     return temp
 
 def main(f_str, start, end, degree, precision, *args):
-
     f = simplify(f_str)
     x = Symbol('x')
     f_lamdified = np.vectorize(lambdify(x, f))
@@ -113,10 +99,9 @@ def main(f_str, start, end, degree, precision, *args):
     err_func = error(polyn, f)
 
     results = {}
-    x_vals = np.linspace(start, end, (end - start) * 1000)
+    x_vals = np.linspace(start, end, (end - start) * 100)
     if (error_on_iteration == 0):
-        mErr = max_error(err_func, start, end)
-        x_err = x_of_max_error(err_func, start, end)
+        [x_err, mErr] = max_error(err_func, start, end)
         return {'1': {
             "alternance": list(alternance),
             "err_in_each_point": list(err_func(alternance)),
@@ -134,9 +119,8 @@ def main(f_str, start, end, degree, precision, *args):
             }
         }
     else:
-        while abs(abs(max_error(err_func, start, end)) - abs(error_on_iteration)) / abs(error_on_iteration) > precision:
-            mErr = max_error(err_func, start, end)
-            x_err = x_of_max_error(err_func, start, end)
+        while abs(abs(max_error(err_func, start, end)[1]) - abs(error_on_iteration)) / abs(error_on_iteration) > precision:
+            [x_err, mErr] = max_error(err_func, start, end)
             results[str(iterations)] = {
                 "alternance": list(alternance),
                 "err_in_each_point": list(err_func(alternance)),
@@ -152,8 +136,7 @@ def main(f_str, start, end, degree, precision, *args):
                 "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))])
             }
 
-
-            alternance = change_alternance(err_func, alternance, start, end)
+            alternance = change_alternance(err_func, x_err, alternance, start, end)
             iterations += 1
             pol_err_on_iter = getPolynom(alternance, error_on_iteration, degree, f, start, end)
             polyn = pol_err_on_iter[0]
@@ -163,13 +146,12 @@ def main(f_str, start, end, degree, precision, *args):
 
             err_func = error(polyn, f)
 
-        mErr = max_error(err_func, start, end)
-        x_err = x_of_max_error(err_func, start, end)
+        [x_err, mErr] = max_error(err_func, start, end)
         results[str(iterations)] = {
             "alternance": list(alternance),
             "err_in_each_point": list(err_func(alternance)),
             "max_err": float(mErr),
-            "x_of_max_err": x_of_max_error(err_func, start, end),
+            "x_of_max_err": x_err,
             "err_diff": float(abs(abs(mErr) - abs(error_on_iteration)) / abs(error_on_iteration)),
             "polynom_latex": latex(polyn),
             "error_plot": list([list(x_vals), list(err_func(x_vals))]),
@@ -181,8 +163,6 @@ def main(f_str, start, end, degree, precision, *args):
             "func_plot": list([list(x_vals), list(f_lamdified(x_vals))]) 
         }
 
-        # print 'max_error_called'
-        # print max_error_called
         return results
 
 # main('sin(x)', 1, 4, 2, 0.001)

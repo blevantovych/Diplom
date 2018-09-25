@@ -128,7 +128,6 @@ def main(X, Y, degree):
     error_on_iteration = 0
 
     alternance = make_initial_alternance(X, degree)
-    print alternance
     iterations = 1
 
     pol_err_on_iter = pol(alternance, degree, f)
