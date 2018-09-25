@@ -35,14 +35,16 @@ def expandInterval(interval, history):
     return [start, end + delta]
 
 
-def main(func, deg, start, end, precision, allowed_error):
+def main(func, deg, start, end, precision, allowed_error, *args):
   interval = [start, end]
   historyOfIntervals = []
   splines = []
 
-  def approximate(interval):
+  def approximateMinmax(interval):
     if type(interval) is list:
       return minmax.main(f_str=func, start=interval[0], end=interval[1], degree=deg, precision=precision)
+
+  approximate = args[0] if len(args) > 0 else approximateMinmax
 
   def make_approximation_on_one_segment(overallInterval):
     if not type(overallInterval) is list:

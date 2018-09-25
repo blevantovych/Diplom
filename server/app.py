@@ -28,13 +28,9 @@ def hi():
 
 @app.route('/continuous_spline_minmax', methods=['POST'])
 def continuousSplineMinmax():
-    print('continuous_spline_minmax')
     data = json.loads(request.data)
     result = spline_cont.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
     return jsonify(result)
-
-
-
 
 @app.route('/minmax', methods=['POST'])
 def min_max():
@@ -148,7 +144,6 @@ def minmax_discrete():
 
 @app.route('/spline_minmax', methods=['POST'])
 def splineMinmax():
-    print('spline minmax')
     data = json.loads(request.data)
     result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
     return jsonify(result)

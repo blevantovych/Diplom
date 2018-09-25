@@ -71,11 +71,6 @@ def sign(x):
 sign = np.vectorize(sign)
 
 def change_alternance(err_func, alternance, start, end):
-    print 'changing alternance'
-    print err_func
-    print alternance
-    print start
-    print end
     x_err = x_of_max_error(err_func, start, end)
     temp = alternance[:]
     temp.append(x_err)
@@ -115,10 +110,6 @@ def main(f_str, start, end, degree, precision, *args):
     polyn = pol_err_on_iter[0]
     polyn_lamdified = np.vectorize(lambdify(x, polyn))
     error_on_iteration = pol_err_on_iter[1]
-    # print('Error on iteration {}'.format(error_on_iteration))
-    # print('Error on iteration {}'.format(polyn))
-    print polyn
-    print f
     err_func = error(polyn, f)
 
     results = {}
