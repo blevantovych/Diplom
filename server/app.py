@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
+from flask_socketio import SocketIO, emit
+
 import numpy as np
 
 import minmax
@@ -18,8 +20,13 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 # client = MongoClient("mongodb://chat:17081996@ds129651.mlab.com:29651/chat")
 # db = client.chat
 
+socketio = SocketIO()
+
 app = Flask(__name__)
+app.debug = True
 CORS(app)
+
+socketio.init_app(app)
 
 @app.route('/', methods=['GET'])
 def hi():
@@ -145,36 +152,48 @@ def minmax_discrete():
 @app.route('/spline_minmax', methods=['POST'])
 def splineMinmax():
     data = json.loads(request.data)
-    result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
+    result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'], emit)
     return jsonify(result)
 
-@app.route('/minmax_discrete_get_results', methods=['GET'])
-def minmax_discrete_get_results():
-    result = []
-    for item in db.minmax_discrete.find({}, {'_id': False}):
-        result.append(item)
-    return jsonify(result) 
+# @app.route('/minmax_discrete_get_results', methods=['GET'])
+# def minmax_discrete_get_results():
+#     result = []
+#     for item in db.minmax_discrete.find({}, {'_id': False}):
+#         result.append(item)
+#     return jsonify(result) 
 
-@app.route('/least_squares_discrete_get_results', methods=['GET'])
-def least_squares_discrete_get_results():
-    result = []
-    for item in db.least_squares_discrete.find({}, {'_id': False}):
-        result.append(item)
-    return jsonify(result) 
+# @app.route('/least_squares_discrete_get_results', methods=['GET'])
+# def least_squares_discrete_get_results():
+#     result = []
+#     for item in db.least_squares_discrete.find({}, {'_id': False}):
+#         result.append(item)
+#     return jsonify(result) 
     
-@app.route('/minmax_get_results', methods=['GET'])
-def minmax_get_results():
-    result = []
-    for item in db.minmax.find({}, {'_id': False}):
-        result.append(item)
-    return jsonify(result) 
+# @app.route('/minmax_get_results', methods=['GET'])
+# def minmax_get_results():
+#     result = []
+#     for item in db.minmax.find({}, {'_id': False}):
+#         result.append(item)
+#     return jsonify(result) 
 
-@app.route('/least_squares_get_results', methods=['GET'])
-def least_squares_get_results():
-    result = []
-    for item in db.least_squares.find({}, {'_id': False}):
-        result.append(item)
-    return jsonify(result) 
+# @app.route('/least_squares_get_results', methods=['GET'])
+# def least_squares_get_results():
+#     result = []
+#     for item in db.least_squares.find({}, {'_id': False}):
+#         result.append(item)
+#     return jsonify(result) 
+
+
+@socketio.on('text', namespace='/text')
+def text(message):
+    """Sent by a client when the user entered a new message.
+    The message is sent to all people in the room."""
+    print message
+    emit('message', {'msg': message['data']})
+    # emit('message', {'msg': session.get('name') + ':' + message['msg']}, room=room)
+
+
 
 if __name__  == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+  socketio.run(app)
+  # app.run(host='0.0.0.0', port=5000, debug=True)

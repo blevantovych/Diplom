@@ -32,7 +32,6 @@ def pol(alternance, error_on_iteration, degree, f, start, end): # start, end arg
     return [polynom, error_on_iteration]
 
 def max_error(func, start, end):
-    global max_error_called
     x_vals = np.linspace(start, end, (end - start) * 1000)
     y_vals = func(x_vals)
     
