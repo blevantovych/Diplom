@@ -5,6 +5,22 @@ import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import Plot from '../Plot';
 import Formula from '../Formula';
 import truncateCoefs from '../../helpers/truncateCoefs';
+import styled from 'styled-components';
+
+const HeaderCell = styled.th`
+  width: 100px;
+  border: 1px solid black;
+  text-align: center;
+  padding: 10px;
+`;
+
+const Cell = styled.td`
+  width: 100px;
+  border: 1px solid black;
+  text-align: center;
+  padding: 5px;  
+`;
+
 
 export default class IterationMinmaxDiscrete extends React.Component {
   constructor(props) {
@@ -27,7 +43,7 @@ export default class IterationMinmaxDiscrete extends React.Component {
       );
     });
     alt.unshift(
-      <TableRowColumn>
+      <TableRowColumn key="Точка альтернансу">
         <h4>Точка альтернансу</h4>
       </TableRowColumn>
     );
@@ -36,14 +52,14 @@ export default class IterationMinmaxDiscrete extends React.Component {
       return <TableRowColumn key={i}>{el.toFixed(7)}</TableRowColumn>;
     });
     err_alt.unshift(
-      <TableRowColumn>
+      <TableRowColumn key={'error'}>
         <h4>Похибка</h4>
       </TableRowColumn>
     );
 
     return (
       <div>
-        <Card
+        {/* <Card
           style={{ margin: '20px 0' }}
           expanded={this.state.expanded}
           onExpandChange={this.handleExpandChange}
@@ -91,13 +107,38 @@ export default class IterationMinmaxDiscrete extends React.Component {
                     />
                   </TableRowColumn>
                 </TableRow>
-                {/*<TableRow>
-                                    <TableRowColumn>For desmos</TableRowColumn>
-                                    <TableRowColumn>{this.props.data.polynom_latex.replace(truncateCoefs(4), '$1')}</TableRowColumn>
-                                </TableRow>*/}
+  
               </TableBody>
-            </Table>
-            <Plot
+            </Table> */}
+            <table style={{borderCollapse: 'collapse'}}>
+              <thead>
+                <tr>
+                  <HeaderCell>H, A/м</HeaderCell>
+                  <HeaderCell>В, Тл</HeaderCell>
+                  <HeaderCell>В обчислене</HeaderCell>
+                  <HeaderCell>Похибка, Тл</HeaderCell>
+                </tr>
+              </thead>
+              <tbody>
+                {this.props.data.err_in_each_x.map((x, i) =>
+                  <tr key={i}>
+                    <Cell>{this.props.data.x_vals[i]}</Cell>
+                    <Cell>{this.props.data.y_vals[i]}</Cell>
+                    <Cell>{this.props.data.approximation_in_each_x[i].toFixed(7)}</Cell>
+                    <Cell>{(-x).toFixed(7)}</Cell>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+            <div style={{marginTop: '20px', fontSize: '18px', marginLeft: '50px'}}>
+              <Formula
+                  formula={this.props.data.formula.replace(
+                    truncateCoefs(10),
+                    '$1'
+                  )}
+                />
+            </div>
+            {/* <Plot
               id={'minmax_discrete_plot' + this.props.ctn}
               plotData={[
                 //{x: this.props.data.x_approx, y: this.props.data.f_x_approx, name: 'Функція'},
@@ -146,7 +187,7 @@ export default class IterationMinmaxDiscrete extends React.Component {
               title={'Графік функції похибки'}
             />
           </CardText>
-        </Card>
+        </Card> */}
       </div>
     );
   }

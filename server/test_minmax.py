@@ -12,16 +12,17 @@ class TestMinmaxModule(unittest.TestCase):
 
     def test_max_error(self):
         func = np.vectorize(lambdify(Symbol('x'), simplify('x^2')))
-        self.assertEqual(minmax.max_error(func, 1, 4), 16)
+        self.assertEqual(minmax.max_error(func, 1, 4), [4, 16])
 
         func = np.vectorize(lambdify(Symbol('x'), simplify('sin(x) - 1.2 * x^2 + 1.53 * x')))
-        self.assertAlmostEqual(minmax.max_error(func, -5, 5), -36.6910757253, places=7)
+        self.assertAlmostEqual(minmax.max_error(func, -5, 5)[1], -36.6910757253, places=7)
     
     def test_change_alternance(self):
         polynomial = simplify('-0.241437236346395*x**2 + 0.615573457011565*x + 0.555617111165429')
         function = simplify('sin(x)')
         error_func = np.vectorize(lambdify(Symbol('x'), function - polynomial))
-        self.assertEqual(minmax.change_alternance(error_func, [1, 2, 3, 4], 1, 4), [1.0, 2.0, 3.3147715905301767, 4.0])
+        
+        self.assertEqual(minmax.change_alternance(error_func, minmax.max_error(error_func, 1, 4)[0], [1, 2, 3, 4], 1, 4), [1.0, 2.0, 3.3147715905301767, 4.0])
 
 if __name__ == '__main__':
     unittest.main()

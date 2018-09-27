@@ -49,7 +49,7 @@ export default class TeX extends Component {
         ref={this.setNode}
         style={this.props.style}
       >
-        {`$${this.props.formula}$`}
+        {`$B_3(H) = ${this.props.formula.replace(/x/g, 'H')}$`}
       </div>
     );
   }

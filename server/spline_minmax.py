@@ -1,6 +1,4 @@
 import minmax
-import app
-from flask_socketio import emit
 
 def getError(result):
   iterations = len(result)
@@ -47,7 +45,6 @@ def main(func, deg, start, end, precision, allowed_error, *args):
       return minmax.main(f_str=func, start=interval[0], end=interval[1], degree=deg, precision=precision)
 
   approximate = args[0] if len(args) > 0 else approximateMinmax
-  emit = args[1] if len(args) > 1 else 'None'
 
   def make_approximation_on_one_segment(overallInterval):
     if not type(overallInterval) is list:
@@ -56,9 +53,6 @@ def main(func, deg, start, end, precision, allowed_error, *args):
     result = approximate(overallInterval)
     max_error = getError(result)
     print("Interval {}".format(overallInterval))
-    if emit != 'None':
-      print 'emiting '
-      emit('message', {'msg': ' '.join(str(e) for e in overallInterval)}, room='/text')
 
     # print("max_error: {} Interval {} history {}".format(max_error, overallInterval, historyOfIntervals))
     condition = abs(abs(max_error) - allowed_error)

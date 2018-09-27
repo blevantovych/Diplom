@@ -142,6 +142,8 @@ def main(X, Y, degree):
         'formula': latex(polyn),
         'x_vals': list(X),
         'y_vals': list(Y),
+        "err_in_each_x": list(err_func(X)),
+        "approximation_in_each_x": list(polyn_lamdified(X)),
         "err_in_each_point": list(err_func(alternance)),
         "alternance": list(alternance),
         "f_alternance": list(np.vectorize(f, otypes=[np.float])(alternance)),
@@ -175,6 +177,8 @@ def main(X, Y, degree):
             'formula': latex(polyn),
             'x_vals': list(X),
             'y_vals': list(Y),
+            "err_in_each_x": list(err_func(X)),
+            "approximation_in_each_x": list(polyn_lamdified(X)),
             "err_in_each_point": list(err_func(alternance)),
             "alternance": list(alternance),
             "f_alternance": list(np.vectorize(f, otypes=[np.float])(alternance)),
@@ -265,14 +269,9 @@ def main(X, Y, degree):
     #     }
 
 
-    
 
 # print main('sin(x)+cos(x)', -5, 5, 2, 0.01)
 # f_str, start, end, degree, precision
-
-
-
-
 
     # for example
     # x = [1, 2, 3, 4, 5, 6, 7, 8] degree = 3
