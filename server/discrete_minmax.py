@@ -115,7 +115,7 @@ def change_alternance(err_func, alternance, x_vals):
 
 def main(X, Y, degree):
     if (len(X) < degree+2):
-        print 'Number of points is insufficient'
+        print('Number of points is insufficient')
         raise ValueError('Number of points is insufficient')
 
     start = min(X)
