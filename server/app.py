@@ -11,10 +11,16 @@ import sys
 import json
 import copy
 import time
+current_milli_time = lambda: int(round(time.time() * 1000))
 
 app = Flask(__name__)
 app.debug = True
 CORS(app)
+
+
+@app.route('/', methods=['GET'])
+def hi():
+    return 'hi'
 
 @app.route('/continuous_spline_minmax', methods=['POST'])
 def continuousSplineMinmax():
@@ -41,7 +47,8 @@ def least_squares():
                 str(data['start']) + '|' +  \
                 str(data['end']) + '|' + \
                 str(data['points'])
-    
+
+
     start = time.time()
     result = lssq.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['points'])
     end = time.time()
@@ -51,6 +58,8 @@ def least_squares():
 @app.route('/least_squares_discrete', methods=['POST'])
 def least_squares_discrete():
     data = json.loads(request.data)
+
+
     start = time.time()
     result = lssq.main_discrete(data['x_vals'], data['y_vals'], data['deg'])
     end = time.time()
@@ -60,7 +69,6 @@ def least_squares_discrete():
 @app.route('/minmax_discrete', methods=['POST'])
 def minmax_discrete():
     data = json.loads(request.data)
-
     start = time.time()
     result = discrete_minmax.main(data['x_vals'], data['y_vals'], data['deg'])
     end = time.time()
@@ -74,4 +82,4 @@ def splineMinmax():
     return jsonify(result)
 
 if __name__  == "__main__":
-  app.run(host='0.0.0.0', port=5000)
+  app.run(host='0.0.0.0', port=5000, debug=True)

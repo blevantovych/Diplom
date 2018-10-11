@@ -1,4 +1,10 @@
 import minmax
+import app
+import redis
+
+r = redis.Redis(
+    host='localhost',
+    port=6379)
 
 def getError(result):
   iterations = len(result)
@@ -48,11 +54,12 @@ def main(func, deg, start, end, precision, allowed_error, *args):
 
   def make_approximation_on_one_segment(overallInterval):
     if not type(overallInterval) is list:
-      print overallInterval
+      print(overallInterval)
       return
     result = approximate(overallInterval)
     max_error = getError(result)
     print("Interval {}".format(overallInterval))
+    r.publish('greetings', ' '.join(str(i) for i in overallInterval))
 
     # print("max_error: {} Interval {} history {}".format(max_error, overallInterval, historyOfIntervals))
     condition = abs(abs(max_error) - allowed_error)

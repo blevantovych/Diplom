@@ -66,9 +66,19 @@ class ContinuousMinmaxSpline extends Component {
   constructor() {
     super();
     this.state = {
-      data: null
+      data: null,
+      interval: null
     };
     this.calculate = this.calculate.bind(this);
+  }
+
+  componentDidMount() {
+    const eventSource = new EventSource('http://localhost:8085/sse');
+    eventSource.onmessage = message => {
+      this.setState({
+        interval: message.data
+      });
+    };
   }
 
   // notify = () => toast("Wow so easy !");
@@ -109,6 +119,7 @@ class ContinuousMinmaxSpline extends Component {
   render() {
     return (
       <div>
+        {this.state.interval ? this.state.interval : ''}
         <ContinuousSplineMinmaxForm onCalcClick={this.calculate} />
         {this.state.data
           ? [

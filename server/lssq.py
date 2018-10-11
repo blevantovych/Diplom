@@ -104,7 +104,7 @@ def main_discrete(x_vals, y_vals, degree):
 
     # x_err = x_of_max_error(approximation - simplify(fun), start, end)
     errors = f_approx(x_vals) - y_vals
-    print errors
+    print(errors)
     err_pos = max(errors)
     err_neg = min(errors)
     err = err_pos if abs(err_pos) > abs(err_neg) else err_neg
