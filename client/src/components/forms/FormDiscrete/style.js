@@ -91,11 +91,31 @@ const DiscreteTable = styled.table`
         opacity: 1;
       }
     }
+
+    .pin {
+      opacity: 1;
+    }
   }
 `;
 
 const DeleteTdPopup = styled.span`
   display: none;
+`;
+
+const Pin = styled.span`
+  cursor: pointer;
+  z-index: 1;
+  opacity: ${props => props.pinned ? 1 : 0};
+  position: absolute;
+  width: 20px;
+  height: 20px
+  top: 0;
+  left: 0;
+  svg {
+    transition: transform .2s;
+    transform: ${props => props.pinned ? 'rotate(-30deg)' : 'rotate(0deg)'};
+    width: 15px;
+  }
 `;
 
 const UploadButtons = styled.div`
@@ -146,5 +166,6 @@ export {
   UploadButtons,
   FormContainer,
   XYChooser,
-  FileInput
+  FileInput,
+  Pin
 };

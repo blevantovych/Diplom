@@ -10,9 +10,11 @@ import {
   XYChooser,
   FormContainer,
   FileInput,
-  DeleteTdPopup
+  DeleteTdPopup,
+  Pin
 } from './style';
 import { csvIcon, excelIcon } from './icons';
+import PinIcon from '../../PinIcon';
 
 function to_json(workbook) {
   var result = {};
@@ -36,8 +38,21 @@ class Form extends Component {
       excelTableInJson: null,
       showColumnChooser: false,
       X: '',
-      Y: ''
+      Y: '',
+      pinnedPoints: []
     };
+  }
+
+  onPinClick = x => () => {
+    if (this.state.pinnedPoints.includes(x)) {
+      const index = this.state.pinnedPoints.indexOf(x);
+      this.setState({pinnedPoints: [
+        ...this.state.pinnedPoints.slice(0, index),
+        ...this.state.pinnedPoints.slice(index + 1)
+      ]})
+    } else {
+      this.setState({pinnedPoints: [...this.state.pinnedPoints, x]})
+    }
   }
 
   processWorkBook = wb => {
@@ -91,14 +106,15 @@ class Form extends Component {
   };
 
   render() {
+    console.log(this.state.pinnedPoints)
     let sortButton = (
       <RaisedButton
         label="Посортувати"
         onClick={() => {
           this.setState({
-            points: [...this.state.points].sort((p1, p2) => {
-              return +p1.x > +p2.x ? 1 : -1;
-            })
+            points: [...this.state.points].sort((p1, p2) =>
+              +p1.x > +p2.x ? 1 : -1
+            )
           });
         }}
       />
@@ -139,6 +155,13 @@ class Form extends Component {
             this.setState({ points: copy });
           }}
         />
+        <Pin
+          title="Pin point"
+          className="pin"
+          pinned={this.state.pinnedPoints.includes(val.x)}
+          onClick={this.onPinClick(val.x)}>
+          <PinIcon />
+        </Pin>
         <TextField
           id={`text-field${val.x}`}
           value={val.x}

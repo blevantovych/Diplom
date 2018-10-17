@@ -40,7 +40,8 @@ class MinmaxDiscrete extends Component {
   render() {
     return (
       <div>
-        {!this.state.data ? <FormDiscrete onCalcClick={this.clickCalcHandler} /> : null}
+        <FormDiscrete onCalcClick={this.clickCalcHandler} />
+        {/* {!this.state.data ? <FormDiscrete onCalcClick={this.clickCalcHandler} /> : null} */}
         {this.state.data ? (
           <IterationListDiscreteMinmax arr={this.state.data} />
         ) : null}

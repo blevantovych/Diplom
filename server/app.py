@@ -47,8 +47,6 @@ def least_squares():
                 str(data['start']) + '|' +  \
                 str(data['end']) + '|' + \
                 str(data['points'])
-
-
     start = time.time()
     result = lssq.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['points'])
     end = time.time()
@@ -58,8 +56,6 @@ def least_squares():
 @app.route('/least_squares_discrete', methods=['POST'])
 def least_squares_discrete():
     data = json.loads(request.data)
-
-
     start = time.time()
     result = lssq.main_discrete(data['x_vals'], data['y_vals'], data['deg'])
     end = time.time()

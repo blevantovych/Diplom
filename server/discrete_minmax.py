@@ -58,13 +58,6 @@ def pol(t, degree, f_discrete, X):
         right_hand_side.append(f_discrete(t[i]))
 
     sol = np.linalg.solve(np.array(left_hand_side), np.array(right_hand_side))
-    print sol
-    print '\n'
-    print 'left_hand_side'
-    print left_hand_side
-    print 'right_hand_side'
-    print right_hand_side
-    # eqs = []
 
     # eqs.append(make_eq(variables, X[0], f_discrete(X[0])))
     # for i in range(degree+1):
@@ -77,6 +70,10 @@ def pol(t, degree, f_discrete, X):
 
     # print 'eqs'
     # print eqs
+    for i in range(degree+1):
+        if abs(sol[i]) < 1e-10:
+            sol[i] = 0
+
     error_on_iteration = sol[0]
     polynom = x - x
     for i in range(degree+1):

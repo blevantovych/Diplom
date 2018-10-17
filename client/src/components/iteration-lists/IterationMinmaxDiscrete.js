@@ -59,7 +59,7 @@ export default class IterationMinmaxDiscrete extends React.Component {
 
     return (
       <div>
-        {/* <Card
+        <Card
           style={{ margin: '20px 0' }}
           expanded={this.state.expanded}
           onExpandChange={this.handleExpandChange}
@@ -109,7 +109,7 @@ export default class IterationMinmaxDiscrete extends React.Component {
                 </TableRow>
   
               </TableBody>
-            </Table> */}
+            </Table>
             <table style={{borderCollapse: 'collapse'}}>
               <thead>
                 <tr>
@@ -124,8 +124,8 @@ export default class IterationMinmaxDiscrete extends React.Component {
                   <tr key={i}>
                     <Cell>{this.props.data.x_vals[i]}</Cell>
                     <Cell>{this.props.data.y_vals[i]}</Cell>
-                    <Cell>{this.props.data.approximation_in_each_x[i].toFixed(7)}</Cell>
-                    <Cell>{(-x).toFixed(7)}</Cell>
+                    <Cell>{Math.abs(this.props.data.approximation_in_each_x[i]) < 1e-10 ? 0 : this.props.data.approximation_in_each_x[i].toFixed(7)}</Cell>
+                    <Cell>{Math.abs(-x) < 1e-10 ? 0 : (-x).toFixed(7)}</Cell>
                   </tr>
                 )}
               </tbody>
@@ -138,7 +138,7 @@ export default class IterationMinmaxDiscrete extends React.Component {
                   )}
                 />
             </div>
-            {/* <Plot
+            <Plot
               id={'minmax_discrete_plot' + this.props.ctn}
               plotData={[
                 //{x: this.props.data.x_approx, y: this.props.data.f_x_approx, name: 'Функція'},
@@ -187,7 +187,7 @@ export default class IterationMinmaxDiscrete extends React.Component {
               title={'Графік функції похибки'}
             />
           </CardText>
-        </Card> */}
+        </Card>
       </div>
     );
   }
