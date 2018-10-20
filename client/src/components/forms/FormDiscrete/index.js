@@ -330,7 +330,7 @@ class Form extends Component {
           onClick={() => {
             let xs = this.state.points.map(p => +p.x);
             let ys = this.state.points.map(p => +p.y);
-            this.props.onCalcClick(xs, ys, this.state.deg);
+            this.props.onCalcClick(xs, ys, this.state.deg, this.state.pinnedPoints);
           }}
         />
       </FormContainer>

@@ -66,7 +66,7 @@ def least_squares_discrete():
 def minmax_discrete():
     data = json.loads(request.data)
     start = time.time()
-    result = discrete_minmax.main(data['x_vals'], data['y_vals'], data['deg'])
+    result = discrete_minmax.main(data['x_vals'], data['y_vals'], data['deg'], data['pinnedPoints'])
     end = time.time()
     result['1']['computation_time'] = end - start
     return jsonify(result)

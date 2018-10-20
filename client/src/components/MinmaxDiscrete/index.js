@@ -15,12 +15,17 @@ class MinmaxDiscrete extends Component {
     };
     this.clickCalcHandler = this.clickCalcHandler.bind(this);
   }
-  clickCalcHandler(xPoints, yPoints, deg) {
+  clickCalcHandler(xPoints, yPoints, deg, pinnedPoints) {
     this.props.loader.showLoader();
 
     fetch(MINMAX_DISCRETE_URL, {
       method: 'POST',
-      body: JSON.stringify({ x_vals: xPoints, y_vals: yPoints, deg })
+      body: JSON.stringify({
+        x_vals: xPoints,
+        y_vals: yPoints,
+        deg,
+        pinnedPoints: pinnedPoints.map(point => +point)
+      })
     })
       .then(r => r.json())
       .then(res => {
