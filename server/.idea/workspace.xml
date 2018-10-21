@@ -23,33 +23,45 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="4" />
+          <entry key="py" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="4" />
+          <entry key="Python" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="251" />
+          <entry key="py" value="473" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="251" />
+          <entry key="Python" value="473" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1055">
-              <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+            <state relative-caret-position="297">
+              <caret line="108" lean-forward="true" selection-start-line="108" selection-end-line="108" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://C:/Python27/Lib/site-packages/flask/app.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="173">
+              <caret line="1798" selection-start-line="1798" selection-end-line="1798" />
             </state>
           </provider>
         </entry>
@@ -65,11 +77,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/discrete_minmax.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="202">
-              <caret line="337" selection-start-line="337" selection-start-column="2" selection-end-line="339" selection-end-column="26" />
+            <state relative-caret-position="145">
+              <caret line="81" selection-start-line="81" selection-end-line="81" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -85,8 +97,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/discrete_minmax.py" />
+        <option value="$PROJECT_DIR$/app.py" />
       </list>
     </option>
   </component>
@@ -145,7 +157,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/discrete_minmax.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -182,7 +194,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3289689" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39934534" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.44353518" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -202,19 +214,14 @@
           <line>68</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/discrete_minmax.py</url>
-          <line>52</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app.py">
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-762174762/__builtin__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1055">
-          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+        <state relative-caret-position="114">
+          <caret line="3360" column="8" selection-start-line="3360" selection-start-column="8" selection-end-line="3360" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -227,19 +234,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-762174762/__builtin__.py">
+    <entry file="file://C:/Python27/Lib/site-packages/flask/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="3360" column="8" selection-start-line="3360" selection-start-column="8" selection-end-line="3360" selection-end-column="8" />
+        <state relative-caret-position="173">
+          <caret line="1798" selection-start-line="1798" selection-end-line="1798" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/discrete_minmax.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="337" selection-start-line="337" selection-start-column="2" selection-end-line="339" selection-end-column="26" />
+        <state relative-caret-position="145">
+          <caret line="81" selection-start-line="81" selection-end-line="81" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="108" lean-forward="true" selection-start-line="108" selection-end-line="108" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>

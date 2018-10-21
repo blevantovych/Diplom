@@ -155,13 +155,16 @@ class Form extends Component {
             this.setState({ points: copy });
           }}
         />
-        <Pin
-          title="Pin point"
-          className="pin"
-          pinned={this.state.pinnedPoints.includes(val.x)}
-          onClick={this.onPinClick(val.x)}>
-          <PinIcon />
-        </Pin>
+        {
+          this.props.pinPoints &&
+          <Pin
+            title="Pin point"
+            className="pin"
+            pinned={this.state.pinnedPoints.includes(val.x)}
+            onClick={this.onPinClick(val.x)}>
+            <PinIcon />
+          </Pin>
+        }
         <TextField
           id={`text-field${val.x}`}
           value={val.x}
@@ -328,9 +331,12 @@ class Form extends Component {
           label="Обчислити"
           primary={true}
           onClick={() => {
-            let xs = this.state.points.map(p => +p.x);
-            let ys = this.state.points.map(p => +p.y);
-            this.props.onCalcClick(xs, ys, this.state.deg, this.state.pinnedPoints);
+            const xs = this.state.points.map(p => +p.x);
+            const ys = this.state.points.map(p => +p.y);
+            const args = [xs, ys, this.state.deg];
+            if (this.props.pinPoints)
+              args.push(this.state.pinnedPoints);
+            this.props.onCalcClick(...args);
           }}
         />
       </FormContainer>
@@ -339,7 +345,8 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  onCalcClick: PropTypes.func
+  onCalcClick: PropTypes.func,
+  pinPoints: PropTypes.bool
 };
 
 Form.defaultProps = {

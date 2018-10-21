@@ -18,6 +18,27 @@ app.debug = True
 CORS(app)
 
 
+class InvalidUsage(Exception):
+    status_code = 400
+
+    def __init__(self, message, status_code=None, payload=None):
+        Exception.__init__(self)
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        rv = dict(self.payload or ())
+        rv['message'] = self.message
+        return rv
+
+@app.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
 @app.route('/', methods=['GET'])
 def hi():
     return 'hi'
@@ -66,7 +87,12 @@ def least_squares_discrete():
 def minmax_discrete():
     data = json.loads(request.data)
     start = time.time()
-    result = discrete_minmax.main(data['x_vals'], data['y_vals'], data['deg'], data['pinnedPoints'])
+    degree = data['deg']
+    x_vals = data['x_vals']
+    if (len(x_vals) < degree + 2):
+        raise InvalidUsage('Insufficient points', status_code=400)
+
+    result = discrete_minmax.main(x_vals, data['y_vals'], data['deg'], data['pinnedPoints'])
     end = time.time()
     result['1']['computation_time'] = end - start
     return jsonify(result)
@@ -76,6 +102,10 @@ def splineMinmax():
     data = json.loads(request.data)
     result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
     return jsonify(result)
+
+@app.route('/foo')
+def get_foo():
+    raise InvalidUsage('This view is gone', status_code=410)
 
 if __name__  == "__main__":
   app.run(host='0.0.0.0', port=5000, debug=True)

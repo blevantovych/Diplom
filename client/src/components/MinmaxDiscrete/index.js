@@ -4,6 +4,9 @@ import FormDiscrete from '../forms/FormDiscrete';
 import IterationListDiscreteMinmax from '../iteration-lists/IterationListDiscreteMinmax';
 import { MINMAX_DISCRETE_URL } from '../../../api/api-config';
 import toArr from '../../helpers/toArr';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import api from './api';
 
 @inject('loader')
 @observer
@@ -17,8 +20,7 @@ class MinmaxDiscrete extends Component {
   }
   clickCalcHandler(xPoints, yPoints, deg, pinnedPoints) {
     this.props.loader.showLoader();
-
-    fetch(MINMAX_DISCRETE_URL, {
+    api(MINMAX_DISCRETE_URL,  {
       method: 'POST',
       body: JSON.stringify({
         x_vals: xPoints,
@@ -26,9 +28,7 @@ class MinmaxDiscrete extends Component {
         deg,
         pinnedPoints: pinnedPoints.map(point => +point)
       })
-    })
-      .then(r => r.json())
-      .then(res => {
+    }).then(res => {
         this.props.loader.hideLoader();
         // const endTime = Date.now();
 
@@ -37,15 +37,18 @@ class MinmaxDiscrete extends Component {
           // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
         });
       })
-      .catch(e => {
-        console.log(e);
-        this.props.loader.hideLoader();
+      .catch(({status, errPromise}) => {
+        errPromise.then(err => {
+          toast(err.message);
+          this.props.loader.hideLoader();
+        })
       });
   }
   render() {
     return (
       <div>
-        <FormDiscrete onCalcClick={this.clickCalcHandler} />
+        <ToastContainer hideProgressBar={true} />
+        <FormDiscrete onCalcClick={this.clickCalcHandler} pinPoints={true} />
         {/* {!this.state.data ? <FormDiscrete onCalcClick={this.clickCalcHandler} /> : null} */}
         {this.state.data ? (
           <IterationListDiscreteMinmax arr={this.state.data} />

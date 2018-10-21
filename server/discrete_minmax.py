@@ -164,7 +164,7 @@ def main(X, Y, degree, pinnedPoints):
 
     alternance = make_initial_alternance(X, degree)
     for i in range(len(pinnedPoints)):
-        del alternance[i]
+        del alternance[0]
     iterations = 1
 
     pol_err_on_iter = pol(alternance, degree, f, X, pinnedPoints)
