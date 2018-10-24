@@ -84,7 +84,7 @@ export default class IterationListDiscreteMinmax extends React.Component {
   };
   render() {
     const iters = this.props.arr.map((el, i, a) => {
-      return <IterationMinmaxDiscrete key={i} ctn={i} data={el} />;
+      return <IterationMinmaxDiscrete demo={this.props.demo} key={i} ctn={i} data={el} />;
     });
     const computationTime =
       this.props.arr.length > 0
@@ -100,8 +100,8 @@ export default class IterationListDiscreteMinmax extends React.Component {
 
     return (
       <div>
-        {iters}
-        {this.props.arr.length > 0 && (
+        {this.props.demo ? iters.slice(-1) : iters}
+        {(this.props.arr.length > 0 && !this.props.demo) && (
           <div onKeyDown={this.handleClicks} tabIndex="0">
             <Plot
               id="all_errors_discrete"
@@ -148,7 +148,7 @@ export default class IterationListDiscreteMinmax extends React.Component {
             />
           </div>
         )}
-        {computationTime}
+        {!this.props.demo && computationTime}
       </div>
     );
   }

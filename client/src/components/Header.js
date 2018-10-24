@@ -93,6 +93,7 @@ class Header extends Component {
   render() {
     return (
       <AppBar
+        id="header"
         // style={{  position: 'fixed', top: 0, width: '60vw' }}
         title={pathNameToTitle[this.props.location.pathname]}
         showMenuIconButton={false}
