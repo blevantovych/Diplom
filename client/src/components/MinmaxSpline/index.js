@@ -11,7 +11,7 @@ import Plot from '../Plot';
 import Formula from '../Formula';
 import truncateCoefs from '../../helpers/truncateCoefs';
 
-const getPlotData = (segment, index) => {
+export const getPlotData = (segment, index) => {
   const iterations = toArr(segment.spline);
   const lastIteration = iterations.last();
   const trace = {
@@ -22,7 +22,7 @@ const getPlotData = (segment, index) => {
   return trace;
 };
 
-const getErrorPlot = data => {
+export const getErrorPlot = data => {
   let x = [];
   let y = [];
   data.forEach(segment => {
@@ -36,7 +36,7 @@ const getErrorPlot = data => {
   };
 };
 
-const getFuncPlot = data => {
+export const getFuncPlot = data => {
   const funcDataOnAllInterval = [[], []];
   data.forEach(segment => {
     const funcPlotOnSegment = toArr(segment.spline).last().func_plot;

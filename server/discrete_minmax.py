@@ -33,25 +33,60 @@ def make_initial_alternance(x, degree):
 # erro_on_iterations is error on previous itertion
 # degree is degree(order) of polynomial we trying to find
 # f_discrete is function at discrete points
-def pol(t, degree, f_discrete):
+def pol(t, degree, f_discrete, X, pinnedPoints):
+    print t
     x = Symbol('x')
     e = Symbol('e')
     vars_str = ' '.join(['a' + str(i) for i in range(degree+1)])
     variables = symbols(vars_str)
-    eqs = []
+    
+    left_hand_side = []
+    right_hand_side = []
+    for i in pinnedPoints:
+        left_hand_side.append([0])
 
-    for i in range(degree+2):
-        eqs.append(make_eq(variables, t[i], f_discrete(t[i])) + e)
-        e *= -1
-    if degree % 2 == 1:
-        e *= -1
+    for point in pinnedPoints:
+        right_hand_side.append(f_discrete(point))
 
-    solution = solve(eqs, variables + (e,))
+    # need to verify if degree+2 - len(pinnedPoint) is not less than 1 ()
+    # Does 1 alternance point make sense?
+    number_of_alternance_points = degree + 2 - len(pinnedPoints)
+    for i in range(number_of_alternance_points):
+        left_hand_side.append([])
 
-    error_on_iteration = solution[e]
+    # print left_hand_side
+    #  build first equation
+    for eq_index, point in enumerate(pinnedPoints):
+        for i in range(degree+1):
+            left_hand_side[eq_index].append(point ** i)
+
+    for i in range(number_of_alternance_points):
+        left_hand_side[i + len(pinnedPoints)] = [1] if i % 2 == 0 else [-1]
+        for j in range(degree + 1):
+            left_hand_side[i + len(pinnedPoints)].append(t[i]**j)
+        right_hand_side.append(f_discrete(t[i]))
+
+    sol = np.linalg.solve(np.array(left_hand_side), np.array(right_hand_side))
+
+    # eqs.append(make_eq(variables, X[0], f_discrete(X[0])))
+    # for i in range(degree+1):
+        # eqs.append(make_eq(variables, t[i+1], f_discrete(t[i+1])) + e)
+        # e *= -1
+    # if degree % 2 == 1:
+    #     e *= -1
+
+    # solution = solve(eqs, variables + (e,))
+
+    # print 'eqs'
+    # print eqs
+    for i in range(number_of_alternance_points):
+        if abs(sol[i]) < 1e-10:
+            sol[i] = 0
+
+    error_on_iteration = sol[0]
     polynom = x - x
-    for i, v in enumerate(variables):
-        polynom += solution[v] * x**i
+    for i in range(degree+1):
+        polynom += sol[i+1] * x**i
 
     return [polynom, error_on_iteration]
 
@@ -113,7 +148,7 @@ def change_alternance(err_func, alternance, x_vals):
             del temp[0]
     return temp
 
-def main(X, Y, degree):
+def main(X, Y, degree, pinnedPoints):
     if (len(X) < degree+2):
         print('Number of points is insufficient')
         raise ValueError('Number of points is insufficient')
@@ -128,9 +163,11 @@ def main(X, Y, degree):
     error_on_iteration = 0
 
     alternance = make_initial_alternance(X, degree)
+    for i in range(len(pinnedPoints)):
+        del alternance[0]
     iterations = 1
 
-    pol_err_on_iter = pol(alternance, degree, f)
+    pol_err_on_iter = pol(alternance, degree, f, X, pinnedPoints)
     polyn = pol_err_on_iter[0]
     polyn_lamdified = np.vectorize(lambdify(x, polyn))
 
@@ -165,7 +202,7 @@ def main(X, Y, degree):
     iterations+=1
     while x_err != x_err_prev:
         alternance = change_alternance(err_func, alternance, X)
-        pol_err_on_iter = pol(alternance, degree, f)
+        pol_err_on_iter = pol(alternance, degree, f, X, pinnedPoints)
         polyn = pol_err_on_iter[0]
         polyn_lamdified = np.vectorize(lambdify(x, polyn))
         error_on_iteration = pol_err_on_iter[1]
@@ -289,3 +326,12 @@ def main(X, Y, degree):
 
 
 # [(1, 1.1), (2.1, 2.03), (2.2, 2.31), (3.4, 3.2),(4.1, 4.0), (5.1, 4.94), (5.6, 5.5),(7.1, 7.0)]
+
+# X = [0, 0.375, 0.875, 1.25, 1.625, 2.125, 2.625, 3, 3.5, 4, 4.563, 5.125, 5.875, 7.063, 8.938, 12.375, 23.625, 63]
+# Y = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7]
+
+# print (main(X, Y, 2, []))
+
+# X = [0, 1, 3.1, 6, 10]
+# Y = [0, 2, 4, 10, 20]
+# print(main(X, Y, 2, []))

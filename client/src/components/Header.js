@@ -16,7 +16,9 @@ const pathNameToTitle = {
   '/minmax': 'Мінімакс',
   '/comparison-continuous': 'Порівняти Мінімакс і МНК',
   '/spline': 'Побудова сплайну (мінімакс)',
-  '/continuous-spline': 'Побудова неперервного сплайну (мінімакс)'
+  '/continuous-spline': 'Побудова неперервного сплайну (мінімакс)',
+  '/continuous-spline-segments-specified':
+    'Побудова неперервного сплайну (мінімакс) з заданою кількістю ланок'
 };
 
 const Menu = props => (
@@ -79,6 +81,12 @@ const Menu = props => (
       primaryText="Апроксимація неперервними сплайнами"
       onClick={() => props.history.push('/continuous-spline')}
     />
+    <MenuItem
+      primaryText="Апроксимація неперервними сплайнами з заданою кількістю ланок"
+      onClick={() =>
+        props.history.push('/continuous-spline-segments-specified')
+      }
+    />
     {/*<MenuItem
             primaryText="Історія"
             onTouchTap={() => props.onMenuChange(4)}
@@ -93,6 +101,7 @@ class Header extends Component {
   render() {
     return (
       <AppBar
+        id="header"
         // style={{  position: 'fixed', top: 0, width: '60vw' }}
         title={pathNameToTitle[this.props.location.pathname]}
         showMenuIconButton={false}
