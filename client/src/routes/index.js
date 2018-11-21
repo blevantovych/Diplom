@@ -1,21 +1,27 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import { Router, Route, Redirect } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-import ComparisonDiscrete from '../components/ComparisonDiscrete';
-import Comparison from '../components/Comparison';
-import LS from '../components/LS';
-import LSDiscrete from '../components/LSDiscrete';
-import Minmax from '../components/Minmax';
-import MinmaxDiscrete from '../components/MinmaxDiscrete';
-import ContinuousMinmaxSpline from '../components/ContinuousMinmaxSpline';
-import MinmaxSpline from '../components/MinmaxSpline';
-import ContinuousMinmaxSplineSegmentsSpecified from '../components/ContinuousMinmaxSplineSegmentsSpecified';
 import Header from '../components/Header';
 import Loader from '../components/loader';
 
+const Comparison = React.lazy(() => import('../components/Comparison'));
+const LS = React.lazy(() => import('../components/LS'));
+const LSDiscrete = React.lazy(() => import('../components/LSDiscrete'));
+const Minmax = React.lazy(() => import('../components/Minmax'));
+const MinmaxDiscrete = React.lazy(() => import('../components/MinmaxDiscrete'));
+const ContinuousMinmaxSpline = React.lazy(() => import('../components/ContinuousMinmaxSpline'));
+const MinmaxSpline = React.lazy(() => import('../components/MinmaxSpline'));
+const ContinuousMinmaxSplineSegmentsSpecified = React.lazy(() => import('../components/ContinuousMinmaxSplineSegmentsSpecified'));
+const ComparisonDiscrete = React.lazy(() => import('../components/ComparisonDiscrete'))
+
 const history = createBrowserHistory();
+
+const suspend = Component => () => (
+  <Suspense fallback={<div>Loading ...</div>}>
+    <Component />
+  </Suspense>
+);
 
 const Routes = () => (
   <Router history={history}>
@@ -23,17 +29,17 @@ const Routes = () => (
       <div style={{ height: '100%', width: '100%'}}>
         <Header />
         <Loader />
-        <Route path="/comparison-discrete" component={ComparisonDiscrete} />
-        <Route path="/comparison-continuous" component={Comparison} />
-        <Route path="/ls" component={LS} />
-        <Route path="/ls-discrete" component={LSDiscrete} />
-        <Route path="/minmax" component={Minmax} />
-        <Route path="/minmax-discrete" component={MinmaxDiscrete} />
-        <Route path="/spline" component={MinmaxSpline} />
-        <Route path="/continuous-spline" component={ContinuousMinmaxSpline} />
+        <Route path="/comparison-discrete" component={suspend(ComparisonDiscrete)} />
+        <Route path="/comparison-continuous" component={suspend(Comparison)} />
+        <Route path="/ls" component={suspend(LS)} />
+        <Route path="/ls-discrete" component={suspend(LSDiscrete)} />
+        <Route path="/minmax" component={suspend(Minmax)} />
+        <Route path="/minmax-discrete" component={suspend(MinmaxDiscrete)} />
+        <Route path="/spline" component={suspend(MinmaxSpline)} />
+        <Route path="/continuous-spline" component={suspend(ContinuousMinmaxSpline)} />
         <Route
           path="/continuous-spline-segments-specified"
-          component={ContinuousMinmaxSplineSegmentsSpecified}
+          component={suspend(ContinuousMinmaxSplineSegmentsSpecified)}
         />
         <Route path="/" exact component={() => <Redirect to="/spline" />} />
       </div>

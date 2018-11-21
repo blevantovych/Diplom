@@ -1,11 +1,11 @@
-var debug = process.env.NODE_ENV !== 'production';
-// var debug = false;
-var webpack = require('webpack');
-var path = require('path');
+// var debug = process.env.NODE_ENV !== 'production';
+const debug = false;
+// const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   // context: path.join(__dirname, "src"),
-  devtool: debug ? 'inline-sourcemap' : null,
+  devtool: debug ? 'inline-sourcemap' : false,
   entry: ['./src/index.js'],
   module: {
     rules: [
@@ -54,14 +54,9 @@ module.exports = {
     host: '0.0.0.0',
     historyApiFallback: true
   },
-  plugins: debug
-    ? []
-    : [
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.optimize.UglifyJsPlugin({
-          mangle: false,
-          sourcemap: false
-        })
-      ]
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin()
+    ]
+  }
 };
