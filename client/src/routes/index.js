@@ -11,6 +11,7 @@ import Minmax from '../components/Minmax';
 import MinmaxDiscrete from '../components/MinmaxDiscrete';
 import ContinuousMinmaxSpline from '../components/ContinuousMinmaxSpline';
 import MinmaxSpline from '../components/MinmaxSpline';
+import ContinuousMinmaxSplineSegmentsSpecified from '../components/ContinuousMinmaxSplineSegmentsSpecified';
 import Header from '../components/Header';
 import Loader from '../components/loader';
 
@@ -30,6 +31,10 @@ const Routes = () => (
         <Route path="/minmax-discrete" component={MinmaxDiscrete} />
         <Route path="/spline" component={MinmaxSpline} />
         <Route path="/continuous-spline" component={ContinuousMinmaxSpline} />
+        <Route
+          path="/continuous-spline-segments-specified"
+          component={ContinuousMinmaxSplineSegmentsSpecified}
+        />
         <Route path="/" exact component={() => <Redirect to="/spline" />} />
       </div>
     </MuiThemeProvider>
