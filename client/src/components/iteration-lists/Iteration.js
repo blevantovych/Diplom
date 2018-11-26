@@ -6,6 +6,7 @@ import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import truncateCoefs from '../../helpers/truncateCoefs';
 import Plot from '../Plot';
 import Formula from '../Formula';
+import HighChartsPlot from '../HighChartsPlot';
 
 class Iteration extends React.Component {
   constructor(props) {
@@ -100,7 +101,8 @@ class Iteration extends React.Component {
                     Аналітичний вигляд многочлена
                   </TableRowColumn>
                   <TableRowColumn key="value">
-                    <div style={{ overflowX: 'scroll' }}>
+                    {/* <div style={{ overflowX: 'auto'}}> */}
+                    <div style={{ overflowX: 'auto', overflowY: 'auto' }}>
                       <Formula
                         formula={this.props.data.polynom_latex.replace(
                           truncateCoefs(4),
@@ -108,6 +110,7 @@ class Iteration extends React.Component {
                         )}
                       />
                     </div>
+                    {/* </div> */}
                   </TableRowColumn>
                 </TableRow>
               </TableBody>
@@ -122,6 +125,7 @@ class Iteration extends React.Component {
               ]}
               title={'Графік функції похибки'}
             />
+            <HighChartsPlot x={this.props.data.error_plot[0]} y={this.props.data.error_plot[1]} />
           </CardText>
         </Card>
         {this.props.isLast && (
