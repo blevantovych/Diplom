@@ -17,7 +17,7 @@ import ContinuousSplineMinmaxForm from './form';
 
 export const getPlotData = (segment, index) => {
   const iterations = toArr(segment.spline);
-  const lastIteration = iterations.last();
+  const lastIteration = iterations.slice(-1)[0];
   const trace = {
     x: lastIteration.pol_plot[0],
     y: lastIteration.pol_plot[1],
@@ -30,7 +30,7 @@ export const getErrorPlot = data => {
   let x = [];
   let y = [];
   data.forEach(segment => {
-    const error_plot_on_segment = toArr(segment.spline).last().error_plot;
+    const error_plot_on_segment = toArr(segment.spline).slice(-1)[0].error_plot;
     x = [...x, ...error_plot_on_segment[0].slice(1, -1)];
     y = [...y, ...error_plot_on_segment[1].slice(1, -1)];
   });
@@ -43,7 +43,7 @@ export const getErrorPlot = data => {
 export const getFuncPlot = data => {
   const funcDataOnAllInterval = [[], []];
   data.forEach(segment => {
-    const funcPlotOnSegment = toArr(segment.spline).last().func_plot;
+    const funcPlotOnSegment = toArr(segment.spline).slice(-1)[0].func_plot;
     funcDataOnAllInterval[0] = [
       ...funcDataOnAllInterval[0],
       ...funcPlotOnSegment[0]
@@ -165,7 +165,7 @@ class ContinuousMinmaxSpline extends Component {
                       <TableRowColumn>
                         <Formula
                           formula={toArr(segment.spline)
-                            .last()
+                            .slice(-1)[0]
                             .polynom_latex.replace(truncateCoefs(4), '$1')}
                         />
                       </TableRowColumn>

@@ -100,7 +100,7 @@ class ContinuousMinmaxSplineSegmentsSpecified extends Component {
                     <TableRowColumn>
                       <Formula
                         formula={toArr(segment.spline)
-                          .last()
+                          .slice(-1)[0]
                           .polynom_latex.replace(truncateCoefs(4), '$1')}
                       />
                     </TableRowColumn>

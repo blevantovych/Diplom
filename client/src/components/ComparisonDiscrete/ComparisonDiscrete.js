@@ -14,12 +14,6 @@ import {
 } from '../../../api/api-config';
 import toArr from '../../helpers/toArr';
 
-if (!Array.prototype.last) {
-  Array.prototype.last = function() {
-    return this[this.length - 1];
-  };
-}
-
 @inject('loader')
 @observer
 class ComparisonDiscrete extends Component {
@@ -51,7 +45,7 @@ class ComparisonDiscrete extends Component {
         // const endTime = Date.now();
         this.props.loader.hideLoader();
         this.setState({
-          minmax: toArr(data[1]).last(),
+          minmax: toArr(data[1]).slice(-1)[0],
           lssq: data[0]
           // loaderActive: false,
           // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'

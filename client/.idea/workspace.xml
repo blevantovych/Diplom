@@ -2,26 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d95fe625-6429-4702-84de-c7af518c78f2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/api-config.js" beforeDir="false" afterPath="$PROJECT_DIR$/api/api-config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ContinuousMinmaxSpline/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ContinuousMinmaxSpline/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Formula.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Formula.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MinmaxDiscrete/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MinmaxDiscrete/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MinmaxSpline/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MinmaxSpline/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forms/FormDiscrete/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/FormDiscrete/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forms/FormDiscrete/style.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/FormDiscrete/style.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/iteration-lists/IterationListDiscreteMinmax.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/iteration-lists/IterationListDiscreteMinmax.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/iteration-lists/IterationMinmaxDiscrete.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/iteration-lists/IterationMinmaxDiscrete.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../data/Bmax=1,5Тл(3408).txt" beforeDir="false" afterPath="$PROJECT_DIR$/../data/Bmax=1,5Тл(3408).txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../data/Bmax=1.5Тл(3406).txt" beforeDir="false" afterPath="$PROJECT_DIR$/../data/Bmax=1.5Тл(3406).txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../data/Bmax=1.7Тл(3406).txt" beforeDir="false" afterPath="$PROJECT_DIR$/../data/Bmax=1.7Тл(3406).txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../server/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../server/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/discrete_minmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/../server/discrete_minmax.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/dist/" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -37,6 +18,7 @@
     <session id="-368089225">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -239,16 +221,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1540843976612</updated>
-      <workItem from="1540843981774" duration="4758000" />
+      <workItem from="1540843981774" duration="6014000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4758000" />
+    <option name="totallyTimeSpent" value="6014000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-32" y="-15" width="1386" height="788" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="npm" side_tool="true" />
       <window_info id="Favorites" side_tool="true" />

@@ -41,7 +41,7 @@ class Comparison extends Component {
 
         this.setState({
           lssq: data[0],
-          minmax: toArr(data[1]).last()
+          minmax: toArr(data[1]).slice(-1)[0]
         });
       })
       .catch(e => {
