@@ -63,6 +63,17 @@ export const getFuncPlot = data => {
   };
 };
 
+const getInterval = (x_vals, segment) => {
+  console.log()
+  const interval = segment.interval;
+  const left_point = x_vals[interval[0]]
+  const right_point = x_vals[interval[1]]
+  // debugger;
+  return `[${left_point.toFixed(3)};
+        ${right_point.toFixed(3)}]`
+}
+  
+
 const demo = false;
 
 @inject('loader')
@@ -72,13 +83,16 @@ class SplineMinmaxDiscrete extends Component {
     super();
     this.state = {
       data: null,
-      allowed_error: 0.5
+      allowed_error: 0.5,
+      xPoints: []
     };
     this.clickCalcHandler = this.clickCalcHandler.bind(this);
   }
   clickCalcHandler(xPoints, yPoints, deg, pinnedPoints) {
     this.props.loader.showLoader();
-
+    this.setState({
+      xPoints
+    })
 
     fetch(MINMAX_SPLINE_DISCRETE_URL, {
       method: 'POST',
@@ -118,7 +132,7 @@ class SplineMinmaxDiscrete extends Component {
                     floatingLabelText="Допустима похибка"
                     type="number"
                     value={this.state.allowed_error || ''}
-                    onChange={e => this.setState({ allowed_error: +e.target.value })}
+                    onChange={e => this.setState({ allowed_error: e.target.value })}
                   />
                 <FormDiscrete onCalcClick={this.clickCalcHandler} pinPoints={true} />
               </div>
@@ -161,8 +175,7 @@ class SplineMinmaxDiscrete extends Component {
                       </TableRowColumn>
                       <TableRowColumn>
                         <Formula
-                          formula={`[${segment.interval[0].toFixed(3)};
-                            ${segment.interval[1].toFixed(3)}]`}
+                          formula={getInterval(this.state.xPoints, segment)}
                         />
                       </TableRowColumn>
                       <TableRowColumn>
