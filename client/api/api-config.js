@@ -27,6 +27,10 @@ const CONTINUOUS_SPLINE_MINMAX_SEGMENTS_SPECIFIED_URL = LOCAL
   ? `http://${window.location.hostname}:5000/continuous_spline_minmax_segments_specified?`
   : 'https://min-max.herokuapp.com/continuous_spline_minmax_segments_specified?';
 
+const MINMAX_SPLINE_DISCRETE_URL = LOCAL
+  ? `http://${window.location.hostname}:5000/spline_minmax_discrete?`
+  : 'https://min-max.herokuapp.com/spline_minmax_discrete?';
+  ;
 // GET
 
 const MINMAX_DISCRETE_URL_GET = LOCAL
@@ -56,5 +60,6 @@ export {
   LSSQ_DISCRETE_URL_GET,
   SPLINE_MINMAX_URL,
   CONTINUOUS_SPLINE_MINMAX_URL,
-  CONTINUOUS_SPLINE_MINMAX_SEGMENTS_SPECIFIED_URL
+  CONTINUOUS_SPLINE_MINMAX_SEGMENTS_SPECIFIED_URL,
+  MINMAX_SPLINE_DISCRETE_URL
 };

@@ -5,6 +5,7 @@ import numpy as np
 import minmax
 import discrete_minmax
 import spline_with_specified_numbers_of_segments
+import discrete_spline_minmax
 import lssq
 import spline_cont
 import spline_minmax
@@ -116,6 +117,16 @@ def splineMinmaxSegmentsSpecified():
     end = data['end']
     segments = data['segments']
     result = spline_with_specified_numbers_of_segments.main(func, deg, start, end, segments)
+    return jsonify(result)
+
+@app.route('/spline_minmax_discrete', methods=['POST'])
+def splineMinmaxDiscrete():
+    data = json.loads(request.data)
+    # print data
+    x_vals = data['x_vals']
+    # # pinnedPoints = data['pinnedPoints']
+    pinnedPoints = []
+    result = discrete_spline_minmax.main(x_vals, data['y_vals'], data['deg'], pinnedPoints, data['allowed_error'])
     return jsonify(result)
 
 @app.route('/foo')

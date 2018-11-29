@@ -1,31 +1,29 @@
-import minmax
-import app
-# import redis
-#
-# r = redis.Redis(
-#     host='localhost',
-#     port=6379)
-
+import discrete_minmax
+import math
 
 def getError(result):
   iterations = len(result)
-  error = result[str(iterations)]["max_err"]
+  error = result[str(iterations)]["max_error"]
   return abs(error)
 
 
 def shrinkInterval(interval, history = []):
   [start, end] = interval
+
+  if end - start == 1:
+      return [start, end]
+
   if (start > end):
-    print('Begining of interval is greater than its end')
+    print('Beginning of interval is greater than its end')
     return
   left_boundaries = sorted(filter(lambda x: x < end, map(lambda x: x[1], history)))
   if len(left_boundaries) > 0:
     nearest_left_neighbor = left_boundaries[-1]
-    delta = (end - nearest_left_neighbor) / 2.0
-    return [start, end - delta]
+    delta = math.ceil((end - nearest_left_neighbor) / 2.0)
+    return [int(start), int(end - delta)]
   else:
-    mid = (end - start) / 2.0
-    return [start, start + mid]
+    mid = math.ceil((end - start) / 2.0)
+    return [int(start), int(start + mid)]
 
 
 def expandInterval(interval, history):
@@ -40,42 +38,44 @@ def expandInterval(interval, history):
   right_boundaries = sorted(filter(lambda x: x > end, map(lambda x: x[1], history)))
   if len(right_boundaries) > 0:
     nearest_right_neighbor = right_boundaries[0]
-    delta = (nearest_right_neighbor - end) / 2.0
-    return [start, end + delta]
+    delta = math.ceil((nearest_right_neighbor - end) / 2.0)
+    return [int(start), int(end + delta)]
 
 
-def main(func, deg, start, end, precision, allowed_error, *args):
-  interval = [start, end]
+def main(X, Y, deg, pinnedPoints, allowed_error, *args):
+  # return discrete_minmax.main(X, Y, deg, pinnedPoints)
+
+  interval = [0, len(X) - 1]
   historyOfIntervals = []
   splines = []
 
   def approximateMinmax(interval):
     if type(interval) is list:
-      return minmax.main(f_str=func, start=interval[0], end=interval[1], degree=deg, precision=precision)
+      [start, end] = interval
+      x_shrinked = X[start:end+1]
+      y_shrinked = Y[start:end + 1]
+      return discrete_minmax.main(x_shrinked, y_shrinked, deg, pinnedPoints)
 
   approximate = args[0] if len(args) > 0 else approximateMinmax
 
   def make_approximation_on_one_segment(overallInterval):
+    print 'overallInterval'
+    print overallInterval
     if not type(overallInterval) is list:
       print(overallInterval)
       return
     result = approximate(overallInterval)
     max_error = getError(result)
-    # print("Interval {}".format(overallInterval))
 
-
-    # REDIS
-    # r.publish('greetings', ' '.join(str(i) for i in overallInterval))
-
-    # print("max_error: {} Interval {} history {}".format(max_error, overallInterval, historyOfIntervals))
     condition = abs(abs(max_error) - allowed_error)
+    points = overallInterval[-1] - overallInterval[0] + 1
 
-    if condition > (allowed_error / 10): # WHY 10 ????
+    if condition > (allowed_error / 10) and points > deg + 2: # WHY 10 ????
 
       if (max_error > allowed_error):
         shrinkedInterval = shrinkInterval(overallInterval, historyOfIntervals)
         if len(historyOfIntervals) == 0:
-          historyOfIntervals.append(overallInterval)  
+          historyOfIntervals.append(overallInterval)
         historyOfIntervals.append(shrinkedInterval)
         make_approximation_on_one_segment(shrinkedInterval)
       else:
@@ -102,4 +102,40 @@ def main(func, deg, start, end, precision, allowed_error, *args):
   make_approximation_on_one_segment(interval)
   return splines
 
-# print main('sin(x)', deg=2, start=1, end=4, precision=0.1, allowed_error=0.001)
+X = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+Y = [1.1, 0.9, 3.2, 4.5, 5.6, 6.7, 7.5, 8.4, 9.2, 10.2, 11.3, 12.4, 13.5, 14.1]
+deg = 1
+pinnedPoints = []
+
+
+print len(main(X, Y, deg, pinnedPoints, 0.2))
+# mid_index = int(math.floor(len(X) / 2.0))
+#
+#
+# print mid_index
+#
+#
+# left_X = X[:mid_index]
+# right_X = X[mid_index:]
+#
+# left_Y = Y[:mid_index]
+# right_Y = Y[mid_index:]
+
+# print left_X
+# print right_X
+
+# print main(X, Y, deg, pinnedPoints)['1']['max_error']
+
+# def getMaxError (X, Y, deg, pinnedPoints):
+#     approx = main(X, Y, deg, pinnedPoints)
+#     iterations = list(map(lambda x: int(x), approx.keys()))
+#     last_index = max(iterations)
+#     print approx[str(last_index)]['max_error']
+
+# getMaxError(X, Y, deg, pinnedPoints)
+#
+# getMaxError(left_X, left_Y, deg, pinnedPoints)
+#
+# getMaxError(right_X, right_Y, deg, pinnedPoints)
+#
+

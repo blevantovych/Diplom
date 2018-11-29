@@ -18,7 +18,8 @@ const pathNameToTitle = {
   '/spline': 'Побудова сплайну (мінімакс)',
   '/continuous-spline': 'Побудова неперервного сплайну (мінімакс)',
   '/continuous-spline-segments-specified':
-    'Побудова неперервного сплайну (мінімакс) з заданою кількістю ланок'
+    'Побудова неперервного сплайну (мінімакс) з заданою кількістю ланок',
+  '/spline-minmax-discrete': 'Мінімаксний сплайн (дискретний випадок)'
 };
 
 const Menu = props => (
@@ -85,6 +86,12 @@ const Menu = props => (
       primaryText="Апроксимація неперервними сплайнами з заданою кількістю ланок"
       onClick={() =>
         props.history.push('/continuous-spline-segments-specified')
+      }
+    />
+    <MenuItem
+      primaryText="Мінімаксний сплайн (дискретний випадок)"
+      onClick={() =>
+        props.history.push('/spline-minmax-discrete')
       }
     />
     {/*<MenuItem

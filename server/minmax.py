@@ -98,7 +98,7 @@ def main(f_str, start, end, degree, precision, *args):
     err_func = error(polyn, f)
 
     results = {}
-    x_vals = np.linspace(start, end, (end - start) * 100)
+    x_vals = np.linspace(start, end, (end - start) * 300)
     if (error_on_iteration == 0):
         [x_err, mErr] = max_error(err_func, start, end)
         return {'1': {

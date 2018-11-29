@@ -14,7 +14,7 @@ const ContinuousMinmaxSpline = React.lazy(() => import('../components/Continuous
 const MinmaxSpline = React.lazy(() => import('../components/MinmaxSpline'));
 const ContinuousMinmaxSplineSegmentsSpecified = React.lazy(() => import('../components/ContinuousMinmaxSplineSegmentsSpecified'));
 const ComparisonDiscrete = React.lazy(() => import('../components/ComparisonDiscrete'))
-
+const SplineMinmaxDiscrete = React.lazy(() => import('../components/SplineMinmaxDiscrete'));
 const history = createBrowserHistory();
 
 const suspend = Component => () => (
@@ -37,6 +37,7 @@ const Routes = () => (
         <Route path="/minmax-discrete" component={suspend(MinmaxDiscrete)} />
         <Route path="/spline" component={suspend(MinmaxSpline)} />
         <Route path="/continuous-spline" component={suspend(ContinuousMinmaxSpline)} />
+        <Route path="/spline-minmax-discrete" component={suspend(SplineMinmaxDiscrete)} />
         <Route
           path="/continuous-spline-segments-specified"
           component={suspend(ContinuousMinmaxSplineSegmentsSpecified)}
