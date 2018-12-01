@@ -3,15 +3,17 @@ from sympy import simplify, lambdify, Symbol, latex, Matrix
 
 x = Symbol('x')
 
+
 # genFuncs(5) => [x**5, x**4, x**3, x**2, x, 1]
 # genFuncs(1) => [x, 1]
 # genFuncs(0) => [1]
 def genFuncs(deg):
     x = Symbol('x')
     funcs = []
-    for i, el in enumerate(range(deg+1)):
-        funcs.append(x**i)
+    for i, el in enumerate(range(deg + 1)):
+        funcs.append(x ** i)
     return funcs[::-1]
+
 
 # makePol([1,2,-1,4]) => x**3 + 2*x**2 - x + 4
 def makePol(coefs):
@@ -19,31 +21,36 @@ def makePol(coefs):
     x = Symbol('x')
     expr = coefs[0]
     for i, el in enumerate(range(deg)):
-        expr = expr * x + coefs[i+1]
+        expr = expr * x + coefs[i + 1]
     return expr.expand()
 
-def max_error(f, a, b): # f is sympy expression
+
+def max_error(f, a, b):  # f is sympy expression
     _f = np.vectorize(lambdify(x, f))
-    x_vals = np.linspace(a, b, (b - a) * 10000) # x values to check for
+    x_vals = np.linspace(a, b, (b - a) * 10000)  # x values to check for
     y_vals = _f(x_vals)
 
     neg_err = min(y_vals)
     pos_err = max(y_vals)
 
-    if abs(neg_err) > pos_err: e_max = neg_err
-    else: e_max = pos_err
+    if abs(neg_err) > pos_err:
+        e_max = neg_err
+    else:
+        e_max = pos_err
     return e_max
+
 
 def x_of_max_error(f, a, b):
     _f = np.vectorize(lambdify(x, f))
-    x_vals = np.linspace(a, b, (b - a) * 10000) # x values to check for maximum
+    x_vals = np.linspace(a, b, (b - a) * 10000)  # x values to check for maximum
     y_vals = _f(x_vals)
 
     absolute_y_vals = list(map(lambda x: abs(x), y_vals))
     e_max = max(absolute_y_vals)
 
-    i = list(absolute_y_vals).index(e_max) # index of max error
+    i = list(absolute_y_vals).index(e_max)  # index of max error
     return x_vals[i]
+
 
 # lssq valid for discrete case also
 def lssq(x_vals, y_vals, deg):
@@ -56,24 +63,24 @@ def lssq(x_vals, y_vals, deg):
     # pprint(A)
     # pprint((A.T*A))
     # pprint(A.T*B)
-    return ((A.T*A).inv() * (A.T*B)).T
+    return ((A.T * A).inv() * (A.T * B)).T
 
 
 def main(fun, degree, start, end, points_ctn):
-     f = np.vectorize(lambdify(x, simplify(fun)))
+    f = np.vectorize(lambdify(x, simplify(fun)))
 
-     x_vals = np.linspace(start, end, points_ctn)
-     y_vals = f(x_vals)
-    
-     approximation = makePol( list(lssq(x_vals, y_vals, degree)) )
-     f_approx = np.vectorize(lambdify(x, simplify(approximation)))
+    x_vals = np.linspace(start, end, points_ctn)
+    y_vals = f(x_vals)
 
-     x_approx = np.linspace(start, end, 100)
-     error_func = approximation - simplify(fun)
-     err = max_error(approximation - simplify(fun), start, end)
-     x_err = x_of_max_error(error_func, start, end)
+    approximation = makePol(list(lssq(x_vals, y_vals, degree)))
+    f_approx = np.vectorize(lambdify(x, simplify(approximation)))
 
-     return {
+    x_approx = np.linspace(start, end, 100)
+    error_func = approximation - simplify(fun)
+    err = max_error(approximation - simplify(fun), start, end)
+    x_err = x_of_max_error(error_func, start, end)
+
+    return {
         'formula': latex(approximation),
         'x_vals': list(x_vals),
         'y_vals': list(y_vals),
@@ -91,13 +98,14 @@ def main(fun, degree, start, end, points_ctn):
             'x': [x_err, x_err],
             'y': list(np.linspace(f_approx(x_err), f(x_err), 2))
         }
-     }
+    }
+
 
 def main_discrete(x_vals, y_vals, degree):
     start = min(x_vals)
     end = max(x_vals)
 
-    approximation = makePol( list(lssq(x_vals, y_vals, degree)) )
+    approximation = makePol(list(lssq(x_vals, y_vals, degree)))
     f_approx = np.vectorize(lambdify(x, simplify(approximation)))
 
     x_approx = np.linspace(start, end, 100)
@@ -128,14 +136,13 @@ def main_discrete(x_vals, y_vals, degree):
         }
     }
 
-
 # print main_discrete([1.2, 2.3, 3.0, 3.8, 4.7, 5.9], [1.1, 2.1, 3.1, 4.0, 4.9, 5.9], 1)
 
-    # return {
-    #     'formula': latex(N(sum(coef*x**i for i, coef in enumerate(reversed(p.coeffs))),4)),
-    #     'max_pos_err': max(f(x_vals) - p(x_vals)),
-    #     'max_neg_err': min(f(x_vals) - p(x_vals))
-    #     }
+# return {
+#     'formula': latex(N(sum(coef*x**i for i, coef in enumerate(reversed(p.coeffs))),4)),
+#     'max_pos_err': max(f(x_vals) - p(x_vals)),
+#     'max_neg_err': min(f(x_vals) - p(x_vals))
+#     }
 
 
 # def least_squares(fun, degree, start, end):
@@ -146,4 +153,4 @@ def main_discrete(x_vals, y_vals, degree):
 #     p = np.poly1d(z)
 #
 #     x_vals = np.linspace(start, end, 10000) #values to check for max error
- # a = matrix([['0.1','0.3'], ['7.1','5.5'],['3.2','4.4']], force_type=mpi)
+# a = matrix([['0.1','0.3'], ['7.1','5.5'],['3.2','4.4']], force_type=mpi)

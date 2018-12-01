@@ -2,34 +2,40 @@ import numpy as np
 from sympy import simplify, lambdify, Symbol, symbols, latex, solve
 import math
 
+
 def make_eq(coefs, point, f_at_point):
     eq = f_at_point
     for i, c in enumerate(coefs):
-        eq -= c*point**i
+        eq -= c * point ** i
     return eq
+
 
 def make_discrete_func(x_arr, y_arr):
     def f(x):
         if x in x_arr:
             index = x_arr.index(x)
             return y_arr[index]
-        else: return None
+        else:
+            return None
+
     return f
 
+
 def make_initial_alternance(x, degree):
-    alternance = [x[0]] # add first
+    alternance = [x[0]]  # add first
     busy = []
     for i in range(degree):
-        rand_index = np.random.randint(1, len(x)-1)
+        rand_index = np.random.randint(1, len(x) - 1)
         while rand_index in busy:
-            rand_index = np.random.randint(1, len(x)-1)
+            rand_index = np.random.randint(1, len(x) - 1)
         busy.append(rand_index)
         alternance.append(x[rand_index])
-    alternance.append(x[len(x)-1]) # add last
+    alternance.append(x[len(x) - 1])  # add last
     alternance.sort()
     return alternance
 
-# t is alternance 
+
+# t is alternance
 # erro_on_iterations is error on previous itertion
 # degree is degree(order) of polynomial we trying to find
 # f_discrete is function at discrete points
@@ -37,9 +43,9 @@ def pol(t, degree, f_discrete, X, pinnedPoints):
     print t
     x = Symbol('x')
     e = Symbol('e')
-    vars_str = ' '.join(['a' + str(i) for i in range(degree+1)])
+    vars_str = ' '.join(['a' + str(i) for i in range(degree + 1)])
     variables = symbols(vars_str)
-    
+
     left_hand_side = []
     right_hand_side = []
     for i in pinnedPoints:
@@ -57,21 +63,21 @@ def pol(t, degree, f_discrete, X, pinnedPoints):
     # print left_hand_side
     #  build first equation
     for eq_index, point in enumerate(pinnedPoints):
-        for i in range(degree+1):
+        for i in range(degree + 1):
             left_hand_side[eq_index].append(point ** i)
 
     for i in range(number_of_alternance_points):
         left_hand_side[i + len(pinnedPoints)] = [1] if i % 2 == 0 else [-1]
         for j in range(degree + 1):
-            left_hand_side[i + len(pinnedPoints)].append(t[i]**j)
+            left_hand_side[i + len(pinnedPoints)].append(t[i] ** j)
         right_hand_side.append(f_discrete(t[i]))
 
     sol = np.linalg.solve(np.array(left_hand_side), np.array(right_hand_side))
 
     # eqs.append(make_eq(variables, X[0], f_discrete(X[0])))
     # for i in range(degree+1):
-        # eqs.append(make_eq(variables, t[i+1], f_discrete(t[i+1])) + e)
-        # e *= -1
+    # eqs.append(make_eq(variables, t[i+1], f_discrete(t[i+1])) + e)
+    # e *= -1
     # if degree % 2 == 1:
     #     e *= -1
 
@@ -85,71 +91,83 @@ def pol(t, degree, f_discrete, X, pinnedPoints):
 
     error_on_iteration = sol[0]
     polynom = x - x
-    for i in range(degree+1):
-        polynom += sol[i+1] * x**i
+    for i in range(degree + 1):
+        polynom += sol[i + 1] * x ** i
 
     return [polynom, error_on_iteration]
+
 
 def max_error(func, x_vals):
     y_vals = func(x_vals)
     neg_err = min(y_vals)
     pos_err = max(y_vals)
-    
+
     if abs(neg_err) > pos_err:
         e_max = neg_err
     else:
         e_max = pos_err
     return e_max
 
+
 def x_of_max_error(func, x_vals):
     y_vals = func(x_vals)
-    
+
     absolute_y_vals = list(map(lambda x: abs(x), y_vals))
     e_max = max(absolute_y_vals)
 
     i = list(absolute_y_vals).index(e_max)
     return x_vals[i]
 
+
 # f is function at discrete points; created with make_discrete_func
 # polyn is sympy expression returned from pol function
 def error(pol_func, f):
     def err_func(x):
         return pol_func(x) - f(x)
+
     return np.vectorize(err_func)
 
+
 def sign(x):
-    if x > 0: return '+'
-    elif x < 0: return '-'
-    else: return 0
+    if x > 0:
+        return '+'
+    elif x < 0:
+        return '-'
+    else:
+        return 0
+
 
 sign = np.vectorize(sign)
+
 
 def change_alternance(err_func, alternance, x_vals):
     x_err = x_of_max_error(err_func, x_vals)
     temp = alternance[:]
     temp.append(x_err)
     temp.sort()
-    index_of_x_err = temp.index(x_err) 
-    if index_of_x_err != 0 and index_of_x_err != (len(temp)-1):
-        if sign(err_func(temp[index_of_x_err])) == sign(err_func(temp[index_of_x_err-1])):
-            del temp[index_of_x_err-1]
-    
-        else: del temp[index_of_x_err+1]
-        
+    index_of_x_err = temp.index(x_err)
+    if index_of_x_err != 0 and index_of_x_err != (len(temp) - 1):
+        if sign(err_func(temp[index_of_x_err])) == sign(err_func(temp[index_of_x_err - 1])):
+            del temp[index_of_x_err - 1]
+
+        else:
+            del temp[index_of_x_err + 1]
+
     elif index_of_x_err == 0:
         if sign(err_func(temp[index_of_x_err])) == sign(err_func(temp[1])):
             del temp[1]
         else:
-            del temp[len(temp)-1]
-    elif index_of_x_err == (len(temp)-1):
-        if sign(err_func(temp[index_of_x_err])) == sign(err_func(temp[index_of_x_err-1])):
-            del temp[index_of_x_err-1]
+            del temp[len(temp) - 1]
+    elif index_of_x_err == (len(temp) - 1):
+        if sign(err_func(temp[index_of_x_err])) == sign(err_func(temp[index_of_x_err - 1])):
+            del temp[index_of_x_err - 1]
         else:
             del temp[0]
     return temp
 
+
 def main(X, Y, degree, pinnedPoints):
-    if (len(X) < degree+2):
+    if (len(X) < degree + 2):
         print('Number of points is insufficient')
         raise ValueError('Number of points is insufficient')
 
@@ -158,7 +176,7 @@ def main(X, Y, degree, pinnedPoints):
 
     x_approx = np.linspace(start, end, 100)
     f = make_discrete_func(X, Y)
-    
+
     x = Symbol('x')
     error_on_iteration = 0
 
@@ -175,7 +193,7 @@ def main(X, Y, degree, pinnedPoints):
     err_func = error(polyn_lamdified, f)
     x_err = float(x_of_max_error(err_func, X))
     result = {}
-    result[str(iterations)] = { 
+    result[str(iterations)] = {
         'formula': latex(polyn),
         'x_vals': list(X),
         'y_vals': list(Y),
@@ -199,7 +217,7 @@ def main(X, Y, degree, pinnedPoints):
         }
     }
     x_err_prev = 0
-    iterations+=1
+    iterations += 1
     while x_err != x_err_prev:
         alternance = change_alternance(err_func, alternance, X)
         pol_err_on_iter = pol(alternance, degree, f, X, pinnedPoints)
@@ -225,7 +243,7 @@ def main(X, Y, degree, pinnedPoints):
             'error_plot': list([list(X), list(err_func(X))]),
             'max_err_in_error_plot': {
                 'x': list([x_err, x_err]),
-                'y': list(np.linspace(0,  polyn_lamdified(x_err) - f(x_err), 2))
+                'y': list(np.linspace(0, polyn_lamdified(x_err) - f(x_err), 2))
             },
             'x_error': x_err,
             'max_error_line': {
@@ -233,7 +251,7 @@ def main(X, Y, degree, pinnedPoints):
                 'y': list(np.linspace(polyn_lamdified(x_err), f(x_err), 100))
             }
         }
-        iterations+=1
+        iterations += 1
     # print iterations
     return result
     # return iterations
@@ -251,78 +269,76 @@ def main(X, Y, degree, pinnedPoints):
 # iters = [6, 6, 8, 6, 6, 5, 6, 6, 8]
 
 # perfect alternancee for Book1.csv
-#303.5000000	314.4000000	328.3000000	352.7000000	378.9000000
-    # if (error_on_iteration == 0):
-    #     mErr = max_error(err_func, x_vals)
-    #     return {'1': {
-    #         "alternance": list(alternance),
-    #         "err_in_each_point": list(err_func(alternance)),
-    #         "max_err": float(mErr),
-    #         "x_of_max_err": x_of_max_error(err_func, start, end),
-    #         # "err_diff": float(abs(abs(mErr) - abs(error_on_iteration)) / abs(error_on_iteration)),
-    #         "polynom_latex": latex(polyn),
-    #         "error_plot": list([list(x_vals), list(err_func(x_vals))]),
-    #         "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))]),
-    #         "func_plot": list([list(x_vals), list(f_lamdified(x_vals))]) 
+# 303.5000000	314.4000000	328.3000000	352.7000000	378.9000000
+# if (error_on_iteration == 0):
+#     mErr = max_error(err_func, x_vals)
+#     return {'1': {
+#         "alternance": list(alternance),
+#         "err_in_each_point": list(err_func(alternance)),
+#         "max_err": float(mErr),
+#         "x_of_max_err": x_of_max_error(err_func, start, end),
+#         # "err_diff": float(abs(abs(mErr) - abs(error_on_iteration)) / abs(error_on_iteration)),
+#         "polynom_latex": latex(polyn),
+#         "error_plot": list([list(x_vals), list(err_func(x_vals))]),
+#         "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))]),
+#         "func_plot": list([list(x_vals), list(f_lamdified(x_vals))])
 
-    #         }
-    #     }
-    # else:
-    #     while abs(abs(max_error(err_func, start, end)) - abs(error_on_iteration)) / abs(error_on_iteration) > precision:
-    #         mErr = max_error(err_func, start, end)
-    #         results[str(iterations)] = {
-    #             "alternance": list(alternance),
-    #             "err_in_each_point": list(err_func(alternance)),
-    #             "max_err": float(mErr),
-    #             "x_of_max_err": x_of_max_error(err_func, start, end),
-    #             "err_diff": float(abs(abs(mErr) - abs(error_on_iteration)) / abs(error_on_iteration)),
-    #             "polynom_latex": latex(polyn),
-    #             "error_plot": list([list(x_vals), list(err_func(x_vals))]),
-    #             "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))])
-    #         }
+#         }
+#     }
+# else:
+#     while abs(abs(max_error(err_func, start, end)) - abs(error_on_iteration)) / abs(error_on_iteration) > precision:
+#         mErr = max_error(err_func, start, end)
+#         results[str(iterations)] = {
+#             "alternance": list(alternance),
+#             "err_in_each_point": list(err_func(alternance)),
+#             "max_err": float(mErr),
+#             "x_of_max_err": x_of_max_error(err_func, start, end),
+#             "err_diff": float(abs(abs(mErr) - abs(error_on_iteration)) / abs(error_on_iteration)),
+#             "polynom_latex": latex(polyn),
+#             "error_plot": list([list(x_vals), list(err_func(x_vals))]),
+#             "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))])
+#         }
 
 
-    #         alternance = change_alternance(err_func, alternance, start, end)
-    #         iterations += 1
-    #         pol_err_on_iter = pol(alternance, error_on_iteration, degree, f)
-    #         polyn = pol_err_on_iter[0]
-    #         polyn_lamdified = np.vectorize(lambdify(x, polyn))
-    #         # f_lamdified = np.vectorize(lambdify(x, f))
-    #         error_on_iteration = pol_err_on_iter[1]
+#         alternance = change_alternance(err_func, alternance, start, end)
+#         iterations += 1
+#         pol_err_on_iter = pol(alternance, error_on_iteration, degree, f)
+#         polyn = pol_err_on_iter[0]
+#         polyn_lamdified = np.vectorize(lambdify(x, polyn))
+#         # f_lamdified = np.vectorize(lambdify(x, f))
+#         error_on_iteration = pol_err_on_iter[1]
 
-    #         err_func = error(polyn, f)
+#         err_func = error(polyn, f)
 
-    #     mErr = max_error(err_func, start, end)
-    #     results[str(iterations)] = {
-    #         "alternance": list(alternance),
-    #         "err_in_each_point": list(err_func(alternance)),
-    #         "max_err": float(mErr),
-    #         "x_of_max_err": x_of_max_error(err_func, start, end),
-    #         "err_diff": float(abs(abs(mErr) - abs(error_on_iteration)) / abs(error_on_iteration)),
-    #         "polynom_latex": latex(polyn),
-    #         "error_plot": list([list(x_vals), list(err_func(x_vals))]),
-    #         "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))]),
-    #         "func_plot": list([list(x_vals), list(f_lamdified(x_vals))]) 
-    #     }
-
+#     mErr = max_error(err_func, start, end)
+#     results[str(iterations)] = {
+#         "alternance": list(alternance),
+#         "err_in_each_point": list(err_func(alternance)),
+#         "max_err": float(mErr),
+#         "x_of_max_err": x_of_max_error(err_func, start, end),
+#         "err_diff": float(abs(abs(mErr) - abs(error_on_iteration)) / abs(error_on_iteration)),
+#         "polynom_latex": latex(polyn),
+#         "error_plot": list([list(x_vals), list(err_func(x_vals))]),
+#         "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))]),
+#         "func_plot": list([list(x_vals), list(f_lamdified(x_vals))])
+#     }
 
 
 # print main('sin(x)+cos(x)', -5, 5, 2, 0.01)
 # f_str, start, end, degree, precision
 
-    # for example
-    # x = [1, 2, 3, 4, 5, 6, 7, 8] degree = 3
-    # what alternance should look like?
-    # first of all there should be 5 points in alternance
-    # i think this is ok [1, 3, 5, 7, 8]
+# for example
+# x = [1, 2, 3, 4, 5, 6, 7, 8] degree = 3
+# what alternance should look like?
+# first of all there should be 5 points in alternance
+# i think this is ok [1, 3, 5, 7, 8]
 
-    # x = [1, 2, 3, 4, 5, 6, 7] degree = 3
-    # what alternance should look like?
-    # first of all there should be 5 points in alternance
-    # i think this is ok [1, 3, 5, 7, 8]
-    
-    # i think to choose first and last and rest randomly
+# x = [1, 2, 3, 4, 5, 6, 7] degree = 3
+# what alternance should look like?
+# first of all there should be 5 points in alternance
+# i think this is ok [1, 3, 5, 7, 8]
 
+# i think to choose first and last and rest randomly
 
 
 # [(1, 1.1), (2.1, 2.03), (2.2, 2.31), (3.4, 3.2),(4.1, 4.0), (5.1, 4.94), (5.6, 5.5),(7.1, 7.0)]

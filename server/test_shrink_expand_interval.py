@@ -2,6 +2,7 @@ import unittest
 import spline_minmax as sm
 import discrete_spline_minmax as dsm
 
+
 class TestIntervalChange(unittest.TestCase):
 
     def test_shrink(self):
@@ -64,6 +65,7 @@ class TestIntervalChange(unittest.TestCase):
             interval=[2, 3],
             history=[[2, 4], [2, 3]]
         ), [2, 3])
+
 
 if __name__ == '__main__':
     unittest.main()

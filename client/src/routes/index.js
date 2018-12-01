@@ -37,6 +37,7 @@ const Routes = () => (
         <Route path="/minmax-discrete" component={suspend(MinmaxDiscrete)} />
         <Route path="/spline" component={suspend(MinmaxSpline)} />
         <Route path="/continuous-spline" component={suspend(ContinuousMinmaxSpline)} />
+        <Route path="/interpolated-spline" component={suspend(ContinuousMinmaxSpline)} />
         <Route path="/spline-minmax-discrete" component={suspend(SplineMinmaxDiscrete)} />
         <Route
           path="/continuous-spline-segments-specified"

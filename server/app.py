@@ -13,6 +13,7 @@ import sys
 import json
 import copy
 import time
+
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 app = Flask(__name__)
@@ -35,46 +36,54 @@ class InvalidUsage(Exception):
         rv['message'] = self.message
         return rv
 
+
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
 
+
 @app.route('/', methods=['GET'])
 def hi():
     return 'hi'
 
+
 @app.route('/continuous_spline_minmax', methods=['POST'])
 def continuousSplineMinmax():
     data = json.loads(request.data)
-    result = spline_cont.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
+    result = spline_cont.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'],
+                              data['precision'], data['allowed_error'])
     return jsonify(result)
+
 
 @app.route('/minmax', methods=['POST'])
 def min_max():
     data = json.loads(request.data)
     start = time.time()
-    result = minmax.main(data['func'].replace('e', str(np.e)), data['start'], data['end'], data['deg'], data['precision'])
+    result = minmax.main(data['func'].replace('e', str(np.e)), data['start'], data['end'], data['deg'],
+                         data['precision'])
     end = time.time()
 
     result['1']['computation_time'] = end - start
     result['1']['precision'] = data['precision']
     return jsonify(result)
 
+
 @app.route('/least_squares', methods=['POST'])
 def least_squares():
     data = json.loads(request.data)
     input_data = data['func'] + '|' + \
-                str(data['deg']) + '|' + \
-                str(data['start']) + '|' +  \
-                str(data['end']) + '|' + \
-                str(data['points'])
+                 str(data['deg']) + '|' + \
+                 str(data['start']) + '|' + \
+                 str(data['end']) + '|' + \
+                 str(data['points'])
     start = time.time()
     result = lssq.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['points'])
     end = time.time()
     result['computation_time'] = end - start
     return jsonify(result)
+
 
 @app.route('/least_squares_discrete', methods=['POST'])
 def least_squares_discrete():
@@ -84,6 +93,7 @@ def least_squares_discrete():
     end = time.time()
     result['computation_time'] = end - start
     return jsonify(result)
+
 
 @app.route('/minmax_discrete', methods=['POST'])
 def minmax_discrete():
@@ -99,15 +109,17 @@ def minmax_discrete():
     result['1']['computation_time'] = end - start
     return jsonify(result)
 
+
 @app.route('/spline_minmax', methods=['POST'])
 def splineMinmax():
     data = json.loads(request.data)
-    result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'], data['precision'], data['allowed_error'])
+    result = spline_minmax.main(data['func'].replace('e', str(np.e)), data['deg'], data['start'], data['end'],
+                                data['precision'], data['allowed_error'])
     return jsonify(result)
+
 
 @app.route('/continuous_spline_minmax_segments_specified', methods=['POST'])
 def splineMinmaxSegmentsSpecified():
-
     # print(request.data)
     data = json.loads(request.data)
 
@@ -119,6 +131,7 @@ def splineMinmaxSegmentsSpecified():
     result = spline_with_specified_numbers_of_segments.main(func, deg, start, end, segments)
     return jsonify(result)
 
+
 @app.route('/spline_minmax_discrete', methods=['POST'])
 def splineMinmaxDiscrete():
     data = json.loads(request.data)
@@ -129,9 +142,11 @@ def splineMinmaxDiscrete():
     result = discrete_spline_minmax.main(x_vals, data['y_vals'], data['deg'], pinnedPoints, data['allowed_error'])
     return jsonify(result)
 
+
 @app.route('/foo')
 def get_foo():
     raise InvalidUsage('This view is gone', status_code=410)
 
-if __name__  == "__main__":
-  app.run(host='0.0.0.0', port=5000, debug=True)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000, debug=True)

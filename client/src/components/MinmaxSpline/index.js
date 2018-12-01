@@ -25,15 +25,22 @@ export const getPlotData = (segment, index) => {
 export const getErrorPlot = data => {
   let x = [];
   let y = [];
-  data.forEach(segment => {
+  const plots = []
+  data.forEach((segment, index) => {
     const error_plot_on_segment = toArr(segment.spline).slice(-1)[0].error_plot;
-    x = [...x, ...error_plot_on_segment[0].slice(1, -1)];
-    y = [...y, ...error_plot_on_segment[1].slice(1, -1)];
+    plots.push({
+      x: error_plot_on_segment[0],
+      y: error_plot_on_segment[1],
+      name: `Похибка на ланці ${index + 1}`
+    })
+    // x = [...x, ...error_plot_on_segment[0].slice(1, -1)];
+    // y = [...y, ...error_plot_on_segment[1].slice(1, -1)];
   });
-  return {
-    x,
-    y
-  };
+  // return {
+  //   x,
+  //   y
+  // };
+  return plots;
 };
 
 export const getFuncPlot = data => {
@@ -120,7 +127,7 @@ class Minmax extends Component {
                 key="error_plot"
                 id="error_plot"
                 title="Графік функції похибки"
-                plotData={[getErrorPlot(this.state.data)]}
+                plotData={getErrorPlot(this.state.data)}
               />,
               <Table
                 key="table"

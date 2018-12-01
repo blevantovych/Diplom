@@ -1,97 +1,124 @@
 import numpy as np
 from sympy import simplify, lambdify, Symbol, symbols, latex, solve
 
+
 def make_eq(coefs, point, f):
     x = Symbol('x')
     _f = lambdify(x, f)
     eq = _f(point)
     for i, c in enumerate(coefs):
-        eq -= c*point**i
+        eq -= c * point ** i
     return eq
 
-def pol(alternance, error_on_iteration, degree, f, start, end): # start, end arguments are passed for continuous minmax spline
+
+def pol(alternance, error_on_iteration, degree, f, start, end,
+        current_iteration):  # start, end arguments are passed for continuous minmax spline
     x = Symbol('x')
     e = Symbol('e')
-    vars_str = ' '.join(['a' + str(i) for i in range(degree+1)])
+    vars_str = ' '.join(['a' + str(i) for i in range(degree + 1)])
     variables = symbols(vars_str)
     eqs = []
 
-    for i in range(degree+2):
-        eqs.append(make_eq(variables, alternance[i], f) + e)
-        e *= -1
-    if degree % 2 == 1:
+    errors_signs = []
+
+    if current_iteration % 2 == 1:
         e *= -1
 
+    for i in range(degree + 2):
+        eqs.append(make_eq(variables, alternance[i], f) + e)
+        errors_signs.append(e)
+        e *= -1
+
+    if degree % 2 == 0 and current_iteration % 2 == 1:
+        e *= -1
+
+    # print degree
+    # print current_iteration
+    # print e
+    # print errors_signs
     solution = solve(eqs, variables + (e,))
 
     error_on_iteration = solution[e]
+
+    print error_on_iteration
     polynom = x - x
     for i, v in enumerate(variables):
-        polynom += solution[v] * x**i
+        polynom += solution[v] * x ** i
 
     return [polynom, error_on_iteration]
+
 
 def max_error(func, start, end):
     x_vals = np.linspace(start, end, (end - start) * 1000)
     y_vals = func(x_vals)
-    
+
     neg_err = min(y_vals)
     pos_err = max(y_vals)
-    
+
     if abs(neg_err) > pos_err:
         e_max = neg_err
     else:
         e_max = pos_err
-  
+
     i = list(y_vals).index(e_max)
     return [x_vals[i], e_max]
+
 
 def error(polyn, f):
     x = Symbol('x')
     return np.vectorize(lambdify(x, f - polyn))
 
+
 def sign(x):
-    if x > 0: return '+'
-    elif x < 0: return '-'
-    else: return 0
+    if x > 0:
+        return '+'
+    elif x < 0:
+        return '-'
+    else:
+        return 0
+
 
 sign = np.vectorize(sign)
+
 
 def change_alternance(err_func, x_err, alternance, start, end):
     temp = alternance[:]
     temp.append(x_err)
     temp.sort()
     index_of_x_err = temp.index(x_err)
-    if index_of_x_err != 0 and index_of_x_err != (len(temp)-1):
-        if sign(err_func(temp[index_of_x_err])) == sign(err_func(temp[index_of_x_err-1])):
-            del temp[index_of_x_err-1]
-    
-        else: del temp[index_of_x_err+1]
+    if index_of_x_err != 0 and index_of_x_err != (len(temp) - 1):
+        if sign(err_func(temp[index_of_x_err])) == sign(err_func(temp[index_of_x_err - 1])):
+            del temp[index_of_x_err - 1]
+
+        else:
+            del temp[index_of_x_err + 1]
     elif index_of_x_err == 0:
         if sign(err_func(temp[index_of_x_err])) == sign(err_func(temp[1])):
             del temp[1]
         else:
-            del temp[len(temp)-1]
-    elif index_of_x_err == (len(temp)-1):
-        if sign(err_func(temp[index_of_x_err])) == sign(err_func(temp[index_of_x_err-1])):
-            del temp[index_of_x_err-1]
+            del temp[len(temp) - 1]
+    elif index_of_x_err == (len(temp) - 1):
+        if sign(err_func(temp[index_of_x_err])) == sign(err_func(temp[index_of_x_err - 1])):
+            del temp[index_of_x_err - 1]
         else:
             del temp[0]
 
     return temp
 
-def main(f_str, start, end, degree, precision, *args):
+
+def main(f_str, start, end, degree, precision, current_iteration=0, *args):
     f = simplify(f_str)
     x = Symbol('x')
     f_lamdified = np.vectorize(lambdify(x, f))
     error_on_iteration = 0
     # precision = 1e-2
 
-    alternance = args[0] if len(args) > 0 else [start + (end-start) * k / float(degree + 1) for k in range(degree+2)]
+    alternance = args[0] if len(args) > 0 else [start + (end - start) * k / float(degree + 1) for k in
+                                                range(degree + 2)]
     getPolynom = args[1] if len(args) > 1 else pol
     iterations = 1
 
-    pol_err_on_iter = getPolynom(alternance, error_on_iteration, degree, f, start, end)
+    pol_err_on_iter = getPolynom(alternance, error_on_iteration, degree, f, start, end, current_iteration)
     polyn = pol_err_on_iter[0]
     polyn_lamdified = np.vectorize(lambdify(x, polyn))
     error_on_iteration = pol_err_on_iter[1]
@@ -114,11 +141,12 @@ def main(f_str, start, end, degree, precision, *args):
                 'y': list(np.linspace(0, polyn_lamdified(x_err) - f_lamdified(x_err), 2))
             },
             "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))]),
-            "func_plot": list([list(x_vals), list(f_lamdified(x_vals))]) 
-            }
+            "func_plot": list([list(x_vals), list(f_lamdified(x_vals))])
+        }
         }
     else:
-        while abs(abs(max_error(err_func, start, end)[1]) - abs(error_on_iteration)) / abs(error_on_iteration) > precision:
+        while abs(abs(max_error(err_func, start, end)[1]) - abs(error_on_iteration)) / abs(
+                error_on_iteration) > precision:
             [x_err, mErr] = max_error(err_func, start, end)
             results[str(iterations)] = {
                 "alternance": list(alternance),
@@ -137,7 +165,7 @@ def main(f_str, start, end, degree, precision, *args):
 
             alternance = change_alternance(err_func, x_err, alternance, start, end)
             iterations += 1
-            pol_err_on_iter = getPolynom(alternance, error_on_iteration, degree, f, start, end)
+            pol_err_on_iter = getPolynom(alternance, error_on_iteration, degree, f, start, end, current_iteration)
             polyn = pol_err_on_iter[0]
             polyn_lamdified = np.vectorize(lambdify(x, polyn))
             # f_lamdified = np.vectorize(lambdify(x, f))
@@ -159,7 +187,7 @@ def main(f_str, start, end, degree, precision, *args):
                 'y': list(np.linspace(0, f_lamdified(x_err) - polyn_lamdified(x_err), 2))
             },
             "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))]),
-            "func_plot": list([list(x_vals), list(f_lamdified(x_vals))]) 
+            "func_plot": list([list(x_vals), list(f_lamdified(x_vals))])
         }
 
         return results

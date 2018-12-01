@@ -15,10 +15,11 @@ const pathNameToTitle = {
   '/ls': 'МНК',
   '/minmax': 'Мінімакс',
   '/comparison-continuous': 'Порівняти Мінімакс і МНК',
-  '/spline': 'Побудова сплайну (мінімакс)',
-  '/continuous-spline': 'Побудова неперервного сплайну (мінімакс)',
+  '/spline': 'Побудова розривного сплайну',
+  '/continuous-spline': 'Побудова неперевного сплайну',
+  '/interpolated-spline': 'Побудова інтерполяційного сплайну',
   '/continuous-spline-segments-specified':
-    'Побудова неперервного сплайну (мінімакс) з заданою кількістю ланок',
+    'Побудова неперервного сплайну з заданою кількістю ланок',
   '/spline-minmax-discrete': 'Мінімаксний сплайн (дискретний випадок)'
 };
 
@@ -75,25 +76,29 @@ const Menu = props => (
       ]}
     />
     <MenuItem
-      primaryText="Апроксимація сплайнами"
+      primaryText="Розривний сплайн"
       onClick={() => props.history.push('/spline')}
     />
     <MenuItem
-      primaryText="Апроксимація неперервними сплайнами"
+      primaryText="Неперевний сплайн"
       onClick={() => props.history.push('/continuous-spline')}
     />
     <MenuItem
-      primaryText="Апроксимація неперервними сплайнами з заданою кількістю ланок"
+      primaryText="Інтерполяційний сплайн"
+      onClick={() => props.history.push('/interpolated-spline')}
+    />
+    <MenuItem
+      primaryText="Сплайн з заданою кількістю ланок"
       onClick={() =>
         props.history.push('/continuous-spline-segments-specified')
       }
     />
-    <MenuItem
+    {/* <MenuItem
       primaryText="Мінімаксний сплайн (дискретний випадок)"
       onClick={() =>
         props.history.push('/spline-minmax-discrete')
       }
-    />
+    /> */}
     {/*<MenuItem
             primaryText="Історія"
             onTouchTap={() => props.onMenuChange(4)}

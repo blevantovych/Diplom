@@ -1,4 +1,6 @@
 import spline_cont
+
+
 # import spline_minmax
 
 
@@ -28,7 +30,8 @@ def main(func, deg, start, end, r):
             mu_left = mu
             if mu_right != 0:
                 mu = (mu + mu_right) / 2
-            else: mu *= 1.1
+            else:
+                mu *= 1.1
 
             approximation = spline_cont.main(func, deg, start, end, precision, mu)
         if k == r:
@@ -42,7 +45,8 @@ def main(func, deg, start, end, r):
             mu_right = mu
             if mu_left != 0:
                 mu = (mu + mu_left) / 2
-            else: mu *= 0.9
+            else:
+                mu *= 0.9
             approximation = spline_cont.main(func, deg, start, end, precision, mu)
         print("mu: {}, k: {}".format(mu, k))
 
