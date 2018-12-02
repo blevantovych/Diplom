@@ -1,5 +1,5 @@
-import spline_cont
-# import spline_minmax
+# import spline_cont
+import spline_minmax
 
 
 def checkIfErrorsOk(specified_precision, approximation, epsilon=0.01):
@@ -21,7 +21,7 @@ def main(func, deg, start, end, r):
 
     # WHY only continuous spline ???
     # TODO: impletement non continuous also
-    approximation = spline_cont.main(func, deg, start, end, precision, mu)
+    approximation = spline_minmax.main(func, deg, start, end, precision, mu)
     k = len(approximation)
     while k != r or not checkIfErrorsOk(mu, approximation):
         if k > r:
@@ -30,21 +30,19 @@ def main(func, deg, start, end, r):
                 mu = (mu + mu_right) / 2
             else: mu *= 1.1
 
-            approximation = spline_cont.main(func, deg, start, end, precision, mu)
         if k == r:
             mu_right = mu
             if mu_left != 0:
                 mu = (mu + mu_left) / 2
             else:
                 mu *= 0.9
-            approximation = spline_cont.main(func, deg, start, end, precision, mu)
         if k < r:
             mu_right = mu
             if mu_left != 0:
                 mu = (mu + mu_left) / 2
             else: mu *= 0.9
-            approximation = spline_cont.main(func, deg, start, end, precision, mu)
         print("mu: {}, k: {}".format(mu, k))
+        approximation = spline_minmax.main(func, deg, start, end, precision, mu)
 
         if len(approximation) == r and abs(prev_specified_precision - mu) < 0.000001:
             return approximation
