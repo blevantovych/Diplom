@@ -108,7 +108,7 @@ deg = 1
 pinnedPoints = []
 
 
-print len(main(X, Y, deg, pinnedPoints, 0.2))
+# print len(main(X, Y, deg, pinnedPoints, 0.2))
 # mid_index = int(math.floor(len(X) / 2.0))
 #
 #

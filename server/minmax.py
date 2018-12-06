@@ -1,5 +1,6 @@
 import numpy as np
 from sympy import simplify, lambdify, Symbol, symbols, latex, solve
+import math
 
 def make_eq(coefs, point, f):
     x = Symbol('x')
@@ -98,7 +99,7 @@ def main(f_str, start, end, degree, precision, *args):
     err_func = error(polyn, f)
 
     results = {}
-    x_vals = np.linspace(start, end, (end - start) * 300)
+    x_vals = np.linspace(start, end, math.ceil((end - start) * 300))
     if (error_on_iteration == 0):
         [x_err, mErr] = max_error(err_func, start, end)
         return {'1': {
@@ -118,8 +119,46 @@ def main(f_str, start, end, degree, precision, *args):
             }
         }
     else:
-        while abs(abs(max_error(err_func, start, end)[1]) - abs(error_on_iteration)) / abs(error_on_iteration) > precision:
-            [x_err, mErr] = max_error(err_func, start, end)
+        try:
+            while abs(abs(max_error(err_func, start, end)[1]) - abs(error_on_iteration)) / abs(error_on_iteration) > precision:
+                [x_err, mErr] = max_error(err_func, start, end)
+                results[str(iterations)] = {
+                    "alternance": list(alternance),
+                    "err_in_each_point": list(err_func(alternance)),
+                    "max_err": float(mErr),
+                    "x_of_max_err": x_err,
+                    "err_diff": float(abs(abs(mErr) - abs(error_on_iteration)) / abs(error_on_iteration)),
+                    "polynom_latex": latex(polyn),
+                    "error_plot": list([list(x_vals), list(err_func(x_vals))]),
+                    'max_err_in_error_plot': {
+                        'x': list([x_err, x_err]),
+                        'y': list(np.linspace(0, f_lamdified(x_err) - polyn_lamdified(x_err), 2))
+                    },
+                    "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))])
+                }
+
+                alternance = change_alternance(err_func, x_err, alternance, start, end)
+                iterations += 1
+                pol_err_on_iter = getPolynom(alternance, error_on_iteration, degree, f, start, end)
+                polyn = pol_err_on_iter[0]
+                polyn_lamdified = np.vectorize(lambdify(x, polyn))
+                # f_lamdified = np.vectorize(lambdify(x, f))
+                error_on_iteration = pol_err_on_iter[1]
+
+                err_func = error(polyn, f)
+        except:
+            print "err_func: {}".format(err_func)
+            print "polyn: {}".format(polyn)
+            print "f: {}".format(f)
+            print "start: {}".format(start)
+            print "end: {}".format(end)
+            print "error_on_iteration: {}".format(error_on_iteration)
+            print "precision: {}".format(precision)
+            print "max_error(err_func, start, end): {}".format(max_error(err_func, start, end))
+
+
+        [x_err, mErr] = max_error(err_func, start, end)
+        try:
             results[str(iterations)] = {
                 "alternance": list(alternance),
                 "err_in_each_point": list(err_func(alternance)),
@@ -132,35 +171,12 @@ def main(f_str, start, end, degree, precision, *args):
                     'x': list([x_err, x_err]),
                     'y': list(np.linspace(0, f_lamdified(x_err) - polyn_lamdified(x_err), 2))
                 },
-                "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))])
+                "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))]),
+                "func_plot": list([list(x_vals), list(f_lamdified(x_vals))])
             }
-
-            alternance = change_alternance(err_func, x_err, alternance, start, end)
-            iterations += 1
-            pol_err_on_iter = getPolynom(alternance, error_on_iteration, degree, f, start, end)
-            polyn = pol_err_on_iter[0]
-            polyn_lamdified = np.vectorize(lambdify(x, polyn))
-            # f_lamdified = np.vectorize(lambdify(x, f))
-            error_on_iteration = pol_err_on_iter[1]
-
-            err_func = error(polyn, f)
-
-        [x_err, mErr] = max_error(err_func, start, end)
-        results[str(iterations)] = {
-            "alternance": list(alternance),
-            "err_in_each_point": list(err_func(alternance)),
-            "max_err": float(mErr),
-            "x_of_max_err": x_err,
-            "err_diff": float(abs(abs(mErr) - abs(error_on_iteration)) / abs(error_on_iteration)),
-            "polynom_latex": latex(polyn),
-            "error_plot": list([list(x_vals), list(err_func(x_vals))]),
-            'max_err_in_error_plot': {
-                'x': list([x_err, x_err]),
-                'y': list(np.linspace(0, f_lamdified(x_err) - polyn_lamdified(x_err), 2))
-            },
-            "pol_plot": list([list(x_vals), list(polyn_lamdified(x_vals))]),
-            "func_plot": list([list(x_vals), list(f_lamdified(x_vals))]) 
-        }
+        except:
+            print "mErr: {}".format(mErr)
+            print "error_on_iteration: {}".format(error_on_iteration)
 
         return results
 

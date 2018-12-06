@@ -70,7 +70,7 @@ def main(func, deg, start, end, precision, allowed_error, *args):
     # print("max_error: {} Interval {} history {}".format(max_error, overallInterval, historyOfIntervals))
     condition = abs(abs(max_error) - allowed_error)
 
-    if condition > (allowed_error / 10): # WHY 10 ????
+    if condition > (allowed_error / 100): # WHY 10 ????
 
       if (max_error > allowed_error):
         shrinkedInterval = shrinkInterval(overallInterval, historyOfIntervals)

@@ -1,8 +1,8 @@
-# import spline_cont
-import spline_minmax
+import spline_cont
+# import spline_minmax
 
 
-def checkIfErrorsOk(specified_precision, approximation, epsilon=0.01):
+def checkIfErrorsOk(specified_precision, approximation, epsilon=0.0001):
     for approx in approximation:
         print("max_error: {}, specified_precision: {}".format(approx["max_error"], specified_precision))
         print("e = {}".format(abs(approx["max_error"] - specified_precision) / specified_precision))
@@ -17,11 +17,11 @@ def main(func, deg, start, end, r):
     prev_specified_precision = 0
     precision = 0.0009
     # mu = 0.01
-    mu = 0.1
+    mu = 0.3
 
     # WHY only continuous spline ???
     # TODO: impletement non continuous also
-    approximation = spline_minmax.main(func, deg, start, end, precision, mu)
+    approximation = spline_cont.main(func, deg, start, end, precision, mu)
     k = len(approximation)
     while k != r or not checkIfErrorsOk(mu, approximation):
         if k > r:
@@ -30,21 +30,20 @@ def main(func, deg, start, end, r):
                 mu = (mu + mu_right) / 2
             else: mu *= 1.1
 
-        if k == r:
+        if k <= r:
             mu_right = mu
             if mu_left != 0:
                 mu = (mu + mu_left) / 2
             else:
                 mu *= 0.9
-        if k < r:
-            mu_right = mu
-            if mu_left != 0:
-                mu = (mu + mu_left) / 2
-            else: mu *= 0.9
         print("mu: {}, k: {}".format(mu, k))
-        approximation = spline_minmax.main(func, deg, start, end, precision, mu)
+        approximation = spline_cont.main(func, deg, start, end, precision, mu)
 
-        if len(approximation) == r and abs(prev_specified_precision - mu) < 0.000001:
+        if len(approximation) == r and abs(prev_specified_precision - mu) < 0.00000001:
+            print '\n\n'
+            print 'prev_specified_precision: {}'.format(prev_specified_precision)
+            print 'mu: {}'.format(mu)
+            print '\n\n'
             return approximation
 
         prev_specified_precision = mu
@@ -55,5 +54,5 @@ def main(func, deg, start, end, r):
 
     return approximation
 
-# if __name__ == "__main__":
-#     main('2.712^x', 2, 0, 3, 3)[0]
+if __name__ == "__main__":
+    main('2.712^x', 2, 0, 3, 3)[0]
