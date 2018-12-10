@@ -121,14 +121,13 @@ export default class IterationList extends React.Component {
               tabIndex="0"
             >
               <Plot
-                id="all_errors"
-                title="Ітерація 1"
+                layout={{title: "Ітерація 1"}}
                 //plotData={this.props.arr.map(el => ({
                 //  x: el.error_plot[0],
                 //  y: el.error_plot[1],
                 //}))}
-                yRange={[yMin - Math.abs(yMin) * 0.1, yMax + yMax * 0.1]}
-                plotData={[
+                // yRange={[yMin - Math.abs(yMin) * 0.1, yMax + yMax * 0.1]}
+                data={[
                   {
                     x: this.props.arr[0].error_plot[0],
                     y: this.props.arr[0].error_plot[1],

@@ -54,7 +54,7 @@ class Form extends PureComponent {
         <TextField
           floatingLabelText="Допустима похибка на одному відрізку сплайна"
           type="number"
-          style={{ width: '370px' }}
+          // style={{ width: '370px' }}
           value={this.props.allowedErrorOnSplineSegment}
           onChange={e => this.props.changeAllowedError(e.target.value)}
         />

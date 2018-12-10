@@ -109,18 +109,16 @@ class Minmax extends Component {
           ? [
               <Plot
                 key="plot"
-                id="approx_plot"
-                title="Апроксимація мінімаксними сплайнами"
-                plotData={[
+                layout={{title: "Апроксимація мінімаксними сплайнами"}}
+                data={[
                   ...this.state.data.map(getPlotData),
                   getFuncPlot(this.state.data)
                 ]}
               />,
               <Plot
                 key="error_plot"
-                id="error_plot"
-                title="Графік функції похибки"
-                plotData={[getErrorPlot(this.state.data)]}
+                layout={{title: "Графік функції похибки"}}
+                data={[getErrorPlot(this.state.data)]}
               />,
               <Table
                 key="table"
