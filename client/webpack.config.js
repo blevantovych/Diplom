@@ -1,12 +1,10 @@
-// var debug = process.env.NODE_ENV !== 'production';
-const debug = false;
-// const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
-module.exports = {
+module.exports = (env, {mode}) => ({
   // context: path.join(__dirname, "src"),
-  devtool: debug ? 'inline-sourcemap' : false,
+  devtool: mode === 'development' ? 'inline-sourcemap' : false,
   entry: ['./src/index.js'],
   module: {
     rules: [
@@ -49,7 +47,7 @@ module.exports = {
     path: __dirname + '/build',
     filename: 'static/js/bundle.js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
-    publicPath: '/Diplom'
+    publicPath: mode === 'development' ? '/' : '/Diplom/'
   },
   devServer: {
     // contentBase: "./src",
@@ -65,6 +63,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html'
+    }),
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(mode === 'production')
     })
   ]
-};
+});

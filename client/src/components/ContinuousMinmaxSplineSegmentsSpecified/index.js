@@ -45,37 +45,37 @@ class ContinuousMinmaxSplineSegmentsSpecified extends Component {
     console.log({func, deg, start, end, segments});
     this.props.loader.showLoader();
     
-    setTimeout(() => {
-      this.props.loader.hideLoader();
+    // setTimeout(() => {
+    //   this.props.loader.hideLoader();
 
-      this.setState({
-        data: toArr(mock),
-        loaderActive: false,
-        // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
-      });
-
-      console.log(getErrorPlot(toArr(mock)))
-    }, 0)
-    // fetch(CONTINUOUS_SPLINE_MINMAX_SEGMENTS_SPECIFIED_URL, {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     func,
-    //     deg,
-    //     start,
-    //     end,
-    //     segments
-    //   })
-    // })
-    //   .then(r => r.json())
-    //   .then(res => {
-    //     this.props.loader.hideLoader();
-    //     this.setState({ data: res });
-
-    //   })
-    //   .catch(e => {
-    //     console.log(e);
-    //     this.props.loader.hideLoader();
+    //   this.setState({
+    //     data: toArr(mock),
+    //     loaderActive: false,
+    //     // message: 'Затрачений час: ' + (endTime - startTime) / 1000 + ' c.'
     //   });
+
+    //   console.log(getErrorPlot(toArr(mock)))
+    // }, 0)
+    fetch(CONTINUOUS_SPLINE_MINMAX_SEGMENTS_SPECIFIED_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        func,
+        deg,
+        start,
+        end,
+        segments
+      })
+    })
+      .then(r => r.json())
+      .then(res => {
+        this.props.loader.hideLoader();
+        this.setState({ data: res });
+
+      })
+      .catch(e => {
+        console.log(e);
+        this.props.loader.hideLoader();
+      });
   }
 
   render() {

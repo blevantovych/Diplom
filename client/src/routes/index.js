@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import { Router, Route, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '../components/Header';
@@ -24,7 +24,7 @@ const suspend = Component => () => (
 );
 
 const Routes = () => (
-  <Router history={history}>
+  <Router>
     <MuiThemeProvider>
       <div style={{ height: '100%', width: '100%'}}>
         <Header />
