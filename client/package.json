@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "author": "Bohdan Levantovych",
   "license": "ISC",
+  "homepage": "https://blevantovych.github.io/Diplom",
   "description": "Function approximation using minmax method and least squares method",
   "main": "webpack.config.js",
   "scripts": {
@@ -33,6 +34,8 @@
     "react-toastify": "^4.2.0",
     "styled-components": "^3.2.6",
     "url-loader": "^1.0.1",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2",
     "xlsx": "^0.14.1"
   },
   "devDependencies": {
@@ -54,6 +57,7 @@
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.8.2",
     "gh-pages": "^2.0.1",
+    "html-webpack-plugin": "^3.2.0",
     "img-loader": "^2.0.0",
     "json-loader": "^0.5.4",
     "node-sass": "^4.9.0",
@@ -61,8 +65,6 @@
     "sass-loader": "^6.0.7",
     "style-loader": "^0.16.1",
     "uglifyjs-webpack-plugin": "^2.0.1",
-    "webpack": "^4.8.3",
-    "webpack-cli": "^2.1.3",
     "webpack-dev-server": "^3.1.4"
   }
 }

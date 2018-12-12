@@ -2,6 +2,7 @@
 const debug = false;
 // const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   // context: path.join(__dirname, "src"),
@@ -45,8 +46,10 @@ module.exports = {
     ]
   },
   output: {
-    filename: 'bundle.js',
-    publicPath: '/'
+    path: __dirname + '/build',
+    filename: 'static/js/bundle.js',
+    chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
+    publicPath: '/Diplom'
   },
   devServer: {
     // contentBase: "./src",
@@ -58,5 +61,10 @@ module.exports = {
     minimizer: [
       new UglifyJsPlugin()
     ]
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'index.html'
+    })
+  ]
 };
