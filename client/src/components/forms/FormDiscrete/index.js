@@ -58,7 +58,6 @@ class Form extends Component {
   processWorkBook = wb => {
     let excelTableInJson = to_json(wb).Sheet1;
     let headers = Object.keys(excelTableInJson[0]);
-    console.log('Headers\n', headers);
     this.setState({
       excelTableHeaders: headers,
       excelTableInJson,
@@ -94,7 +93,6 @@ class Form extends Component {
       } else if (type === 'vert') {
         rows.forEach(row => {
           let xy = row.split(/,\s?/);
-          console.log(xy);
           points.push({ x: +xy[0], y: +xy[1] });
         });
       }
@@ -106,7 +104,6 @@ class Form extends Component {
   };
 
   render() {
-    console.log(this.state.pinnedPoints)
     let sortButton = (
       <RaisedButton
         label="Посортувати"

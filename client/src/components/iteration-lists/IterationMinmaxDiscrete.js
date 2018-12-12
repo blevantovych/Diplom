@@ -176,9 +176,8 @@ export default class IterationMinmaxDiscrete extends React.Component {
               ]}
             />
             <Plot
-              legend={false}
-              id={'minmax_error_func' + this.props.ctn}
-              plotData={[
+              layout={{showlegend: false, title: 'Графік функції похибки'}}
+              data={[
                 {
                   x: this.props.data.error_plot[0],
                   y: this.props.data.error_plot[1]
@@ -194,7 +193,6 @@ export default class IterationMinmaxDiscrete extends React.Component {
                   mode: 'markers'
                 }
               ]}
-              title={'Графік функції похибки'}
             />
           </CardText>
         </Card>

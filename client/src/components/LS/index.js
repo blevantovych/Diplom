@@ -93,8 +93,7 @@ class LS extends Component {
             </CardText>
 
             <Plot
-              id="ls_plot"
-              plotData={[
+              data={[
                 {
                   x: toJS(this.data.x_approx),
                   y: toJS(this.data.f_x_approx),
@@ -119,9 +118,8 @@ class LS extends Component {
               ]}
             />
             <Plot
-              id="ls_error"
-              title="Функція похибки"
-              plotData={[
+              layout={{title: "Функція похибки"}}
+              data={[
                 {
                   ...toJS(this.data.error_plot),
                   name: 'функція похибки'

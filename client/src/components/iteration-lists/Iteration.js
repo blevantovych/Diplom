@@ -113,23 +113,20 @@ class Iteration extends React.Component {
               </TableBody>
             </Table>
             <Plot
-              id={`${this.props.ctn + 1}`}
-              plotData={[
+              data={[
                 {
                   x: this.props.data.error_plot[0],
                   y: this.props.data.error_plot[1]
                 }
               ]}
-              title={'Графік функції похибки'}
+              layout={{title: 'Графік функції похибки'}}
             />
           </CardText>
         </Card>
         {this.props.isLast && (
           <Card>
             <Plot
-              id={this.props.ctn + 1 + 'polynom'}
-              title={'Функція і наближення многочленом'}
-              plotData={[
+              data={[
                 {
                   x: this.props.data.pol_plot[0],
                   y: this.props.data.pol_plot[1],
@@ -141,6 +138,7 @@ class Iteration extends React.Component {
                   name: 'f(x)'
                 }
               ]}
+              layout={{title: 'Функція і наближення многочленом'}}
             />
           </Card>
         )}

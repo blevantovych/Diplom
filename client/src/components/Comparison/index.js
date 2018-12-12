@@ -54,9 +54,8 @@ class Comparison extends Component {
     if (this.state.lssq && this.state.minmax) {
       const lsPlot = (
         <Plot
-          id="comp_ls_plot"
           legend={false}
-          plotData={[
+          data={[
             {
               x: this.state.lssq.x_approx,
               y: this.state.lssq.f_x_approx
@@ -71,9 +70,8 @@ class Comparison extends Component {
       );
       const mmPlot = (
         <Plot
-          id="comp_mm_plot"
-          legend={false}
-          plotData={[
+          layout={{showlegend: false}}
+          data={[
             {
               x: this.state.minmax.func_plot[0],
               y: this.state.minmax.func_plot[1]
@@ -87,9 +85,8 @@ class Comparison extends Component {
       );
       const errsPlot = (
         <Plot
-          id="comp_err_plot"
-          title="Функції похибок"
-          plotData={[
+          layout={{title: "Функції похибок"}}
+          data={[
             { ...this.state.lssq.error_plot, name: 'МНК' },
             {
               x: this.state.minmax.error_plot[0],

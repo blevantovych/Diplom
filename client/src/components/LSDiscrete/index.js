@@ -82,8 +82,7 @@ class LS extends Component {
             </CardText>
 
             <Plot
-              id="ls_discrete_plot"
-              plotData={[
+              data={[
                 {
                   x: this.state.data.x_approx,
                   y: this.state.data.approximation,
@@ -103,9 +102,8 @@ class LS extends Component {
               ]}
             />
             <Plot
-              id="ls_discrete_error"
-              title="Функція похибки"
-              plotData={[{ ...this.state.data.error_plot }]}
+              layout={{title: "Функція похибки"}}
+              data={[{ ...this.state.data.error_plot }]}
             />
             <h1>{`Час рахування: ${this.state.data.computation_time.toFixed(
               2

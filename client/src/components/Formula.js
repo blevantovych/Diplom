@@ -1,59 +1,67 @@
-/* eslint-disable new-cap */
+// /* eslint-disable new-cap */
 
-import React, { Component } from 'react'; // we require this to have correct build of component(without error React is not defined)
-import PropTypes from 'prop-types';
+// import React, { Component } from 'react'; // we require this to have correct build of component(without error React is not defined)
+// import PropTypes from 'prop-types';
 
-export default class TeX extends Component {
-  static propTypes = {
-    className: PropTypes.string,
-    showMathMenu: PropTypes.bool,
-    showMathMenuMSIE: PropTypes.bool,
-    style: PropTypes.object,
-    tex2jax: PropTypes.object,
-    formula: PropTypes.string
-  };
+// export default class TeX extends Component {
+//   static propTypes = {
+//     className: PropTypes.string,
+//     showMathMenu: PropTypes.bool,
+//     showMathMenuMSIE: PropTypes.bool,
+//     style: PropTypes.object,
+//     tex2jax: PropTypes.object,
+//     formula: PropTypes.string
+//   };
 
-  static defaultProps = {
-    showMathMenu: false,
-    showMathMenuMSIE: false,
-    tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
-  };
+//   static defaultProps = {
+//     showMathMenu: false,
+//     showMathMenuMSIE: false,
+//     tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+//   };
 
-  constructor(props) {
-    super(props);
+//   constructor(props) {
+//     super(props);
 
-    MathJax.Hub.Config({
-      tex2jax: props.tex2jax,
-      showMathMenu: props.showMathMenu,
-      showMathMenuMSIE: props.showMathMenuMSIE
-    });
-  }
+//     MathJax.Hub.Config({
+//       tex2jax: props.tex2jax,
+//       showMathMenu: props.showMathMenu,
+//       showMathMenuMSIE: props.showMathMenuMSIE
+//     });
+//   }
 
-  componentDidMount() {
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub, this.node]);
-  }
+//   componentDidMount() {
+//     MathJax.Hub.Queue(['Typeset', MathJax.Hub, this.node]);
+//   }
 
-  componentDidUpdate() {
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub, this.node]);
-  }
+//   componentDidUpdate() {
+//     MathJax.Hub.Queue(['Typeset', MathJax.Hub, this.node]);
+//   }
 
-  setNode = node => {
-    this.node = node;
-  };
+//   setNode = node => {
+//     this.node = node;
+//   };
 
-  render() {
-    return (
-      <div
-        className={this.props.className}
-        id="MathJax-TeX"
-        ref={this.setNode}
-        style={this.props.style}
-      >
-        {this.props.demo
-          ? `$B_${this.props.degree}(H) = ${this.props.formula.replace(/x/g, 'H')}$`
-          : `$${this.props.formula}$`
-        }
-      </div>
-    );
-  }
-}
+//   render() {
+//     return (
+//       <div
+//         className={this.props.className}
+//         id="MathJax-TeX"
+//         ref={this.setNode}
+//         style={this.props.style}
+//       >
+//         {this.props.demo
+//           ? `$B_${this.props.degree}(H) = ${this.props.formula.replace(/x/g, 'H')}$`
+//           : `$${this.props.formula}$`
+//         }
+//       </div>
+//     );
+//   }
+// }
+
+
+import React from 'react';
+import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
+
+const Formula = ({ formula }) => <InlineMath math={formula} />;
+export default Formula;
