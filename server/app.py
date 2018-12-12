@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS, cross_origin
 import numpy as np
 
@@ -43,7 +43,7 @@ def handle_invalid_usage(error):
 
 @app.route('/', methods=['GET'])
 def hi():
-    return 'hi'
+    return render_template('hello.html')
 
 @app.route('/continuous_spline_minmax', methods=['POST'])
 def continuousSplineMinmax():
