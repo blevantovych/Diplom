@@ -13,6 +13,9 @@ import sys
 import json
 import copy
 import time
+import sentry_sdk
+sentry_sdk.init("https://2bc1500c735e40c586593a05de1cab6f@sentry.io/1353830")
+
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 app = Flask(__name__)
