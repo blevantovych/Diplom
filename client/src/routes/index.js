@@ -2,8 +2,11 @@ import React, {Suspense} from 'react';
 import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 import Header from '../components/Header';
 import Loader from '../components/loader';
+import ProgressStyles from './ProgressStyles.scss';
 
 const Comparison = React.lazy(() => import('../components/Comparison'));
 const LS = React.lazy(() => import('../components/LS'));
@@ -17,8 +20,22 @@ const ComparisonDiscrete = React.lazy(() => import('../components/ComparisonDisc
 const SplineMinmaxDiscrete = React.lazy(() => import('../components/SplineMinmaxDiscrete'));
 const history = createBrowserHistory();
 
+class Fallback extends React.Component {
+  componentDidMount () {
+    nprogress.start()
+  }
+
+  componentWillUnmount () {
+    nprogress.done();
+  }
+
+  render () {
+    return null
+  }
+}
+
 const suspend = Component => () => (
-  <Suspense fallback={<div>Loading ...</div>}>
+  <Suspense fallback={<Fallback />}>
     <Component />
   </Suspense>
 );

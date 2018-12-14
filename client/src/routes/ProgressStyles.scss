@@ -1,0 +1,15 @@
+$progress-color: #ef1738;
+
+#nprogress .bar {
+  z-index: 1200;
+  background: $progress-color;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px $progress-color, 0 0 5px $progress-color;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: $progress-color;
+  border-left-color: $progress-color;
+}
