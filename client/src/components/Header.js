@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
+import AppBar from '@material-ui/core/AppBar';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ArrowDropRight from '@material-ui/icons/ArrowRight'
+// import ArrowDropRight from '@material-ui/core/svg-icons/navigation-arrow-drop-right';
 import { withRouter } from 'react-router-dom';
 
-import Hamburger from 'material-ui/svg-icons/navigation/menu';
+import Hamburger from '@material-ui/icons/Menu';
 
 const pathNameToTitle = {
   '/ls-discrete': 'МНК (дискретна функція)',
@@ -19,18 +22,21 @@ const pathNameToTitle = {
   '/continuous-spline': 'Побудова неперервного сплайну (мінімакс)',
   '/continuous-spline-segments-specified':
     'Побудова неперервного сплайну (мінімакс) з заданою кількістю ланок',
-  '/spline-minmax-discrete': 'Мінімаксний сплайн (дискретний випадок)'
+  '/spline-minmax-discrete': 'Мінімаксний сплайн (дискретний випадок)',
+  '/spline-with-specified-number-of-segments': 'Мінімаксний сплайн з заданою кількістю ланок',
+  '/spline-with-precision': 'Мінімаксний сплайн з заданою похибкою'
 };
 
-const Menu = props => (
-  <IconMenu
-    iconButtonElement={
-      <IconButton>
-        <Hamburger color={'white'} />
-      </IconButton>
-    }
-    targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-    anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+const Menu_ = props => (
+  <Menu
+    open={true}
+    // iconButtonElement={
+    //   <IconButton>
+    //     <Hamburger color={'white'} />
+    //   </IconButton>
+    // }
+    // targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+    // anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
   >
     <MenuItem
       primaryText="Дискретний випадок"
@@ -74,26 +80,33 @@ const Menu = props => (
         />
       ]}
     />
-    <MenuItem
+    <MenuItem 
       primaryText="Апроксимація сплайнами"
-      onClick={() => props.history.push('/spline')}
+      rightIcon={<ArrowDropRight />}
+      menuItems={[
+        <MenuItem
+          primaryText="З заданою похибкою"
+          onClick={() => props.history.push('/spline-with-precision')}
+        />,
+        <MenuItem
+          primaryText="З заданою кількістю ланок"
+          onClick={() => props.history.push('/spline-with-specified-number-of-segments')}
+        />,
+        // <MenuItem
+        //   primaryText="Апроксимація неперервними сплайнами з заданою кількістю ланок"
+        //   onClick={() =>
+        //     props.history.push('/continuous-spline-segments-specified')
+        //   }
+        // />,
+        // <MenuItem
+        //   primaryText="Мінімаксний сплайн (дискретний випадок)"
+        //   onClick={() =>
+        //     props.history.push('/spline-minmax-discrete')
+        //   }
+        // />
+      ]}
     />
-    <MenuItem
-      primaryText="Апроксимація неперервними сплайнами"
-      onClick={() => props.history.push('/continuous-spline')}
-    />
-    <MenuItem
-      primaryText="Апроксимація неперервними сплайнами з заданою кількістю ланок"
-      onClick={() =>
-        props.history.push('/continuous-spline-segments-specified')
-      }
-    />
-    <MenuItem
-      primaryText="Мінімаксний сплайн (дискретний випадок)"
-      onClick={() =>
-        props.history.push('/spline-minmax-discrete')
-      }
-    />
+  
     {/*<MenuItem
             primaryText="Історія"
             onTouchTap={() => props.onMenuChange(4)}
@@ -101,23 +114,27 @@ const Menu = props => (
     {/* <MenuItem primaryText="Як користуватися (pdf)">
       <a id="download_desc_link" href="/program_description.pdf" download="" />
     </MenuItem> */}
-  </IconMenu>
+  </Menu>
 );
 
 class Header extends Component {
   render() {
     return (
-      <AppBar
-        id="header"
-        title={pathNameToTitle[this.props.location.pathname]}
-        showMenuIconButton={false}
-        iconElementRight={
-          <Menu
-            onMenuChange={this.props.onMenuChange}
-            history={this.props.history}
-          />
-        }
-      />
+      <div>
+        
+        <AppBar
+          id="header"
+          title={pathNameToTitle[this.props.location.pathname]}
+          // children={<h1>hi</h1>}
+          // children={<Menu_
+          //   onMenuChange={this.props.onMenuChange}
+          //   history={this.props.history}
+          // />}
+        // showMenuIconButton={false}
+        >
+          <MenuIcon />
+        </AppBar>
+      </div>
     );
   }
 }

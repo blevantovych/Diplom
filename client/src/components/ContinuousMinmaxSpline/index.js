@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import Plot from '../Plot';
 import Formula from '../Formula';
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
+import { Table, TableBody, TableRow, TableRowColumn } from '@material-ui/core/Table';
 import toArr from '../../helpers/toArr';
 import truncateCoefs from '../../helpers/truncateCoefs';
 

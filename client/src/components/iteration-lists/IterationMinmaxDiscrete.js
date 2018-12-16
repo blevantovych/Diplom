@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
+import { Card, CardHeader, CardText } from '@material-ui/core/Card';
+import { Table, TableBody, TableRow, TableRowColumn } from '@material-ui/core/Table';
 
 import Plot from '../Plot';
 import Formula from '../Formula';

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Iteration from './Iteration';
 import Plot from '../Plot';
-import { Card } from 'material-ui/Card';
+import { Card } from '@material-ui/core/Card';
 
 const lineStyles = {
   color: 'rgb(32, 206, 15)',

@@ -3,8 +3,8 @@ import { observer, inject } from 'mobx-react';
 import FormDiscrete from '../forms/FormDiscrete';
 import Plot from '../Plot';
 import Formula from '../Formula'
-import { TextField } from 'material-ui'
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
+import { TextField } from '@material-ui/core'
+import { Table, TableBody, TableRow, TableRowColumn } from '@material-ui/core/Table';
 import { MINMAX_SPLINE_DISCRETE_URL } from '../../../api/api-config';
 import toArr from '../../helpers/toArr';
 import { ToastContainer, toast } from 'react-toastify';

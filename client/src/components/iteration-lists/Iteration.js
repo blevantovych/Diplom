@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
+import { Card, CardHeader, CardText } from '@material-ui/core/Card';
+import { Table, TableBody, TableRow, TableRowColumn } from '@material-ui/core/Table';
 
 import truncateCoefs from '../../helpers/truncateCoefs';
 import Plot from '../Plot';

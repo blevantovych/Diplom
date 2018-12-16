@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { TextField, RaisedButton } from 'material-ui';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import { TextField, RaisedButton } from '@material-ui/core';
+import SelectField from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import PropTypes from 'prop-types';
 import chunk from 'lodash.chunk';
 import {

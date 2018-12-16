@@ -1,6 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import styled from 'styled-components';
-import { TextField, RaisedButton } from 'material-ui';
+import { TextField, RaisedButton } from '@material-ui/core';
 
 const FormContainer = styled.div`
   display: flex;

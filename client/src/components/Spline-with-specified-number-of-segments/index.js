@@ -9,7 +9,7 @@ import truncateCoefs from '../../helpers/truncateCoefs';
 
 import Form from './form';
 
-import {getPlotData/*, getErrorPlot*/, getFuncPlot} from '../MinmaxSpline';
+import {getPlotData/*, getErrorPlot*/, getFuncPlot} from '../Spline-with-precision';
 import mock from './mock';
 
 const getErrorPlot = data => {

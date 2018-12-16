@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import range from 'lodash.range';
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
-import { Card, CardText } from 'material-ui/Card';
+import { Table, TableBody, TableRow, TableRowColumn } from '@material-ui/core/Table';
+import { Card, CardText } from '@material-ui/core/Card';
 import { observer, inject } from 'mobx-react';
 import { action, observable, toJS } from 'mobx';
 
