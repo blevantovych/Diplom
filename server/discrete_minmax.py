@@ -34,7 +34,7 @@ def make_initial_alternance(x, degree):
 # degree is degree(order) of polynomial we trying to find
 # f_discrete is function at discrete points
 def pol(t, degree, f_discrete, X, pinnedPoints):
-    print t
+    print(t)
     x = Symbol('x')
     e = Symbol('e')
     vars_str = ' '.join(['a' + str(i) for i in range(degree+1)])
@@ -54,7 +54,7 @@ def pol(t, degree, f_discrete, X, pinnedPoints):
     for i in range(number_of_alternance_points):
         left_hand_side.append([])
 
-    # print left_hand_side
+    # print(left_hand_side)
     #  build first equation
     for eq_index, point in enumerate(pinnedPoints):
         for i in range(degree+1):
@@ -77,8 +77,8 @@ def pol(t, degree, f_discrete, X, pinnedPoints):
 
     # solution = solve(eqs, variables + (e,))
 
-    # print 'eqs'
-    # print eqs
+    # print('eqs')
+    # print(eqs)
     for i in range(number_of_alternance_points):
         if abs(sol[i]) < 1e-10:
             sol[i] = 0
@@ -234,7 +234,7 @@ def main(X, Y, degree, pinnedPoints):
             }
         }
         iterations+=1
-    # print iterations
+    # print(iterations)
     return result
     # return iterations
 
@@ -244,7 +244,7 @@ def main(X, Y, degree, pinnedPoints):
 # iters = []
 # for i in range(100):
 #     iters.append(main(X, Y, 3))
-# print iters
+# print(iters)
 # print(float(sum(iters)) / len(iters))
 
 # 5.58
@@ -307,7 +307,7 @@ def main(X, Y, degree, pinnedPoints):
 
 
 
-# print main('sin(x)+cos(x)', -5, 5, 2, 0.01)
+# print(main('sin(x)+cos(x)', -5, 5, 2, 0.01))
 # f_str, start, end, degree, precision
 
     # for example
@@ -330,7 +330,7 @@ def main(X, Y, degree, pinnedPoints):
 # X = [0, 0.375, 0.875, 1.25, 1.625, 2.125, 2.625, 3, 3.5, 4, 4.563, 5.125, 5.875, 7.063, 8.938, 12.375, 23.625, 63]
 # Y = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7]
 
-# print (main(X, Y, 2, []))
+# print((main(X, Y, 2, [])))
 
 # X = [0, 1, 3.1, 6, 10]
 # Y = [0, 2, 4, 10, 20]

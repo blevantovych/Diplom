@@ -40,10 +40,10 @@ def main(func, deg, start, end, r):
         approximation = spline_cont.main(func, deg, start, end, precision, mu)
 
         if len(approximation) == r and abs(prev_specified_precision - mu) < 0.00000001:
-            print '\n\n'
-            print 'prev_specified_precision: {}'.format(prev_specified_precision)
-            print 'mu: {}'.format(mu)
-            print '\n\n'
+            print('\n\n')
+            print('prev_specified_precision: {}'.format(prev_specified_precision))
+            print('mu: {}'.format(mu))
+            print('\n\n')
             return approximation
 
         prev_specified_precision = mu

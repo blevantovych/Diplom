@@ -129,7 +129,7 @@ def main_discrete(x_vals, y_vals, degree):
     }
 
 
-# print main_discrete([1.2, 2.3, 3.0, 3.8, 4.7, 5.9], [1.1, 2.1, 3.1, 4.0, 4.9, 5.9], 1)
+# print(main_discrete([1.2, 2.3, 3.0, 3.8, 4.7, 5.9], [1.1, 2.1, 3.1, 4.0, 4.9, 5.9], 1))
 
     # return {
     #     'formula': latex(N(sum(coef*x**i for i, coef in enumerate(reversed(p.coeffs))),4)),

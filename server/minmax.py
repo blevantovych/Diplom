@@ -147,14 +147,14 @@ def main(f_str, start, end, degree, precision, *args):
 
                 err_func = error(polyn, f)
         except:
-            print "err_func: {}".format(err_func)
-            print "polyn: {}".format(polyn)
-            print "f: {}".format(f)
-            print "start: {}".format(start)
-            print "end: {}".format(end)
-            print "error_on_iteration: {}".format(error_on_iteration)
-            print "precision: {}".format(precision)
-            print "max_error(err_func, start, end): {}".format(max_error(err_func, start, end))
+            print("err_func: {}".format(err_func))
+            print("polyn: {}".format(polyn))
+            print("f: {}".format(f))
+            print("start: {}".format(start))
+            print("end: {}".format(end))
+            print("error_on_iteration: {}".format(error_on_iteration))
+            print("precision: {}".format(precision))
+            print("max_error(err_func, start, end): {}".format(max_error(err_func, start, end)))
 
 
         [x_err, mErr] = max_error(err_func, start, end)
@@ -175,8 +175,8 @@ def main(f_str, start, end, degree, precision, *args):
                 "func_plot": list([list(x_vals), list(f_lamdified(x_vals))])
             }
         except:
-            print "mErr: {}".format(mErr)
-            print "error_on_iteration: {}".format(error_on_iteration)
+            print("mErr: {}".format(mErr))
+            print("error_on_iteration: {}".format(error_on_iteration))
 
         return results
 

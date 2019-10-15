@@ -125,7 +125,7 @@ def splineMinmaxSegmentsSpecified():
 @app.route('/spline_minmax_discrete', methods=['POST'])
 def splineMinmaxDiscrete():
     data = json.loads(request.data)
-    # print data
+    # print(data)
     x_vals = data['x_vals']
     # # pinnedPoints = data['pinnedPoints']
     pinnedPoints = []
