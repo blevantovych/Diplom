@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS, cross_origin
 import numpy as np
+import platform
 
 import minmax
 import discrete_minmax
@@ -47,6 +48,10 @@ def handle_invalid_usage(error):
 @app.route('/', methods=['GET'])
 def hi():
     return render_template('hello.html')
+
+@app.route('/python-version', methods=['GET'])
+def version():
+    return platform.python_version()
 
 @app.route('/continuous_spline_minmax', methods=['POST'])
 def continuousSplineMinmax():
