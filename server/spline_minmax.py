@@ -102,4 +102,4 @@ def main(func, deg, start, end, precision, allowed_error, *args):
   make_approximation_on_one_segment(interval)
   return splines
 
-# print main('sin(x)', deg=2, start=1, end=4, precision=0.1, allowed_error=0.001)
+# print(main('sin(x)', deg=2, start=1, end=4, precision=0.1, allowed_error=0.001))

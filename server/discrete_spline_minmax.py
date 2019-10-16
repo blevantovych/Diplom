@@ -59,8 +59,8 @@ def main(X, Y, deg, pinnedPoints, allowed_error, *args):
   approximate = args[0] if len(args) > 0 else approximateMinmax
 
   def make_approximation_on_one_segment(overallInterval):
-    print 'overallInterval'
-    print overallInterval
+    print('overallInterval')
+    print(overallInterval)
     if not type(overallInterval) is list:
       print(overallInterval)
       return
@@ -108,11 +108,11 @@ deg = 1
 pinnedPoints = []
 
 
-# print len(main(X, Y, deg, pinnedPoints, 0.2))
+# print(len(main(X, Y, deg, pinnedPoints, 0.2)))
 # mid_index = int(math.floor(len(X) / 2.0))
 #
 #
-# print mid_index
+# print(mid_index)
 #
 #
 # left_X = X[:mid_index]
@@ -121,16 +121,16 @@ pinnedPoints = []
 # left_Y = Y[:mid_index]
 # right_Y = Y[mid_index:]
 
-# print left_X
-# print right_X
+# print(left_X)
+# print(right_X)
 
-# print main(X, Y, deg, pinnedPoints)['1']['max_error']
+# print(main(X, Y, deg, pinnedPoints)['1']['max_error'])
 
 # def getMaxError (X, Y, deg, pinnedPoints):
 #     approx = main(X, Y, deg, pinnedPoints)
 #     iterations = list(map(lambda x: int(x), approx.keys()))
 #     last_index = max(iterations)
-#     print approx[str(last_index)]['max_error']
+#     print(approx[str(last_index)]['max_error'])
 
 # getMaxError(X, Y, deg, pinnedPoints)
 #
