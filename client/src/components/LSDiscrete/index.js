@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
-import { Card, CardText } from 'material-ui/Card';
-import { inject, observer } from 'mobx-react';
+import React, { Component } from "react";
+import { Table, TableBody, TableRow, TableRowColumn } from "material-ui/Table";
+import { Card, CardText } from "material-ui/Card";
+import { inject, observer } from "mobx-react";
 // import IterationList from '../iteration-lists/IterationList';
-import FormDiscrete from '../forms/FormDiscrete';
-import Plot from '../Plot';
-import truncateCoefs from '../../helpers/truncateCoefs';
-import Formula from '../Formula';
-import { LSSQ_DISCRETE_URL } from '../../../api/api-config';
+import FormDiscrete from "../forms/FormDiscrete";
+import Plot from "../Plot";
+import truncateCoefs from "../../helpers/truncateCoefs";
+import Formula from "../Formula";
+import { LSSQ_DISCRETE_URL } from "../../../api/api-config";
 
-@inject('loader')
+@inject("loader")
 @observer
 class LS extends Component {
   constructor() {
@@ -22,7 +22,7 @@ class LS extends Component {
   clickCalcHandler(xPoints, yPoints, deg) {
     this.props.loader.showLoader();
     fetch(LSSQ_DISCRETE_URL, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ x_vals: xPoints, y_vals: yPoints, deg })
     })
       .then(r => r.json())
@@ -58,7 +58,7 @@ class LS extends Component {
                       <Formula
                         formula={this.state.data.formula.replace(
                           truncateCoefs(4),
-                          '$1'
+                          "$1"
                         )}
                       />
                     </TableRowColumn>
@@ -86,23 +86,23 @@ class LS extends Component {
                 {
                   x: this.state.data.x_approx,
                   y: this.state.data.approximation,
-                  name: 'Апроксимація'
+                  name: "Апроксимація"
                 },
                 {
                   x: this.state.data.x_vals,
                   y: this.state.data.y_vals,
-                  mode: 'markers',
-                  name: 'Табл. дані'
+                  mode: "markers",
+                  name: "Табл. дані"
                 },
                 {
                   ...this.state.data.max_error_line,
-                  name: 'Максимальна похибка',
-                  mode: 'lines'
+                  name: "Максимальна похибка",
+                  mode: "lines"
                 }
               ]}
             />
             <Plot
-              layout={{title: "Функція похибки"}}
+              layout={{ title: "Функція похибки" }}
               data={[{ ...this.state.data.error_plot }]}
             />
             <h1>{`Час рахування: ${this.state.data.computation_time.toFixed(
