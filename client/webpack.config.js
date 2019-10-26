@@ -1,8 +1,8 @@
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
-module.exports = (env, {mode}) => ({
+module.exports = (env, { mode }) => ({
   // context: path.join(__dirname, "src"),
   devtool: mode === 'development' ? 'inline-sourcemap' : false,
   entry: ['./src/index.js'],
@@ -47,7 +47,8 @@ module.exports = (env, {mode}) => ({
     path: __dirname + '/build',
     filename: 'static/js/bundle.js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
-    publicPath: mode === 'development' ? '/' : '/Diplom/'
+    // publicPath: mode === 'development' ? '/' : '/Diplom/',
+    publicPath: '/'
   },
   devServer: {
     // contentBase: "./src",
@@ -56,9 +57,7 @@ module.exports = (env, {mode}) => ({
     historyApiFallback: true
   },
   optimization: {
-    minimizer: [
-      new UglifyJsPlugin()
-    ]
+    minimizer: [new UglifyJsPlugin()]
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -68,4 +67,4 @@ module.exports = (env, {mode}) => ({
       PRODUCTION: JSON.stringify(mode === 'production')
     })
   ]
-});
+})
