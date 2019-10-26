@@ -12,5 +12,7 @@ git subtree push --prefix server heroku master
 
 ```
 docker build -t minmax-app .
-docker run -p 5000:5000 -p 8080:8080 minmax-app
+docker run -v ${PWD}:/app -v /app/client/node_modules -p 5000:5000 -p 8080:8080 minmax-app
 ```
+
+### to have livereload on windows use this python program https://pypi.org/project/docker-windows-volume-watcher

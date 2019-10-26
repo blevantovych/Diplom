@@ -7,13 +7,7 @@ COPY server/requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
 
 WORKDIR /app/client
-COPY client/package.json /app/client
+COPY client/package.json /app/client/package.json
 RUN npm install
-COPY client /app/client
 
-WORKDIR /app/server
-COPY server /app/server
-
-WORKDIR /app/client
-COPY launch.sh /app/client
-CMD ["bash", "launch.sh"]
+CMD ["bash", "../launch.sh"]

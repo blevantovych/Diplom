@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import { TextField, RaisedButton } from 'material-ui';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import PropTypes from 'prop-types';
-import chunk from 'lodash.chunk';
+import React, { Component } from "react";
+import { TextField, RaisedButton } from "material-ui";
+import SelectField from "material-ui/SelectField";
+import MenuItem from "material-ui/MenuItem";
+import PropTypes from "prop-types";
+import chunk from "lodash.chunk";
+import { Translate } from "react-localize-redux";
 import {
   DiscreteTable,
   UploadButtons,
@@ -12,9 +13,9 @@ import {
   FileInput,
   DeleteTdPopup,
   Pin
-} from './style';
-import { csvIcon, excelIcon } from './icons';
-import PinIcon from '../../PinIcon';
+} from "./style";
+import { csvIcon, excelIcon } from "./icons";
+import PinIcon from "../../PinIcon";
 
 function to_json(workbook) {
   var result = {};
@@ -37,8 +38,8 @@ class Form extends Component {
       excelTableHeaders: [],
       excelTableInJson: null,
       showColumnChooser: false,
-      X: '',
-      Y: '',
+      X: "",
+      Y: "",
       pinnedPoints: []
     };
   }
@@ -46,14 +47,16 @@ class Form extends Component {
   onPinClick = x => () => {
     if (this.state.pinnedPoints.includes(x)) {
       const index = this.state.pinnedPoints.indexOf(x);
-      this.setState({pinnedPoints: [
-        ...this.state.pinnedPoints.slice(0, index),
-        ...this.state.pinnedPoints.slice(index + 1)
-      ]})
+      this.setState({
+        pinnedPoints: [
+          ...this.state.pinnedPoints.slice(0, index),
+          ...this.state.pinnedPoints.slice(index + 1)
+        ]
+      });
     } else {
-      this.setState({pinnedPoints: [...this.state.pinnedPoints, x]})
+      this.setState({ pinnedPoints: [...this.state.pinnedPoints, x] });
     }
-  }
+  };
 
   processWorkBook = wb => {
     let excelTableInJson = to_json(wb).Sheet1;
@@ -70,27 +73,27 @@ class Form extends Component {
     let reader = new FileReader();
     reader.onload = e => {
       let data = e.target.result;
-      let wb = XLSX.read(data, { type: 'binary' });
+      let wb = XLSX.read(data, { type: "binary" });
       this.processWorkBook(wb);
     };
     reader.readAsBinaryString(file);
   };
 
-  onFileUpload = (event, type = 'vert') => {
+  onFileUpload = (event, type = "vert") => {
     const input = event.target;
     const reader = new FileReader();
     reader.onload = () => {
       // if horizontal
       const data = reader.result;
-      let rows = data.split('\n');
+      let rows = data.split("\n");
       let points = [];
-      if (type === 'hor') {
+      if (type === "hor") {
         let x_vals = rows[0].split(/,\s?/g);
         let y_vals = rows[1].split(/,\s?/g);
         x_vals.forEach((val, i) => {
           points.push({ x: +val, y: +y_vals[i] });
         });
-      } else if (type === 'vert') {
+      } else if (type === "vert") {
         rows.forEach(row => {
           let xy = row.split(/,\s?/);
           points.push({ x: +xy[0], y: +xy[1] });
@@ -104,239 +107,246 @@ class Form extends Component {
   };
 
   render() {
-    let sortButton = (
-      <RaisedButton
-        label="Посортувати"
-        onClick={() => {
-          this.setState({
-            points: [...this.state.points].sort((p1, p2) =>
-              +p1.x > +p2.x ? 1 : -1
-            )
-          });
-        }}
-      />
-    );
-    let addClearBtns = (
-      <td key="add_clear_btns" style={{ height: '100%' }}>
-        <RaisedButton
-          label="Очистити"
-          secondary={true}
-          containerElement="label"
-          onClick={() =>
-            this.setState({
-              points: [{ x: 0, y: 0 }]
-            })
-          }
-        />
-        <RaisedButton
-          label="Додати"
-          secondary={true}
-          containerElement="label"
-          onClick={() =>
-            this.setState({
-              points: [...this.state.points, { x: 0, y: 0 }]
-            })
-          }
-        />
-      </td>
-    );
-
-    let x_vals_tds = this.state.points.map((val, i) => (
-      <td key={i}>
-        <DeleteTdPopup
-          title="Видалити стовпець"
-          class="delete_td_popup"
-          onClick={() => {
-            let copy = [...this.state.points];
-            copy.splice(i, 1);
-            this.setState({ points: copy });
-          }}
-        />
-        {
-          this.props.pinPoints &&
-          <Pin
-            title="Pin point"
-            className="pin"
-            pinned={this.state.pinnedPoints.includes(val.x)}
-            onClick={this.onPinClick(val.x)}>
-            <PinIcon />
-          </Pin>
-        }
-        <TextField
-          id={`text-field${val.x}`}
-          value={val.x}
-          onChange={e => {
-            val.x = e.target.value;
-            this.forceUpdate();
-          }}
-          style={{ width: '50px' }}
-        />
-      </td>
-    ));
-    let y_vals_tds = this.state.points.map((val, i) => (
-      <td key={i}>
-        <DeleteTdPopup
-          title="Видалити стовпець"
-          class="delete_td_popup"
-          onClick={() => {
-            let copy = [...this.state.points];
-            copy.splice(i, 1);
-            this.setState({ points: copy });
-          }}
-        />
-        <TextField
-          id="text-field"
-          value={val.y}
-          onChange={e => {
-            val.y = e.target.value;
-            this.forceUpdate();
-          }}
-          style={{ width: '50px' }}
-        />
-      </td>
-    ));
-
-    x_vals_tds.push(<td key="sort button">{sortButton}</td>);
-    y_vals_tds.push(addClearBtns);
-    let separateXTds = chunk(x_vals_tds, 10);
-    let separateYTds = chunk(y_vals_tds, 10);
-
-    let tables = separateXTds.map((xTds, i) => (
-      <div key={i}>
-        <DiscreteTable>
-          <tbody>
-            <tr>
-              <td>X</td>
-              {xTds}
-            </tr>
-            <tr>
-              <td>Y</td>
-              {separateYTds[i]}
-            </tr>
-          </tbody>
-          {/* {sortButton} */}
-          {/* {addClearBtns} */}
-        </DiscreteTable>
-        <br />
-      </div>
-    ));
-
     return (
-      <FormContainer>
-        <TextField
-          floatingLabelText="Степінь"
-          type="number"
-          value={this.state.deg || ''}
-          onChange={e => this.setState({ deg: +e.target.value })}
-        />
-
-        {tables}
-        <br />
-
-        <UploadButtons>
-          <RaisedButton
-            label="Завантажити CSV"
-            secondary={true}
-            icon={<span>{csvIcon}</span>}
-            containerElement="label"
-          >
-            <FileInput type="file" onChange={this.onFileUpload} />
-          </RaisedButton>
-
-          <RaisedButton
-            label="Завантажити Excel"
-            labelPosition="before"
-            icon={<span>{excelIcon}</span>}
-            secondary={true}
-            containerElement="label"
-          >
-            <FileInput type="file" onChange={this.onExcelUpload} />
-          </RaisedButton>
-        </UploadButtons>
-
-        <XYChooser
-          style={{
-            visibility: this.state.showColumnChooser ? 'visible' : 'hidden'
-          }}
-        >
-          <div>
-            <SelectField
-              value={this.state.X}
-              floatingLabelText="X"
-              floatingLabelFixed={true}
-              hintText="X"
-              onChange={(e, i, val) => {
-                if (this.state.Y) {
-                  this.setState({
-                    points: this.state.excelTableInJson.map(r => ({
-                      x: r[val],
-                      y: r[this.state.Y]
-                    })),
-                    X: val
-                  });
-                } else this.setState({ X: val });
-              }}
-            >
-              {this.state.excelTableHeaders.map((h, i) => (
-                <MenuItem key={i} value={h} primaryText={h} />
-              ))}
-            </SelectField>
-          </div>
-
-          <div>
+      <Translate>
+        {({ translate }) => {
+          let sortButton = (
             <RaisedButton
-              label="<=>"
+              label={translate("discrete_form.sort")}
               onClick={() => {
                 this.setState({
-                  X: this.state.Y,
-                  Y: this.state.X,
-                  points: this.state.excelTableInJson.map(r => ({
-                    x: r[this.state.Y],
-                    y: r[this.state.X]
-                  }))
+                  points: [...this.state.points].sort((p1, p2) =>
+                    +p1.x > +p2.x ? 1 : -1
+                  )
                 });
               }}
             />
-          </div>
-
-          <div>
-            <SelectField
-              value={this.state.Y}
-              floatingLabelText="Y"
-              floatingLabelFixed={true}
-              hintText="Y"
-              onChange={(e, i, val) => {
-                if (this.state.X) {
+          );
+          let addClearBtns = (
+            <td key="add_clear_btns" style={{ height: "100%" }}>
+              <RaisedButton
+                label={translate("discrete_form.clear")}
+                secondary={true}
+                containerElement="label"
+                onClick={() =>
                   this.setState({
-                    points: this.state.excelTableInJson.map(r => ({
-                      x: r[this.state.X],
-                      y: r[val]
-                    })),
-                    Y: val
-                  });
-                } else this.setState({ Y: val });
-              }}
-            >
-              {this.state.excelTableHeaders.map((h, i) => (
-                <MenuItem key={i} value={h} primaryText={h} />
-              ))}
-            </SelectField>
-          </div>
-        </XYChooser>
+                    points: [{ x: 0, y: 0 }]
+                  })
+                }
+              />
+              <RaisedButton
+                label={translate("discrete_form.add")}
+                secondary={true}
+                containerElement="label"
+                onClick={() =>
+                  this.setState({
+                    points: [...this.state.points, { x: 0, y: 0 }]
+                  })
+                }
+              />
+            </td>
+          );
 
-        <RaisedButton
-          label="Обчислити"
-          primary={true}
-          onClick={() => {
-            const xs = this.state.points.map(p => +p.x);
-            const ys = this.state.points.map(p => +p.y);
-            const args = [xs, ys, this.state.deg];
-            if (this.props.pinPoints)
-              args.push(this.state.pinnedPoints);
-            this.props.onCalcClick(...args);
-          }}
-        />
-      </FormContainer>
+          let x_vals_tds = this.state.points.map((val, i) => (
+            <td key={i}>
+              <DeleteTdPopup
+                title={translate("discrete_form.remove_column")}
+                class="delete_td_popup"
+                onClick={() => {
+                  let copy = [...this.state.points];
+                  copy.splice(i, 1);
+                  this.setState({ points: copy });
+                }}
+              />
+              {this.props.pinPoints && (
+                <Pin
+                  title={translate("discrete_form.pin")}
+                  className="pin"
+                  pinned={this.state.pinnedPoints.includes(val.x)}
+                  onClick={this.onPinClick(val.x)}
+                >
+                  <PinIcon />
+                </Pin>
+              )}
+              <TextField
+                id={`text-field${val.x}`}
+                value={val.x}
+                onChange={e => {
+                  val.x = e.target.value;
+                  this.forceUpdate();
+                }}
+                style={{ width: "50px" }}
+              />
+            </td>
+          ));
+          let y_vals_tds = this.state.points.map((val, i) => (
+            <td key={i}>
+              <DeleteTdPopup
+                title={translate("discrete_form.remove_column")}
+                class="delete_td_popup"
+                onClick={() => {
+                  let copy = [...this.state.points];
+                  copy.splice(i, 1);
+                  this.setState({ points: copy });
+                }}
+              />
+              <TextField
+                id="text-field"
+                value={val.y}
+                onChange={e => {
+                  val.y = e.target.value;
+                  this.forceUpdate();
+                }}
+                style={{ width: "50px" }}
+              />
+            </td>
+          ));
+
+          x_vals_tds.push(<td key="sort button">{sortButton}</td>);
+          y_vals_tds.push(addClearBtns);
+          let separateXTds = chunk(x_vals_tds, 10);
+          let separateYTds = chunk(y_vals_tds, 10);
+
+          let tables = separateXTds.map((xTds, i) => (
+            <div key={i}>
+              <DiscreteTable>
+                <tbody>
+                  <tr>
+                    <td>X</td>
+                    {xTds}
+                  </tr>
+                  <tr>
+                    <td>Y</td>
+                    {separateYTds[i]}
+                  </tr>
+                </tbody>
+                {/* {sortButton} */}
+                {/* {addClearBtns} */}
+              </DiscreteTable>
+              <br />
+            </div>
+          ));
+
+          return (
+            <FormContainer>
+              <TextField
+                floatingLabelText={translate("form.degree")}
+                type="number"
+                value={this.state.deg || ""}
+                onChange={e => this.setState({ deg: +e.target.value })}
+              />
+
+              {tables}
+              <br />
+
+              <UploadButtons>
+                <RaisedButton
+                  label={translate("discrete_form.upload_csv")}
+                  secondary={true}
+                  icon={<span>{csvIcon}</span>}
+                  containerElement="label"
+                >
+                  <FileInput type="file" onChange={this.onFileUpload} />
+                </RaisedButton>
+
+                <RaisedButton
+                  label={translate("discrete_form.upload_excel")}
+                  labelPosition="before"
+                  icon={<span>{excelIcon}</span>}
+                  secondary={true}
+                  containerElement="label"
+                >
+                  <FileInput type="file" onChange={this.onExcelUpload} />
+                </RaisedButton>
+              </UploadButtons>
+
+              <XYChooser
+                style={{
+                  visibility: this.state.showColumnChooser
+                    ? "visible"
+                    : "hidden"
+                }}
+              >
+                <div>
+                  <SelectField
+                    value={this.state.X}
+                    floatingLabelText="X"
+                    floatingLabelFixed={true}
+                    hintText="X"
+                    onChange={(e, i, val) => {
+                      if (this.state.Y) {
+                        this.setState({
+                          points: this.state.excelTableInJson.map(r => ({
+                            x: r[val],
+                            y: r[this.state.Y]
+                          })),
+                          X: val
+                        });
+                      } else this.setState({ X: val });
+                    }}
+                  >
+                    {this.state.excelTableHeaders.map((h, i) => (
+                      <MenuItem key={i} value={h} primaryText={h} />
+                    ))}
+                  </SelectField>
+                </div>
+
+                <div>
+                  <RaisedButton
+                    label="<=>"
+                    onClick={() => {
+                      this.setState({
+                        X: this.state.Y,
+                        Y: this.state.X,
+                        points: this.state.excelTableInJson.map(r => ({
+                          x: r[this.state.Y],
+                          y: r[this.state.X]
+                        }))
+                      });
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <SelectField
+                    value={this.state.Y}
+                    floatingLabelText="Y"
+                    floatingLabelFixed={true}
+                    hintText="Y"
+                    onChange={(e, i, val) => {
+                      if (this.state.X) {
+                        this.setState({
+                          points: this.state.excelTableInJson.map(r => ({
+                            x: r[this.state.X],
+                            y: r[val]
+                          })),
+                          Y: val
+                        });
+                      } else this.setState({ Y: val });
+                    }}
+                  >
+                    {this.state.excelTableHeaders.map((h, i) => (
+                      <MenuItem key={i} value={h} primaryText={h} />
+                    ))}
+                  </SelectField>
+                </div>
+              </XYChooser>
+
+              <RaisedButton
+                label={translate("form.calc")}
+                primary={true}
+                onClick={() => {
+                  const xs = this.state.points.map(p => +p.x);
+                  const ys = this.state.points.map(p => +p.y);
+                  const args = [xs, ys, this.state.deg];
+                  if (this.props.pinPoints) args.push(this.state.pinnedPoints);
+                  this.props.onCalcClick(...args);
+                }}
+              />
+            </FormContainer>
+          );
+        }}
+      </Translate>
     );
   }
 }
