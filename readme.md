@@ -1,6 +1,6 @@
 ### Builder of minmax approximation, least squares approximation for analytical and discrete functions.
 
-#### https://blevantovych.github.io/Diplom
+#### https://minmax.netlify.com
 
 #### to push server code to heroku:
 
