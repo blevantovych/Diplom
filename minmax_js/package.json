@@ -12,6 +12,6 @@
   "dependencies": {
     "algebra.js": "^0.2.6",
     "algebrite": "^1.2.0",
-    "mathjs": "^5.1.1"
+    "mathjs": "^7.5.1"
   }
 }
