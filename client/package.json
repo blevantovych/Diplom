@@ -37,7 +37,7 @@
     "url-loader": "^1.0.1",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
-    "xlsx": "^0.14.1"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@eleks/eslint-config-eleks": "^0.2.1",
